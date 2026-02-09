@@ -1,14 +1,38 @@
+const jwt = require("jsonwebtoken");
 const AppError = require("../utils/AppError");
+const User = require("../models/User");
+const asyncHandler = require("../utils/asyncHandler");
 
-// Day 2: implement JWT verification and attach req.user
-function protect(req, res, next) {
-  return next(new AppError("Auth not implemented yet (Day 2)", 501));
-}
+const protect = asyncHandler(async (req, res, next) => {
+  const auth = req.headers.authorization;
 
-// Day 2: implement role check using req.user.role
+  if (!auth || !auth.startsWith("Bearer ")) {
+    throw new AppError("Not authorized (missing Bearer token)", 401);
+  }
+
+  const token = auth.split(" ")[1];
+
+  let decoded;
+  try {
+    decoded = jwt.verify(token, process.env.JWT_SECRET);
+  } catch (e) {
+    throw new AppError("Not authorized (invalid token)", 401);
+  }
+
+  const user = await User.findById(decoded.id).select("-passwordHash");
+  if (!user) throw new AppError("User not found", 401);
+
+  req.user = user;
+  next();
+});
+
 function authorize(...roles) {
   return (req, res, next) => {
-    return next(new AppError("RBAC not implemented yet (Day 2)", 501));
+    if (!req.user) return next(new AppError("Not authorized", 401));
+    if (!roles.includes(req.user.role)) {
+      return next(new AppError("Forbidden: insufficient role", 403));
+    }
+    next();
   };
 }
 
