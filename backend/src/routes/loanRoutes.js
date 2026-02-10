@@ -1,11 +1,18 @@
 const router = require("express").Router();
+const { protect, authorize } = require("../middlewares/auth");
+const ctrl = require("../controllers/loanController");
 
-router.post("/", (req, res) => res.json({ message: "TODO create loan request" }));
-router.get("/me", (req, res) => res.json({ message: "TODO list my loans" }));
-router.put("/:loanId", (req, res) => res.json({ message: "TODO update my loan" }));
-router.delete("/:loanId", (req, res) => res.json({ message: "TODO delete my loan" }));
-router.get("/", (req, res) => res.json({ message: "TODO browse loans (lender/admin)" }));
-router.patch("/:loanId/approve", (req, res) => res.json({ message: "TODO admin approve" }));
-router.patch("/:loanId/reject", (req, res) => res.json({ message: "TODO admin reject" }));
+// Borrower
+router.post("/", protect, authorize("BORROWER"), ctrl.createLoan);
+router.get("/me", protect, authorize("BORROWER"), ctrl.listMyLoans);
+router.put("/:loanId", protect, authorize("BORROWER"), ctrl.updateLoan);
+router.delete("/:loanId", protect, authorize("BORROWER"), ctrl.deleteLoan);
+
+// Lender/Admin
+router.get("/", protect, authorize("LENDER", "ADMIN"), ctrl.browseLoans);
+
+// Admin
+router.patch("/:loanId/approve", protect, authorize("ADMIN"), ctrl.approveLoan);
+router.patch("/:loanId/reject", protect, authorize("ADMIN"), ctrl.rejectLoan);
 
 module.exports = router;
