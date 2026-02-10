@@ -1,18 +1,21 @@
 const axios = require("axios");
 const AppError = require("../utils/AppError");
 
-// Frankfurter public API (no key)
-const FX_BASE_URL = process.env.EXCHANGE_API_BASE_URL || "https://api.frankfurter.dev/v1";
+const FX_BASE_URL = process.env.EXCHANGE_API_BASE_URL || "https://api.currencyapi.com/v3/latest";
+const FX_API_KEY = process.env.EXCHANGE_API_KEY;
 
-// simple in-memory cache to reduce calls
-const cache = new Map(); // key = "LKR->USD", value = { rate, date, ts }
-const CACHE_TTL_MS = 60 * 60 * 1000; // 1 hour
+// cache
+const cache = new Map();
+const CACHE_TTL_MS = 60 * 60 * 1000;
 
 async function getRate(from, to) {
-  const base = String(from || "").toUpperCase();
-  const target = String(to || "").toUpperCase();
+  const base = String(from || "").trim().toUpperCase();
+  const target = String(to || "").trim().toUpperCase();
+
   if (!base || !target) throw new AppError("from/to currency required", 400);
   if (base === target) return { rate: 1, date: new Date().toISOString().slice(0, 10) };
+
+  if (!FX_API_KEY) throw new AppError("FX API key missing (EXCHANGE_API_KEY)", 500);
 
   const key = `${base}->${target}`;
   const cached = cache.get(key);
@@ -21,11 +24,21 @@ async function getRate(from, to) {
   }
 
   try {
-    const url = `${FX_BASE_URL}/latest?base=${encodeURIComponent(base)}&symbols=${encodeURIComponent(target)}`;
-    const resp = await axios.get(url, { timeout: 8000 });
+    // CurrencyAPI format:
+    // GET https://api.currencyapi.com/v3/latest?apikey=KEY&base_currency=LKR&currencies=USD
+    const resp = await axios.get(FX_BASE_URL, {
+      params: {
+        apikey: FX_API_KEY,
+        base_currency: base,
+        currencies: target
+      },
+      timeout: 8000
+    });
 
-    const rate = resp.data?.rates?.[target];
-    const date = resp.data?.date;
+    // CurrencyAPI response shape: { data: { USD: { value: 0.0031 } }, meta: { last_updated_at: ... } }
+    const rate = resp.data?.data?.[target]?.value;
+    const dateRaw = resp.data?.meta?.last_updated_at || new Date().toISOString();
+    const date = String(dateRaw).slice(0, 10);
 
     if (!rate) throw new AppError("FX rate not available", 502);
 
@@ -40,7 +53,7 @@ function convertAmount(amount, rate) {
   const n = Number(amount);
   const r = Number(rate);
   const converted = n * r;
-  return Math.round(converted * 100) / 100; // 2dp
+  return Math.round(converted * 100) / 100;
 }
 
 module.exports = { getRate, convertAmount };
