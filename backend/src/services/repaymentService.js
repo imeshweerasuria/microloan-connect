@@ -27,11 +27,23 @@ async function deleteRepayment(id) {
   return deleted;
 }
 
-async function payRepayment(repaymentId, amount, method) {
+async function payRepayment(user, repaymentId, amount, method) {
   const rep = await repo.findById(repaymentId);
   if (!rep) throw new AppError("Repayment not found", 404);
 
-  // Day 3: verify borrower owns loan etc
+  // ✅ Borrower can only pay their own repayment
+  if (user.role === "BORROWER" && String(rep.borrowerId) !== String(user._id)) {
+    throw new AppError("Forbidden: not your repayment", 403);
+  }
+
+  if (!amount || amount <= 0) throw new AppError("amount must be > 0", 400);
+  if (rep.status === "PAID") throw new AppError("Repayment already PAID", 400);
+
+  const remaining = rep.amountDue - rep.amountPaid;
+  if (amount > remaining) {
+    throw new AppError(`Payment exceeds remaining amount (${remaining})`, 400);
+  }
+
   rep.payments.push({ amount, method: method || "CASH" });
   rep.amountPaid += amount;
 
@@ -41,6 +53,7 @@ async function payRepayment(repaymentId, amount, method) {
   await rep.save();
   return rep;
 }
+
 
 module.exports = {
   createRepayment,
