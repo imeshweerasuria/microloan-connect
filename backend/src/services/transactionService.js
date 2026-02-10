@@ -1,72 +1,72 @@
 const AppError = require("../utils/AppError");
-const repo = require("../repositories/transactionRepository");
-const LoanRequest = require("../models/LoanRequest");
+const txRepo = require("../repositories/transactionRepository");
+const loanRepo = require("../repositories/loanRepository");
 
-async function createTransaction(actorUser, payload) {
-  // RBAC rules for creating transactions
-  if (actorUser.role === "LENDER" && payload.type !== "FUNDING") {
-    throw new AppError("LENDER can only create FUNDING transactions", 403);
+function ensureObjectIdLike(id, name) {
+  if (!id || typeof id !== "string" || id.length !== 24) {
+    throw new AppError(`Invalid ID format for ${name}`, 400);
   }
-  if (actorUser.role === "BORROWER" && payload.type !== "REPAYMENT") {
-    throw new AppError("BORROWER can only create REPAYMENT transactions", 403);
+}
+
+exports.createFundingTransaction = async (user, payload) => {
+  // user is req.user (lender/admin)
+  const { type, loanId, fromUserId, toUserId, amount, currency, note } = payload;
+
+  if (type !== "FUNDING") throw new AppError("Only FUNDING supported for now", 400);
+
+  ensureObjectIdLike(loanId, "loanId");
+  ensureObjectIdLike(fromUserId, "fromUserId");
+  ensureObjectIdLike(toUserId, "toUserId");
+
+  if (String(user._id) !== String(fromUserId) && user.role !== "ADMIN") {
+    throw new AppError("Forbidden: fromUserId must be your user id", 403);
   }
 
-  // ensure loan exists
-  const loan = await LoanRequest.findById(payload.loanId);
+  if (!amount || amount <= 0) throw new AppError("amount must be > 0", 400);
+
+  const loan = await loanRepo.findById(loanId);
   if (!loan) throw new AppError("Loan not found", 404);
 
-  const txn = await repo.createTxn(payload);
+  // Create transaction
+  const tx = await txRepo.create({
+    type,
+    loanId,
+    fromUserId,
+    toUserId,
+    amount,
+    currency: currency || "LKR",
+    status: "CONFIRMED",
+    note: note || ""
+  });
 
-  // funding updates loan fundedAmount (peer-to-peer proof)
-  if (txn.type === "FUNDING" && txn.status === "CONFIRMED") {
-    loan.fundedAmount += txn.amount;
-    await loan.save();
-  }
+  // Update loan fundedAmount
+  const newFunded = (loan.fundedAmount || 0) + amount;
+  await loanRepo.updateById(loanId, { fundedAmount: newFunded });
 
-  return txn;
-}
+  return tx;
+};
 
-async function listAll(filters) {
-  return repo.findAll(filters);
-}
+exports.listAll = async () => txRepo.listAll();
+exports.listMine = async (userId) => txRepo.listMine(userId);
 
-async function listMine(userId) {
-  return repo.findMine(userId);
-}
+exports.getById = async (user, id) => {
+  const tx = await txRepo.findById(id);
+  if (!tx) throw new AppError("Transaction not found", 404);
 
-async function getTransaction(actorUser, id) {
-  const txn = await repo.findById(id);
-  if (!txn) throw new AppError("Transaction not found", 404);
+  const isOwner = String(tx.fromUserId) === String(user._id) || String(tx.toUserId) === String(user._id);
+  if (!isOwner && user.role !== "ADMIN") throw new AppError("Forbidden", 403);
 
-  // Admin can view all; others only own
-  if (
-    actorUser.role !== "ADMIN" &&
-    txn.fromUserId.toString() !== actorUser._id.toString() &&
-    txn.toUserId.toString() !== actorUser._id.toString()
-  ) {
-    throw new AppError("Forbidden", 403);
-  }
+  return tx;
+};
 
-  return txn;
-}
-
-async function updateTransaction(id, updates) {
-  const updated = await repo.updateById(id, updates);
+exports.updateById = async (id, payload) => {
+  const updated = await txRepo.updateById(id, payload);
   if (!updated) throw new AppError("Transaction not found", 404);
   return updated;
-}
+};
 
-async function deleteTransaction(id) {
-  const deleted = await repo.deleteById(id);
+exports.deleteById = async (id) => {
+  const deleted = await txRepo.deleteById(id);
   if (!deleted) throw new AppError("Transaction not found", 404);
   return deleted;
-}
-
-module.exports = {
-  createTransaction,
-  listAll,
-  listMine,
-  getTransaction,
-  updateTransaction,
-  deleteTransaction
 };

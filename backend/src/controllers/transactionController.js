@@ -1,39 +1,32 @@
 const asyncHandler = require("../utils/asyncHandler");
 const service = require("../services/transactionService");
 
-const create = asyncHandler(async (req, res) => {
-  const txn = await service.createTransaction(req.user, req.body);
-  res.status(201).json(txn);
+exports.createTransaction = asyncHandler(async (req, res) => {
+  const tx = await service.createFundingTransaction(req.user, req.body);
+  res.status(201).json(tx);
 });
 
-const listAll = asyncHandler(async (req, res) => {
-  const filters = {};
-  if (req.query.type) filters.type = req.query.type;
-  if (req.query.status) filters.status = req.query.status;
-  if (req.query.loanId) filters.loanId = req.query.loanId;
-
-  const txns = await service.listAll(filters);
-  res.json(txns);
+exports.listAllTransactions = asyncHandler(async (req, res) => {
+  const list = await service.listAll(req.query);
+  res.json(list);
 });
 
-const mine = asyncHandler(async (req, res) => {
-  const txns = await service.listMine(req.user._id);
-  res.json(txns);
+exports.myTransactions = asyncHandler(async (req, res) => {
+  const list = await service.listMine(req.user._id);
+  res.json(list);
 });
 
-const getById = asyncHandler(async (req, res) => {
-  const txn = await service.getTransaction(req.user, req.params.id);
-  res.json(txn);
+exports.getTransactionById = asyncHandler(async (req, res) => {
+  const tx = await service.getById(req.user, req.params.id);
+  res.json(tx);
 });
 
-const update = asyncHandler(async (req, res) => {
-  const txn = await service.updateTransaction(req.params.id, req.body);
-  res.json(txn);
+exports.updateTransaction = asyncHandler(async (req, res) => {
+  const tx = await service.updateById(req.params.id, req.body);
+  res.json(tx);
 });
 
-const remove = asyncHandler(async (req, res) => {
-  const deleted = await service.deleteTransaction(req.params.id);
+exports.deleteTransaction = asyncHandler(async (req, res) => {
+  const deleted = await service.deleteById(req.params.id);
   res.json({ message: "Transaction deleted", deletedId: deleted._id });
 });
-
-module.exports = { create, listAll, mine, getById, update, remove };
