@@ -1,6 +1,7 @@
 const AppError = require("../utils/AppError");
 const txRepo = require("../repositories/transactionRepository");
 const loanRepo = require("../repositories/loanRepository");
+const fx = require("./fxService");
 
 function ensureObjectIdLike(id, name) {
   if (!id || typeof id !== "string" || id.length !== 24) {
@@ -44,6 +45,14 @@ exports.createFundingTransaction = async (user, payload) => {
     throw new AppError(`Funding amount (${amount}) would exceed loan amount (${loan.amount})`, 400);
   }
 
+  // ✅ Day 5 FX Conversion
+  const fromCur = (currency || loan.currency || "LKR").toUpperCase();
+  const toCur = "USD";
+
+  // Get FX rate and convert amount
+  const { rate, date } = await fx.getRate(fromCur, toCur);
+  const converted = fx.convertAmount(amount, rate);
+
   // Create transaction
   const tx = await txRepo.create({
     type,
@@ -51,9 +60,18 @@ exports.createFundingTransaction = async (user, payload) => {
     fromUserId,
     toUserId,
     amount,
-    currency: currency || "LKR",
+    currency: fromCur,
     status: "CONFIRMED",
-    note: note || ""
+    note: note || "",
+
+    // ✅ Day 5 FX fields
+    fxProvider: "frankfurter",
+    fxFrom: fromCur,
+    fxTo: toCur,
+    fxRate: rate,
+    fxDate: date,
+    amountConverted: converted,
+    convertedCurrency: toCur
   });
 
   // Update loan fundedAmount

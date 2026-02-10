@@ -21,6 +21,8 @@ app.use(morgan("dev"));
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
 app.use("/api/auth", authRoutes);
+app.use("/api/fx", require("./routes/fxRoutes"));
+
 app.use("/api/borrowers", borrowerRoutes);
 app.use("/api/loans", loanRoutes);
 app.use("/api/repayments", repaymentRoutes);
