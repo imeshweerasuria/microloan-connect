@@ -1,10 +1,75 @@
 const router = require("express").Router();
+const Joi = require("joi");
 
-router.post("/", (req, res) => res.json({ message: "TODO create repayment" }));
-router.get("/loan/:loanId", (req, res) => res.json({ message: "TODO list repayments by loan" }));
-router.get("/:id", (req, res) => res.json({ message: "TODO get repayment by id" }));
-router.put("/:id", (req, res) => res.json({ message: "TODO update repayment" }));
-router.delete("/:id", (req, res) => res.json({ message: "TODO delete repayment" }));
-router.post("/:id/pay", (req, res) => res.json({ message: "TODO borrower pay repayment" }));
+const validate = require("../middlewares/validate");
+const { protect, authorize } = require("../middlewares/auth");
+const repayment = require("../controllers/repaymentController");
+
+// ✅ Validation schemas
+const createRepaymentSchema = Joi.object({
+  loanId: Joi.string().required(),
+  borrowerId: Joi.string().required(),
+  dueDate: Joi.date().required(),
+  amountDue: Joi.number().min(1).required()
+});
+
+const updateRepaymentSchema = Joi.object({
+  dueDate: Joi.date().optional(),
+  amountDue: Joi.number().min(1).optional(),
+  status: Joi.string().valid("PENDING", "PARTIAL", "PAID", "OVERDUE").optional()
+}).min(1);
+
+const paySchema = Joi.object({
+  amount: Joi.number().min(1).required(),
+  method: Joi.string().min(2).max(20).optional()
+});
+
+// ✅ ADMIN CRUD
+router.post(
+  "/",
+  protect,
+  authorize("ADMIN"),
+  validate(createRepaymentSchema),
+  repayment.createRepayment
+);
+
+router.put(
+  "/:id",
+  protect,
+  authorize("ADMIN"),
+  validate(updateRepaymentSchema),
+  repayment.updateRepayment
+);
+
+router.delete(
+  "/:id",
+  protect,
+  authorize("ADMIN"),
+  repayment.deleteRepayment
+);
+
+// ✅ View repayments (ADMIN or BORROWER)
+router.get(
+  "/loan/:loanId",
+  protect,
+  authorize("ADMIN", "BORROWER"),
+  repayment.listByLoan
+);
+
+router.get(
+  "/:id",
+  protect,
+  authorize("ADMIN", "BORROWER"),
+  repayment.getRepayment
+);
+
+// ✅ BORROWER action: pay
+router.post(
+  "/:id/pay",
+  protect,
+  authorize("BORROWER"),
+  validate(paySchema),
+  repayment.pay
+);
 
 module.exports = router;
