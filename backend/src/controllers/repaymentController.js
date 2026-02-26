@@ -28,9 +28,10 @@ const deleteRepayment = asyncHandler(async (req, res) => {
 
 const pay = asyncHandler(async (req, res) => {
   const { amount, method } = req.body;
-  const rep = await service.payRepayment(req.params.id, Number(amount), method);
+  const rep = await service.payRepayment(req.user, req.params.id, Number(amount), method);
   res.json(rep);
 });
+
 
 module.exports = {
   createRepayment,
