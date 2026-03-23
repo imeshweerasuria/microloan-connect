@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import client from "./api/client";
+import client from "../api/client";
 
 export default function BorrowerDashboard() {
  const emptyForm = {
