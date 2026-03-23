@@ -1,3 +1,288 @@
+import { useEffect, useState } from "react";
+import client from "../api/client";
+
 export default function Repayments() {
-  return <div style={{ padding: "24px" }}>Repayments Page</div>;
+ const [myLoans, setMyLoans] = useState([]);
+ const [selectedLoanId, setSelectedLoanId] = useState("");
+ const [repayments, setRepayments] = useState([]);
+ const [payingId, setPayingId] = useState("");
+ const [amount, setAmount] = useState("");
+ const [method, setMethod] = useState("CASH");
+ const [loading, setLoading] = useState(true);
+ const [message, setMessage] = useState("");
+ const [error, setError] = useState("");
+
+ const fetchLoans = async () => {
+   try {
+     const res = await client.get("/loans/me");
+     setMyLoans(res.data || []);
+   } catch (err) {
+     setError(err.message || "Failed to load loans");
+   }
+ };
+
+ const fetchRepaymentsByLoan = async (loanId) => {
+   if (!loanId) return;
+   try {
+     const res = await client.get(`/repayments/loan/${loanId}`);
+     setRepayments(res.data || []);
+   } catch (err) {
+     setError(err.message || "Failed to load repayments");
+   }
+ };
+
+ useEffect(() => {
+   const load = async () => {
+     try {
+       setLoading(true);
+       await fetchLoans();
+     } finally {
+       setLoading(false);
+     }
+   };
+   load();
+ }, []);
+
+ useEffect(() => {
+   if (selectedLoanId) {
+     fetchRepaymentsByLoan(selectedLoanId);
+   } else {
+     setRepayments([]);
+   }
+ }, [selectedLoanId]);
+
+ const handlePay = async (repaymentId) => {
+   try {
+     setError("");
+     setMessage("");
+     setPayingId(repaymentId);
+
+     await client.post(`/repayments/${repaymentId}/pay`, {
+       amount: Number(amount),
+       method,
+     });
+
+     setMessage("✅ Repayment recorded successfully");
+     setAmount("");
+     setMethod("CASH");
+     await fetchRepaymentsByLoan(selectedLoanId);
+   } catch (err) {
+     setError(err.message || "Failed to make repayment");
+   } finally {
+     setPayingId("");
+   }
+ };
+
+ const getStatusColor = (status) => {
+   switch (status) {
+     case "PAID":
+       return "#166534";
+     case "PARTIAL":
+       return "#92400e";
+     case "OVERDUE":
+       return "#b91c1c";
+     default:
+       return "#1d4ed8";
+   }
+ };
+
+ return (
+   <div style={styles.page}>
+     <h1>Repayments</h1>
+     <p style={styles.sub}>
+       View your repayment schedule and make installment payments.
+     </p>
+
+     {message && <div style={styles.success}>{message}</div>}
+     {error && <div style={styles.error}>{error}</div>}
+
+     <div style={styles.card}>
+       <label style={styles.label}>Select My Loan</label>
+       <select
+         style={styles.input}
+         value={selectedLoanId}
+         onChange={(e) => setSelectedLoanId(e.target.value)}
+       >
+         <option value="">-- Select Loan --</option>
+         {myLoans.map((loan) => (
+           <option key={loan._id} value={loan._id}>
+             {loan.title} | {loan.status} | {loan.amount} {loan.currency}
+           </option>
+         ))}
+       </select>
+     </div>
+
+     <div style={styles.card}>
+       <h2>Repayment Schedule</h2>
+
+       {loading ? (
+         <p>Loading...</p>
+       ) : selectedLoanId === "" ? (
+         <p>Select a loan to view repayments.</p>
+       ) : repayments.length === 0 ? (
+         <p>No repayments found for this loan.</p>
+       ) : (
+         <div style={{ display: "grid", gap: "12px" }}>
+           {repayments.map((rep) => {
+             const remaining = rep.amountDue - rep.amountPaid;
+
+             return (
+               <div key={rep._id} style={styles.repCard}>
+                 <div style={styles.repTop}>
+                   <strong>Due: {new Date(rep.dueDate).toLocaleDateString()}</strong>
+                   <span
+                     style={{
+                       ...styles.badge,
+                       color: getStatusColor(rep.status),
+                       borderColor: getStatusColor(rep.status),
+                     }}
+                   >
+                     {rep.status}
+                   </span>
+                 </div>
+
+                 <p><strong>Amount Due:</strong> {rep.amountDue}</p>
+                 <p><strong>Amount Paid:</strong> {rep.amountPaid}</p>
+                 <p><strong>Remaining:</strong> {remaining}</p>
+
+                 {rep.payments?.length > 0 && (
+                   <div style={styles.historyBox}>
+                     <strong>Payment History</strong>
+                     {rep.payments.map((p, idx) => (
+                       <div key={idx} style={styles.smallText}>
+                         {p.amount} via {p.method} on{" "}
+                         {new Date(p.paidAt).toLocaleString()}
+                       </div>
+                     ))}
+                   </div>
+                 )}
+
+                 {rep.status !== "PAID" && (
+                   <div style={styles.payRow}>
+                     <input
+                       style={styles.smallInput}
+                       type="number"
+                       value={amount}
+                       onChange={(e) => setAmount(e.target.value)}
+                       placeholder="Amount"
+                     />
+                     <select
+                       style={styles.smallInput}
+                       value={method}
+                       onChange={(e) => setMethod(e.target.value)}
+                     >
+                       <option value="CASH">CASH</option>
+                       <option value="BANK">BANK</option>
+                       <option value="ONLINE">ONLINE</option>
+                     </select>
+                     <button
+                       style={styles.payBtn}
+                       onClick={() => handlePay(rep._id)}
+                       disabled={payingId === rep._id}
+                     >
+                       {payingId === rep._id ? "Paying..." : "Pay"}
+                     </button>
+                   </div>
+                 )}
+               </div>
+             );
+           })}
+         </div>
+       )}
+     </div>
+   </div>
+ );
 }
+
+const styles = {
+ page: {
+   padding: "24px",
+   maxWidth: "1000px",
+   margin: "0 auto",
+ },
+ sub: {
+   color: "#6b7280",
+   marginBottom: "20px",
+ },
+ card: {
+   background: "#fff",
+   padding: "20px",
+   borderRadius: "12px",
+   boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
+   marginBottom: "20px",
+ },
+ label: {
+   display: "block",
+   fontWeight: "600",
+   marginBottom: "6px",
+ },
+ input: {
+   width: "100%",
+   padding: "10px",
+   borderRadius: "8px",
+   border: "1px solid #d1d5db",
+   boxSizing: "border-box",
+ },
+ repCard: {
+   border: "1px solid #e5e7eb",
+   borderRadius: "10px",
+   padding: "14px",
+ },
+ repTop: {
+   display: "flex",
+   justifyContent: "space-between",
+   alignItems: "center",
+   gap: "10px",
+ },
+ badge: {
+   padding: "4px 10px",
+   borderRadius: "999px",
+   border: "1px solid",
+   fontSize: "12px",
+   fontWeight: "600",
+ },
+ historyBox: {
+   marginTop: "10px",
+   padding: "10px",
+   background: "#f9fafb",
+   borderRadius: "8px",
+ },
+ smallText: {
+   fontSize: "12px",
+   color: "#6b7280",
+   marginTop: "4px",
+ },
+ payRow: {
+   display: "flex",
+   gap: "8px",
+   marginTop: "12px",
+   flexWrap: "wrap",
+ },
+ smallInput: {
+   padding: "8px 10px",
+   borderRadius: "8px",
+   border: "1px solid #d1d5db",
+ },
+ payBtn: {
+   padding: "8px 12px",
+   borderRadius: "8px",
+   border: "none",
+   background: "#2563eb",
+   color: "#fff",
+   cursor: "pointer",
+ },
+ success: {
+   background: "#dcfce7",
+   color: "#166534",
+   padding: "10px 12px",
+   borderRadius: "8px",
+   marginBottom: "16px",
+ },
+ error: {
+   background: "#fee2e2",
+   color: "#b91c1c",
+   padding: "10px 12px",
+   borderRadius: "8px",
+   marginBottom: "16px",
+ },
+};
