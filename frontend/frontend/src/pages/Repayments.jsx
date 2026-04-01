@@ -1,9 +1,11 @@
 import { useEffect, useMemo, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import client from "../api/client";
 import { useAuth } from "../context/AuthContext";
 
 export default function Repayments() {
  const { user } = useAuth();
+ const [searchParams, setSearchParams] = useSearchParams();
 
  const [loans, setLoans] = useState([]);
  const [selectedLoanId, setSelectedLoanId] = useState("");
@@ -15,6 +17,7 @@ export default function Repayments() {
  });
  const [creating, setCreating] = useState(false);
  const [payingId, setPayingId] = useState("");
+ const [stripePayingId, setStripePayingId] = useState("");
  const [loading, setLoading] = useState(true);
  const [message, setMessage] = useState("");
  const [error, setError] = useState("");
@@ -54,12 +57,56 @@ export default function Repayments() {
  }, [isAdmin]);
 
  useEffect(() => {
+   const loanIdFromQuery = searchParams.get("loan_id");
+   if (loanIdFromQuery) {
+     setSelectedLoanId(loanIdFromQuery);
+   }
+ }, [searchParams]);
+
+ useEffect(() => {
    if (selectedLoanId) {
      fetchRepaymentsByLoan(selectedLoanId);
    } else {
      setRepayments([]);
    }
  }, [selectedLoanId]);
+
+ useEffect(() => {
+   const stripeSuccess = searchParams.get("stripe_success");
+   const stripeCancel = searchParams.get("stripe_cancel");
+   const repaymentId = searchParams.get("repayment_id");
+   const sessionId = searchParams.get("session_id");
+   const loanId = searchParams.get("loan_id");
+
+   if (stripeCancel === "1") {
+     setMessage("ℹ️ Stripe checkout was cancelled.");
+     setSearchParams(loanId ? { loan_id: loanId } : {});
+     return;
+   }
+
+   if (!isAdmin && stripeSuccess === "1" && repaymentId && sessionId) {
+     (async () => {
+       try {
+         setError("");
+         setMessage("Confirming Stripe payment...");
+         await client.post(`/repayments/${repaymentId}/confirm-stripe-session`, {
+           sessionId
+         });
+
+         if (loanId) {
+           setSelectedLoanId(loanId);
+           await fetchRepaymentsByLoan(loanId);
+         }
+
+         setMessage("✅ Stripe payment confirmed and repayment updated.");
+       } catch (err) {
+         setError(err.message || "Failed to confirm Stripe payment");
+       } finally {
+         setSearchParams(loanId ? { loan_id: loanId } : {});
+       }
+     })();
+   }
+ }, [searchParams, isAdmin, setSearchParams]);
 
  const selectedLoan = useMemo(
    () => loans.find((loan) => loan._id === selectedLoanId),
@@ -103,6 +150,20 @@ export default function Repayments() {
      setError(err.message || "Failed to make repayment");
    } finally {
      setPayingId("");
+   }
+ };
+
+ const handleStripeCheckout = async (repaymentId) => {
+   try {
+     setError("");
+     setMessage("");
+     setStripePayingId(repaymentId);
+
+     const res = await client.post(`/repayments/${repaymentId}/stripe-checkout-session`);
+     window.location.href = res.data.url;
+   } catch (err) {
+     setError(err.message || "Failed to start Stripe checkout");
+     setStripePayingId("");
    }
  };
 
@@ -155,7 +216,7 @@ export default function Repayments() {
      <p style={styles.sub}>
        {isAdmin
          ? "Create repayment schedules and monitor installment progress."
-         : "View your repayment schedule and make installment payments."}
+         : "View your repayment schedule, pay manually, or use Stripe test checkout."}
      </p>
 
      {message && <div style={styles.success}>{message}</div>}
@@ -257,33 +318,47 @@ export default function Repayments() {
                  )}
 
                  {!isAdmin && rep.status !== "PAID" && (
-                   <div style={styles.payRow}>
-                     <input
-                       style={styles.smallInput}
-                       type="number"
-                       min="1"
-                       max={remaining}
-                       value={draft.amount}
-                       onChange={(e) => updateDraft(rep._id, "amount", e.target.value)}
-                       placeholder="Amount"
-                     />
-                     <select
-                       style={styles.smallInput}
-                       value={draft.method}
-                       onChange={(e) => updateDraft(rep._id, "method", e.target.value)}
-                     >
-                       <option value="CASH">CASH</option>
-                       <option value="BANK">BANK</option>
-                       <option value="ONLINE">ONLINE</option>
-                     </select>
-                     <button
-                       style={styles.payBtn}
-                       onClick={() => handlePay(rep._id)}
-                       disabled={payingId === rep._id}
-                     >
-                       {payingId === rep._id ? "Paying..." : "Pay"}
-                     </button>
-                   </div>
+                   <>
+                     <div style={styles.payRow}>
+                       <input
+                         style={styles.smallInput}
+                         type="number"
+                         min="1"
+                         max={remaining}
+                         value={draft.amount}
+                         onChange={(e) => updateDraft(rep._id, "amount", e.target.value)}
+                         placeholder="Amount"
+                       />
+                       <select
+                         style={styles.smallInput}
+                         value={draft.method}
+                         onChange={(e) => updateDraft(rep._id, "method", e.target.value)}
+                       >
+                         <option value="CASH">CASH</option>
+                         <option value="BANK">BANK</option>
+                         <option value="ONLINE">ONLINE</option>
+                       </select>
+                       <button
+                         style={styles.payBtn}
+                         onClick={() => handlePay(rep._id)}
+                         disabled={payingId === rep._id}
+                       >
+                         {payingId === rep._id ? "Paying..." : "Manual Pay"}
+                       </button>
+                     </div>
+
+                     <div style={{ marginTop: "10px" }}>
+                       <button
+                         style={styles.stripeBtn}
+                         onClick={() => handleStripeCheckout(rep._id)}
+                         disabled={stripePayingId === rep._id}
+                       >
+                         {stripePayingId === rep._id
+                           ? "Redirecting to Stripe..."
+                           : "Pay by Stripe Test"}
+                       </button>
+                     </div>
+                   </>
                  )}
                </div>
              );
@@ -372,6 +447,14 @@ const styles = {
    color: "#fff",
    cursor: "pointer",
  },
+ stripeBtn: {
+   padding: "10px 14px",
+   borderRadius: "8px",
+   border: "none",
+   background: "#111827",
+   color: "#fff",
+   cursor: "pointer",
+ },
  success: {
    background: "#dcfce7",
    color: "#166534",
@@ -387,3 +470,4 @@ const styles = {
    marginBottom: "16px",
  },
 };
+
