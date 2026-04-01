@@ -2,6 +2,7 @@ const router = require("express").Router();
 const { protect, authorize } = require("../middlewares/auth");
 const ctrl = require("../controllers/transactionController");
 
+router.get("/summary/analytics", protect, authorize("ADMIN"), ctrl.analyticsSummary);
 router.post("/", protect, authorize("LENDER", "ADMIN"), ctrl.createTransaction);
 router.get("/", protect, authorize("ADMIN"), ctrl.listAllTransactions);
 router.get("/me", protect, ctrl.myTransactions);
