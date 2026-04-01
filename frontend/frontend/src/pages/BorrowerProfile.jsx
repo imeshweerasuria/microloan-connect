@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import client from "../api/client";
+
 export default function BorrowerProfile() {
  const [form, setForm] = useState({
    phone: "",
@@ -15,6 +16,7 @@ export default function BorrowerProfile() {
  const [verified, setVerified] = useState(false);
  const [loading, setLoading] = useState(true);
  const [saving, setSaving] = useState(false);
+ const [lookupLoading, setLookupLoading] = useState(false);
  const [message, setMessage] = useState("");
  const [error, setError] = useState("");
 
@@ -55,6 +57,33 @@ export default function BorrowerProfile() {
          ? Number(e.target.value)
          : e.target.value,
    }));
+ };
+
+ const handleLookupCommunity = async () => {
+   try {
+     setLookupLoading(true);
+     setError("");
+     setMessage("");
+
+     const res = await client.get(
+       `/borrowers/geocode/community?address=${encodeURIComponent(form.address)}`
+     );
+
+     setForm((prev) => ({
+       ...prev,
+       community: res.data.community || prev.community,
+     }));
+
+     setMessage(
+       res.data.community
+         ? `✅ Community detected: ${res.data.community}`
+         : "✅ Address lookup completed, but no clear community was found"
+     );
+   } catch (err) {
+     setError(err.message || "Failed to detect community from address");
+   } finally {
+     setLookupLoading(false);
+   }
  };
 
  const handleSubmit = async (e) => {
@@ -146,6 +175,17 @@ export default function BorrowerProfile() {
            placeholder="Enter your full address"
            required
          />
+
+         <div style={{ marginTop: "10px" }}>
+           <button
+             type="button"
+             style={styles.lookupBtn}
+             onClick={handleLookupCommunity}
+             disabled={lookupLoading}
+           >
+             {lookupLoading ? "Detecting..." : "Auto-detect community from address"}
+           </button>
+         </div>
 
          <div style={styles.grid}>
            <div>
@@ -271,6 +311,15 @@ const styles = {
    border: "none",
    borderRadius: "8px",
    background: "#2563eb",
+   color: "#fff",
+   fontWeight: "600",
+   cursor: "pointer",
+ },
+ lookupBtn: {
+   padding: "10px 14px",
+   border: "none",
+   borderRadius: "8px",
+   background: "#111827",
    color: "#fff",
    fontWeight: "600",
    cursor: "pointer",
