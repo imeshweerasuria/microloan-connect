@@ -2,6 +2,12 @@ import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+function roleHome(role) {
+  if (role === "BORROWER") return "/borrower/dashboard";
+  if (role === "LENDER") return "/lender/dashboard";
+  return "/";
+}
+
 export default function Register() {
   const { register } = useAuth();
   const navigate = useNavigate();
@@ -30,11 +36,7 @@ export default function Register() {
     try {
       setLoading(true);
       const res = await register(form);
-
-      const role = res.user.role;
-      if (role === "BORROWER") navigate("/borrower/dashboard");
-      else if (role === "LENDER") navigate("/lender/dashboard");
-      else navigate("/");
+      navigate(roleHome(res.user.role));
     } catch (err) {
       setError(err.message || "Registration failed");
     } finally {
@@ -45,7 +47,10 @@ export default function Register() {
   return (
     <div style={styles.wrapper}>
       <div style={styles.card}>
-        <h2 style={styles.heading}>Register</h2>
+        <h2 style={styles.heading}>Create Account</h2>
+        <p style={styles.sub}>
+          Register as a borrower or lender to start using the platform.
+        </p>
 
         {error && <div style={styles.error}>{error}</div>}
 
@@ -118,15 +123,20 @@ const styles = {
   },
   card: {
     width: "100%",
-    maxWidth: "460px",
+    maxWidth: "500px",
     background: "#fff",
     borderRadius: "12px",
     padding: "32px",
     boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
   },
   heading: {
-    marginBottom: "20px",
+    marginBottom: "10px",
     textAlign: "center",
+  },
+  sub: {
+    textAlign: "center",
+    color: "#6b7280",
+    marginBottom: "20px",
   },
   label: {
     display: "block",
