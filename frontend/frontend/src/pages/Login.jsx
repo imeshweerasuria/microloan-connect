@@ -1,10 +1,18 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useLocation } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
+
+function roleHome(role) {
+  if (role === "BORROWER") return "/borrower/dashboard";
+  if (role === "LENDER") return "/lender/dashboard";
+  if (role === "ADMIN") return "/admin/dashboard";
+  return "/";
+}
 
 export default function Login() {
   const { login } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const [form, setForm] = useState({
     email: "",
@@ -13,6 +21,8 @@ export default function Login() {
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+
+  const fromPath = location.state?.from || "";
 
   const handleChange = (e) => {
     setForm((prev) => ({
@@ -29,11 +39,12 @@ export default function Login() {
       setLoading(true);
       const res = await login(form);
 
-      const role = res.user.role;
-      if (role === "BORROWER") navigate("/borrower/dashboard");
-      else if (role === "LENDER") navigate("/lender/dashboard");
-      else if (role === "ADMIN") navigate("/admin/dashboard");
-      else navigate("/");
+      if (fromPath) {
+        navigate(fromPath);
+        return;
+      }
+
+      navigate(roleHome(res.user.role));
     } catch (err) {
       setError(err.message || "Login failed");
     } finally {
@@ -45,6 +56,9 @@ export default function Login() {
     <div style={styles.wrapper}>
       <div style={styles.card}>
         <h2 style={styles.heading}>Login</h2>
+        <p style={styles.sub}>
+          Sign in to continue to your borrower, lender, or admin experience.
+        </p>
 
         {error && <div style={styles.error}>{error}</div>}
 
@@ -95,15 +109,20 @@ const styles = {
   },
   card: {
     width: "100%",
-    maxWidth: "420px",
+    maxWidth: "460px",
     background: "#fff",
     borderRadius: "12px",
     padding: "32px",
     boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
   },
   heading: {
-    marginBottom: "20px",
+    marginBottom: "10px",
     textAlign: "center",
+  },
+  sub: {
+    textAlign: "center",
+    color: "#6b7280",
+    marginBottom: "20px",
   },
   label: {
     display: "block",

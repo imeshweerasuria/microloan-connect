@@ -2,340 +2,361 @@ import { useEffect, useState } from "react";
 import client from "../api/client";
 
 export default function BorrowerProfile() {
- const [form, setForm] = useState({
-   phone: "",
-   address: "",
-   community: "",
-   businessCategory: "",
-   monthlyIncomeRange: "",
-   householdSize: "",
-   povertyImpactPlan: "",
- });
+  const [form, setForm] = useState({
+    phone: "",
+    address: "",
+    community: "",
+    businessCategory: "",
+    monthlyIncomeRange: "",
+    householdSize: "",
+    povertyImpactPlan: "",
+  });
 
- const [profileExists, setProfileExists] = useState(false);
- const [verified, setVerified] = useState(false);
- const [loading, setLoading] = useState(true);
- const [saving, setSaving] = useState(false);
- const [lookupLoading, setLookupLoading] = useState(false);
- const [message, setMessage] = useState("");
- const [error, setError] = useState("");
+  const [profileExists, setProfileExists] = useState(false);
+  const [verified, setVerified] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [lookupLoading, setLookupLoading] = useState(false);
+  const [lookupPreview, setLookupPreview] = useState(null);
+  const [message, setMessage] = useState("");
+  const [error, setError] = useState("");
 
- const fetchProfile = async () => {
-   try {
-     setLoading(true);
-     setError("");
-     const res = await client.get("/borrowers/profile/me");
+  const fetchProfile = async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const res = await client.get("/borrowers/profile/me");
 
-     setForm({
-       phone: res.data.phone || "",
-       address: res.data.address || "",
-       community: res.data.community || "",
-       businessCategory: res.data.businessCategory || "",
-       monthlyIncomeRange: res.data.monthlyIncomeRange || "",
-       householdSize: res.data.householdSize || "",
-       povertyImpactPlan: res.data.povertyImpactPlan || "",
-     });
+      setForm({
+        phone: res.data.phone || "",
+        address: res.data.address || "",
+        community: res.data.community || "",
+        businessCategory: res.data.businessCategory || "",
+        monthlyIncomeRange: res.data.monthlyIncomeRange || "",
+        householdSize: res.data.householdSize || "",
+        povertyImpactPlan: res.data.povertyImpactPlan || "",
+      });
 
-     setVerified(Boolean(res.data.verified));
-     setProfileExists(true);
-   } catch (err) {
-     setProfileExists(false);
-   } finally {
-     setLoading(false);
-   }
- };
+      setVerified(Boolean(res.data.verified));
+      setProfileExists(true);
+    } catch (err) {
+      setProfileExists(false);
+    } finally {
+      setLoading(false);
+    }
+  };
 
- useEffect(() => {
-   fetchProfile();
- }, []);
+  useEffect(() => {
+    fetchProfile();
+  }, []);
 
- const handleChange = (e) => {
-   setForm((prev) => ({
-     ...prev,
-     [e.target.name]:
-       e.target.name === "householdSize"
-         ? Number(e.target.value)
-         : e.target.value,
-   }));
- };
+  const handleChange = (e) => {
+    setForm((prev) => ({
+      ...prev,
+      [e.target.name]:
+        e.target.name === "householdSize"
+          ? Number(e.target.value)
+          : e.target.value,
+    }));
+  };
 
- const handleLookupCommunity = async () => {
-   try {
-     setLookupLoading(true);
-     setError("");
-     setMessage("");
+  const handleLookupCommunity = async () => {
+    try {
+      setLookupLoading(true);
+      setError("");
+      setMessage("");
+      setLookupPreview(null);
 
-     const res = await client.get(
-       `/borrowers/geocode/community?address=${encodeURIComponent(form.address)}`
-     );
+      const res = await client.get(
+        `/borrowers/geocode/community?address=${encodeURIComponent(form.address)}`
+      );
 
-     setForm((prev) => ({
-       ...prev,
-       community: res.data.community || prev.community,
-     }));
+      setForm((prev) => ({
+        ...prev,
+        community: res.data.community || prev.community,
+      }));
 
-     setMessage(
-       res.data.community
-         ? `✅ Community detected: ${res.data.community}`
-         : "✅ Address lookup completed, but no clear community was found"
-     );
-   } catch (err) {
-     setError(err.message || "Failed to detect community from address");
-   } finally {
-     setLookupLoading(false);
-   }
- };
+      setLookupPreview(res.data);
 
- const handleSubmit = async (e) => {
-   e.preventDefault();
-   setSaving(true);
-   setMessage("");
-   setError("");
+      setMessage(
+        res.data.community
+          ? `✅ Community detected: ${res.data.community}`
+          : "✅ Address lookup completed, but no clear community was found"
+      );
+    } catch (err) {
+      setError(err.message || "Failed to detect community from address");
+    } finally {
+      setLookupLoading(false);
+    }
+  };
 
-   try {
-     if (profileExists) {
-       await client.put("/borrowers/profile/me", form);
-       setMessage("✅ Profile updated successfully");
-     } else {
-       await client.post("/borrowers/profile", form);
-       setMessage("✅ Profile created successfully");
-       setProfileExists(true);
-     }
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setSaving(true);
+    setMessage("");
+    setError("");
 
-     await fetchProfile();
-   } catch (err) {
-     setError(err.message || "Failed to save borrower profile");
-   } finally {
-     setSaving(false);
-   }
- };
+    try {
+      if (profileExists) {
+        await client.put("/borrowers/profile/me", form);
+        setMessage("✅ Profile updated successfully");
+      } else {
+        await client.post("/borrowers/profile", form);
+        setMessage("✅ Profile created successfully");
+        setProfileExists(true);
+      }
 
- if (loading) {
-   return <div style={{ padding: "24px" }}>Loading borrower profile...</div>;
- }
+      await fetchProfile();
+    } catch (err) {
+      setError(err.message || "Failed to save borrower profile");
+    } finally {
+      setSaving(false);
+    }
+  };
 
- return (
-   <div style={styles.wrapper}>
-     <div style={styles.card}>
-       <div style={styles.headerRow}>
-         <div>
-           <h2 style={{ marginBottom: "8px" }}>Borrower Profile</h2>
-           <p style={{ color: "#666", marginTop: 0 }}>
-             Complete your profile for loan eligibility and verification.
-           </p>
-         </div>
+  if (loading) {
+    return <div style={{ padding: "24px" }}>Loading borrower profile...</div>;
+  }
 
-         <span
-           style={{
-             ...styles.badge,
-             background: verified ? "#dcfce7" : "#fef3c7",
-             color: verified ? "#166534" : "#92400e",
-           }}
-         >
-           {verified ? "Verified" : "Pending Verification"}
-         </span>
-       </div>
+  return (
+    <div style={styles.wrapper}>
+      <div style={styles.card}>
+        <div style={styles.headerRow}>
+          <div>
+            <h2 style={{ marginBottom: "8px" }}>Borrower Profile</h2>
+            <p style={{ color: "#666", marginTop: 0 }}>
+              Complete your profile for loan eligibility and verification.
+            </p>
+          </div>
 
-       {message && <div style={styles.success}>{message}</div>}
-       {error && <div style={styles.error}>{error}</div>}
+          <span
+            style={{
+              ...styles.badge,
+              background: verified ? "#dcfce7" : "#fef3c7",
+              color: verified ? "#166534" : "#92400e",
+            }}
+          >
+            {verified ? "Verified" : "Pending Verification"}
+          </span>
+        </div>
 
-       <form onSubmit={handleSubmit}>
-         <div style={styles.grid}>
-           <div>
-             <label style={styles.label}>Phone</label>
-             <input
-               style={styles.input}
-               name="phone"
-               value={form.phone}
-               onChange={handleChange}
-               placeholder="e.g. 0771234567"
-               required
-             />
-           </div>
+        {message && <div style={styles.success}>{message}</div>}
+        {error && <div style={styles.error}>{error}</div>}
 
-           <div>
-             <label style={styles.label}>Community</label>
-             <input
-               style={styles.input}
-               name="community"
-               value={form.community}
-               onChange={handleChange}
-               placeholder="Your community / area"
-               required
-             />
-           </div>
-         </div>
+        <form onSubmit={handleSubmit}>
+          <div style={styles.grid}>
+            <div>
+              <label style={styles.label}>Phone</label>
+              <input
+                style={styles.input}
+                name="phone"
+                value={form.phone}
+                onChange={handleChange}
+                placeholder="e.g. 0771234567"
+                required
+              />
+            </div>
 
-         <label style={styles.label}>Address</label>
-         <input
-           style={styles.input}
-           name="address"
-           value={form.address}
-           onChange={handleChange}
-           placeholder="Enter your full address"
-           required
-         />
+            <div>
+              <label style={styles.label}>Community</label>
+              <input
+                style={styles.input}
+                name="community"
+                value={form.community}
+                onChange={handleChange}
+                placeholder="Your community / area"
+                required
+              />
+            </div>
+          </div>
 
-         <div style={{ marginTop: "10px" }}>
-           <button
-             type="button"
-             style={styles.lookupBtn}
-             onClick={handleLookupCommunity}
-             disabled={lookupLoading}
-           >
-             {lookupLoading ? "Detecting..." : "Auto-detect community from address"}
-           </button>
-         </div>
+          <label style={styles.label}>Address</label>
+          <input
+            style={styles.input}
+            name="address"
+            value={form.address}
+            onChange={handleChange}
+            placeholder="Enter your full address"
+            required
+          />
 
-         <div style={styles.grid}>
-           <div>
-             <label style={styles.label}>Business Category</label>
-             <input
-               style={styles.input}
-               name="businessCategory"
-               value={form.businessCategory}
-               onChange={handleChange}
-               placeholder="e.g. farming, tailoring, grocery"
-               required
-             />
-           </div>
+          <div style={{ marginTop: "10px" }}>
+            <button
+              type="button"
+              style={styles.lookupBtn}
+              onClick={handleLookupCommunity}
+              disabled={lookupLoading}
+            >
+              {lookupLoading ? "Detecting..." : "Auto-detect community from address"}
+            </button>
+          </div>
 
-           <div>
-             <label style={styles.label}>Monthly Income Range</label>
-             <input
-               style={styles.input}
-               name="monthlyIncomeRange"
-               value={form.monthlyIncomeRange}
-               onChange={handleChange}
-               placeholder="e.g. LKR 30,000 - 50,000"
-               required
-             />
-           </div>
-         </div>
+          {lookupPreview && (
+            <div style={styles.previewBox}>
+              <h4 style={{ marginTop: 0 }}>Detected Address Preview</h4>
+              <p><strong>Community:</strong> {lookupPreview.community || "Not clear"}</p>
+              <p><strong>Display Name:</strong> {lookupPreview.displayName || "N/A"}</p>
+              <p><strong>Latitude:</strong> {lookupPreview.latitude || "N/A"}</p>
+              <p><strong>Longitude:</strong> {lookupPreview.longitude || "N/A"}</p>
+            </div>
+          )}
 
-         <label style={styles.label}>Household Size</label>
-         <input
-           style={styles.input}
-           type="number"
-           name="householdSize"
-           value={form.householdSize}
-           onChange={handleChange}
-           min="1"
-           required
-         />
+          <div style={styles.grid}>
+            <div>
+              <label style={styles.label}>Business Category</label>
+              <input
+                style={styles.input}
+                name="businessCategory"
+                value={form.businessCategory}
+                onChange={handleChange}
+                placeholder="e.g. farming, tailoring, grocery"
+                required
+              />
+            </div>
 
-         <label style={styles.label}>Poverty Impact Plan</label>
-         <textarea
-           style={styles.textarea}
-           name="povertyImpactPlan"
-           value={form.povertyImpactPlan}
-           onChange={handleChange}
-           placeholder="Explain how this loan will reduce poverty or improve your family’s living conditions"
-           required
-         />
+            <div>
+              <label style={styles.label}>Monthly Income Range</label>
+              <input
+                style={styles.input}
+                name="monthlyIncomeRange"
+                value={form.monthlyIncomeRange}
+                onChange={handleChange}
+                placeholder="e.g. LKR 30,000 - 50,000"
+                required
+              />
+            </div>
+          </div>
 
-         <button type="submit" style={styles.button} disabled={saving}>
-           {saving
-             ? profileExists
-               ? "Updating..."
-               : "Saving..."
-             : profileExists
-             ? "Update Profile"
-             : "Create Profile"}
-         </button>
-       </form>
-     </div>
-   </div>
- );
+          <label style={styles.label}>Household Size</label>
+          <input
+            style={styles.input}
+            type="number"
+            name="householdSize"
+            value={form.householdSize}
+            onChange={handleChange}
+            min="1"
+            required
+          />
+
+          <label style={styles.label}>Poverty Impact Plan</label>
+          <textarea
+            style={styles.textarea}
+            name="povertyImpactPlan"
+            value={form.povertyImpactPlan}
+            onChange={handleChange}
+            placeholder="Explain how this loan will reduce poverty or improve your family’s living conditions"
+            required
+          />
+
+          <button type="submit" style={styles.button} disabled={saving}>
+            {saving
+              ? profileExists
+                ? "Updating..."
+                : "Saving..."
+              : profileExists
+              ? "Update Profile"
+              : "Create Profile"}
+          </button>
+        </form>
+      </div>
+    </div>
+  );
 }
 
 const styles = {
- wrapper: {
-   background: "#f5f7fb",
-   minHeight: "calc(100vh - 80px)",
-   padding: "24px",
- },
- card: {
-   maxWidth: "900px",
-   margin: "0 auto",
-   background: "#fff",
-   borderRadius: "12px",
-   padding: "32px",
-   boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
- },
- headerRow: {
-   display: "flex",
-   justifyContent: "space-between",
-   alignItems: "flex-start",
-   gap: "16px",
-   marginBottom: "20px",
- },
- badge: {
-   padding: "8px 14px",
-   borderRadius: "999px",
-   fontSize: "14px",
-   fontWeight: "600",
- },
- grid: {
-   display: "grid",
-   gridTemplateColumns: "1fr 1fr",
-   gap: "16px",
- },
- label: {
-   display: "block",
-   marginBottom: "8px",
-   marginTop: "10px",
-   fontWeight: "600",
- },
- input: {
-   width: "100%",
-   padding: "12px",
-   borderRadius: "8px",
-   border: "1px solid #ccc",
-   fontSize: "15px",
-   boxSizing: "border-box",
- },
- textarea: {
-   width: "100%",
-   minHeight: "130px",
-   padding: "12px",
-   borderRadius: "8px",
-   border: "1px solid #ccc",
-   fontSize: "15px",
-   boxSizing: "border-box",
-   resize: "vertical",
- },
- button: {
-   marginTop: "18px",
-   padding: "12px 18px",
-   border: "none",
-   borderRadius: "8px",
-   background: "#2563eb",
-   color: "#fff",
-   fontWeight: "600",
-   cursor: "pointer",
- },
- lookupBtn: {
-   padding: "10px 14px",
-   border: "none",
-   borderRadius: "8px",
-   background: "#111827",
-   color: "#fff",
-   fontWeight: "600",
-   cursor: "pointer",
- },
- success: {
-   background: "#dcfce7",
-   color: "#166534",
-   padding: "10px 12px",
-   borderRadius: "8px",
-   marginBottom: "16px",
- },
- error: {
-   background: "#fee2e2",
-   color: "#b91c1c",
-   padding: "10px 12px",
-   borderRadius: "8px",
-   marginBottom: "16px",
- },
+  wrapper: {
+    background: "#f5f7fb",
+    minHeight: "calc(100vh - 80px)",
+    padding: "24px",
+  },
+  card: {
+    maxWidth: "900px",
+    margin: "0 auto",
+    background: "#fff",
+    borderRadius: "12px",
+    padding: "32px",
+    boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
+  },
+  headerRow: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "flex-start",
+    gap: "16px",
+    marginBottom: "20px",
+  },
+  badge: {
+    padding: "8px 14px",
+    borderRadius: "999px",
+    fontSize: "14px",
+    fontWeight: "600",
+  },
+  grid: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "16px",
+  },
+  label: {
+    display: "block",
+    marginBottom: "8px",
+    marginTop: "10px",
+    fontWeight: "600",
+  },
+  input: {
+    width: "100%",
+    padding: "12px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    fontSize: "15px",
+    boxSizing: "border-box",
+  },
+  textarea: {
+    width: "100%",
+    minHeight: "130px",
+    padding: "12px",
+    borderRadius: "8px",
+    border: "1px solid #ccc",
+    fontSize: "15px",
+    boxSizing: "border-box",
+    resize: "vertical",
+  },
+  button: {
+    marginTop: "18px",
+    padding: "12px 18px",
+    border: "none",
+    borderRadius: "8px",
+    background: "#2563eb",
+    color: "#fff",
+    fontWeight: "600",
+    cursor: "pointer",
+  },
+  lookupBtn: {
+    padding: "10px 14px",
+    border: "none",
+    borderRadius: "8px",
+    background: "#111827",
+    color: "#fff",
+    fontWeight: "600",
+    cursor: "pointer",
+  },
+  previewBox: {
+    marginTop: "14px",
+    padding: "12px",
+    background: "#f9fafb",
+    border: "1px solid #e5e7eb",
+    borderRadius: "8px",
+  },
+  success: {
+    background: "#dcfce7",
+    color: "#166534",
+    padding: "10px 12px",
+    borderRadius: "8px",
+    marginBottom: "16px",
+  },
+  error: {
+    background: "#fee2e2",
+    color: "#b91c1c",
+    padding: "10px 12px",
+    borderRadius: "8px",
+    marginBottom: "16px",
+  },
 };
