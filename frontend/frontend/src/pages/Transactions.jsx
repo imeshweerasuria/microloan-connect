@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import client from "./api/client";
+import client from "../api/client";
 import { useAuth } from "../context/AuthContext";
 
 export default function Transactions() {
