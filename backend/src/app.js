@@ -9,7 +9,7 @@ const borrowerRoutes = require("./routes/borrowerRoutes");
 const loanRoutes = require("./routes/loanRoutes");
 const repaymentRoutes = require("./routes/repaymentRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
-const exchangeRoutes = require("./routes/exchangeRoutes");
+const fxRoutes = require("./routes/fxRoutes");
 
 const app = express();
 
@@ -21,13 +21,11 @@ app.use(morgan("dev"));
 app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 
 app.use("/api/auth", authRoutes);
-app.use("/api/fx", require("./routes/fxRoutes"));
-
+app.use("/api/fx", fxRoutes);
 app.use("/api/borrowers", borrowerRoutes);
 app.use("/api/loans", loanRoutes);
 app.use("/api/repayments", repaymentRoutes);
 app.use("/api/transactions", transactionRoutes);
-app.use("/api/exchange-rate", exchangeRoutes);
 
 app.use(notFound);
 app.use(errorHandler);
