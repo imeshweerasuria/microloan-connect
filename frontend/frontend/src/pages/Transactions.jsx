@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
+import { useSearchParams, Link } from "react-router-dom";
 import client from "../api/client";
 import { useAuth } from "../context/AuthContext";
 
 export default function Transactions() {
  const { user } = useAuth();
+ const [searchParams] = useSearchParams();
 
  const [transactions, setTransactions] = useState([]);
  const [loans, setLoans] = useState([]);
@@ -15,6 +17,8 @@ export default function Transactions() {
  const [funding, setFunding] = useState(false);
  const [message, setMessage] = useState("");
  const [error, setError] = useState("");
+
+ const currentUserId = user?.id || user?._id || "";
 
  const fetchTransactions = async () => {
    try {
@@ -38,6 +42,7 @@ export default function Transactions() {
    const load = async () => {
      try {
        setLoading(true);
+       setError("");
        await Promise.all([fetchTransactions(), fetchLoans()]);
      } finally {
        setLoading(false);
@@ -46,12 +51,35 @@ export default function Transactions() {
    load();
  }, []);
 
- const selectedLoan = loans.find((l) => l._id === selectedLoanId);
+ useEffect(() => {
+   const loanIdFromQuery = searchParams.get("loanId");
+   if (loanIdFromQuery) {
+     setSelectedLoanId(loanIdFromQuery);
+   }
+ }, [searchParams]);
+
+ const selectedLoan = useMemo(
+   () => loans.find((l) => l._id === selectedLoanId),
+   [loans, selectedLoanId]
+ );
+
+ const remainingAmount = selectedLoan
+   ? Number(selectedLoan.amount || 0) - Number(selectedLoan.fundedAmount || 0)
+   : 0;
 
  const handleCreateFunding = async (e) => {
    e.preventDefault();
+
    if (!selectedLoan) {
      setError("Please select a loan");
+     return;
+   }
+
+   const normalizedBorrowerId =
+     selectedLoan.borrowerId?._id || selectedLoan.borrowerId || "";
+
+   if (!currentUserId) {
+     setError("Unable to detect current user session");
      return;
    }
 
@@ -63,8 +91,8 @@ export default function Transactions() {
      await client.post("/transactions", {
        type: "FUNDING",
        loanId: selectedLoan._id,
-       fromUserId: user.id,
-       toUserId: selectedLoan.borrowerId,
+       fromUserId: currentUserId,
+       toUserId: normalizedBorrowerId,
        amount: Number(amount),
        currency,
        note,
@@ -73,8 +101,6 @@ export default function Transactions() {
      setMessage("✅ Funding transaction created successfully");
      setAmount("");
      setNote("");
-     setSelectedLoanId("");
-
      await Promise.all([fetchTransactions(), fetchLoans()]);
    } catch (err) {
      setError(err.message || "Failed to create transaction");
@@ -93,6 +119,17 @@ export default function Transactions() {
      {message && <div style={styles.success}>{message}</div>}
      {error && <div style={styles.error}>{error}</div>}
 
+     <div style={styles.statsRow}>
+       <div style={styles.statCard}>
+         <h3>Approved Loans</h3>
+         <p style={styles.big}>{loans.length}</p>
+       </div>
+       <div style={styles.statCard}>
+         <h3>My Transactions</h3>
+         <p style={styles.big}>{transactions.length}</p>
+       </div>
+     </div>
+
      <div style={styles.grid}>
        <div style={styles.card}>
          <h2>Create Funding Transaction</h2>
@@ -106,18 +143,24 @@ export default function Transactions() {
              required
            >
              <option value="">-- Select Loan --</option>
-             {loans.map((loan) => (
-               <option key={loan._id} value={loan._id}>
-                 {loan.title} | {loan.amount} {loan.currency} | funded: {loan.fundedAmount || 0}
-               </option>
-             ))}
+             {loans.map((loan) => {
+               const remaining =
+                 Number(loan.amount || 0) - Number(loan.fundedAmount || 0);
+
+               return (
+                 <option key={loan._id} value={loan._id}>
+                   {loan.title} | {loan.amount} {loan.currency} | remaining: {remaining}
+                 </option>
+               );
+             })}
            </select>
 
            {selectedLoan && (
              <div style={styles.loanInfo}>
-               <p><strong>Borrower ID:</strong> {selectedLoan.borrowerId}</p>
+               <p><strong>Purpose:</strong> {selectedLoan.purpose}</p>
                <p><strong>Category:</strong> {selectedLoan.businessCategory}</p>
-               <p><strong>Poverty Impact:</strong> {selectedLoan.povertyImpactPlanSnapshot}</p>
+               <p><strong>Impact Plan:</strong> {selectedLoan.povertyImpactPlanSnapshot}</p>
+               <p><strong>Remaining Needed:</strong> {remainingAmount} {selectedLoan.currency}</p>
              </div>
            )}
 
@@ -125,6 +168,8 @@ export default function Transactions() {
            <input
              style={styles.input}
              type="number"
+             min="1"
+             max={remainingAmount || undefined}
              value={amount}
              onChange={(e) => setAmount(e.target.value)}
              required
@@ -134,7 +179,7 @@ export default function Transactions() {
            <input
              style={styles.input}
              value={currency}
-             onChange={(e) => setCurrency(e.target.value)}
+             onChange={(e) => setCurrency(e.target.value.toUpperCase())}
              required
            />
 
@@ -158,7 +203,10 @@ export default function Transactions() {
          {loading ? (
            <p>Loading transactions...</p>
          ) : transactions.length === 0 ? (
-           <p>No transactions found.</p>
+           <div>
+             <p>No transactions found.</p>
+             <Link to="/lender/dashboard">Go to lender dashboard</Link>
+           </div>
          ) : (
            <div style={{ display: "grid", gap: "12px" }}>
              {transactions.map((tx) => (
@@ -205,6 +253,23 @@ const styles = {
  sub: {
    color: "#6b7280",
    marginBottom: "20px",
+ },
+ statsRow: {
+   display: "grid",
+   gridTemplateColumns: "1fr 1fr",
+   gap: "16px",
+   marginBottom: "20px",
+ },
+ statCard: {
+   background: "#fff",
+   padding: "20px",
+   borderRadius: "12px",
+   boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
+ },
+ big: {
+   margin: 0,
+   fontSize: "30px",
+   fontWeight: "700",
  },
  grid: {
    display: "grid",

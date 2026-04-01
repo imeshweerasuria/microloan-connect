@@ -1,6 +1,7 @@
-const  AppError = require("../utils/AppError");
+const AppError = require("../utils/AppError");
 const txRepo = require("../repositories/transactionRepository");
 const loanRepo = require("../repositories/loanRepository");
+const Transaction = require("../models/Transaction");
 const fx = require("./fxService");
 
 function ensureObjectIdLike(id, name) {
@@ -96,7 +97,6 @@ exports.createFundingTransaction = async (user, payload) => {
 };
 
 exports.listAll = async () => txRepo.listAll();
-
 exports.listMine = async (userId) => txRepo.listMine(userId);
 
 exports.getById = async (user, id) => {
@@ -130,4 +130,37 @@ exports.deleteById = async (id) => {
  const deleted = await txRepo.deleteById(id);
  if (!deleted) throw new AppError("Transaction not found", 404);
  return deleted;
+};
+
+exports.getAnalyticsSummary = async () => {
+ const grouped = await Transaction.aggregate([
+   {
+     $match: {
+       status: "CONFIRMED"
+     }
+   },
+   {
+     $group: {
+       _id: "$type",
+       totalAmount: { $sum: "$amount" },
+       count: { $sum: 1 }
+     }
+   }
+ ]);
+
+ const totalTransactions = await Transaction.countDocuments();
+
+ let totalFunding = 0;
+ let totalRepayment = 0;
+
+ for (const row of grouped) {
+   if (row._id === "FUNDING") totalFunding = row.totalAmount;
+   if (row._id === "REPAYMENT") totalRepayment = row.totalAmount;
+ }
+
+ return {
+   totalFunding,
+   totalRepayment,
+   totalTransactions
+ };
 };
