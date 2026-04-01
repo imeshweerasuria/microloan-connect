@@ -37,7 +37,7 @@ export default function AdminDashboard() {
      setMessage("");
      setError("");
      await client.patch(`/loans/${loanId}/approve`);
-     setMessage("✅ Loan approved successfully");
+     setMessage("✅ Loan approved and borrower SMS notification triggered");
      await fetchAll();
    } catch (err) {
      setError(err.message || "Failed to approve loan");
@@ -49,7 +49,7 @@ export default function AdminDashboard() {
      setMessage("");
      setError("");
      await client.patch(`/loans/${loanId}/reject`);
-     setMessage("✅ Loan rejected successfully");
+     setMessage("✅ Loan rejected and borrower SMS notification triggered");
      await fetchAll();
    } catch (err) {
      setError(err.message || "Failed to reject loan");
@@ -68,7 +68,7 @@ export default function AdminDashboard() {
    <div style={styles.page}>
      <h1>Admin Dashboard</h1>
      <p style={styles.sub}>
-       Review loan requests, moderate approvals, and monitor transaction activity.
+       Review loan requests, moderate approvals, monitor transaction activity, and trigger borrower SMS updates.
      </p>
 
      {message && <div style={styles.success}>{message}</div>}
@@ -118,10 +118,10 @@ export default function AdminDashboard() {
 
                <div style={styles.btnRow}>
                  <button style={styles.approveBtn} onClick={() => approveLoan(loan._id)}>
-                   Approve
+                   Approve + SMS
                  </button>
                  <button style={styles.rejectBtn} onClick={() => rejectLoan(loan._id)}>
-                   Reject
+                   Reject + SMS
                  </button>
                </div>
              </div>
