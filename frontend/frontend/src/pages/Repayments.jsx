@@ -1,21 +1,30 @@
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import client from "../api/client";
+import { useAuth } from "../context/AuthContext";
 
 export default function Repayments() {
- const [myLoans, setMyLoans] = useState([]);
+ const { user } = useAuth();
+
+ const [loans, setLoans] = useState([]);
  const [selectedLoanId, setSelectedLoanId] = useState("");
  const [repayments, setRepayments] = useState([]);
+ const [paymentDrafts, setPaymentDrafts] = useState({});
+ const [createForm, setCreateForm] = useState({
+   dueDate: "",
+   amountDue: "",
+ });
+ const [creating, setCreating] = useState(false);
  const [payingId, setPayingId] = useState("");
- const [amount, setAmount] = useState("");
- const [method, setMethod] = useState("CASH");
  const [loading, setLoading] = useState(true);
  const [message, setMessage] = useState("");
  const [error, setError] = useState("");
 
+ const isAdmin = user?.role === "ADMIN";
+
  const fetchLoans = async () => {
    try {
-     const res = await client.get("/loans/me");
-     setMyLoans(res.data || []);
+     const res = isAdmin ? await client.get("/loans") : await client.get("/loans/me");
+     setLoans(res.data || []);
    } catch (err) {
      setError(err.message || "Failed to load loans");
    }
@@ -35,13 +44,14 @@ export default function Repayments() {
    const load = async () => {
      try {
        setLoading(true);
+       setError("");
        await fetchLoans();
      } finally {
        setLoading(false);
      }
    };
    load();
- }, []);
+ }, [isAdmin]);
 
  useEffect(() => {
    if (selectedLoanId) {
@@ -51,25 +61,78 @@ export default function Repayments() {
    }
  }, [selectedLoanId]);
 
+ const selectedLoan = useMemo(
+   () => loans.find((loan) => loan._id === selectedLoanId),
+   [loans, selectedLoanId]
+ );
+
+ const selectedBorrowerId =
+   selectedLoan?.borrowerId?._id || selectedLoan?.borrowerId || "";
+
+ const updateDraft = (repaymentId, field, value) => {
+   setPaymentDrafts((prev) => ({
+     ...prev,
+     [repaymentId]: {
+       amount: prev[repaymentId]?.amount || "",
+       method: prev[repaymentId]?.method || "CASH",
+       [field]: value,
+     },
+   }));
+ };
+
  const handlePay = async (repaymentId) => {
+   const draft = paymentDrafts[repaymentId] || { amount: "", method: "CASH" };
+
    try {
      setError("");
      setMessage("");
      setPayingId(repaymentId);
 
      await client.post(`/repayments/${repaymentId}/pay`, {
-       amount: Number(amount),
-       method,
+       amount: Number(draft.amount),
+       method: draft.method,
      });
 
      setMessage("✅ Repayment recorded successfully");
-     setAmount("");
-     setMethod("CASH");
+     setPaymentDrafts((prev) => ({
+       ...prev,
+       [repaymentId]: { amount: "", method: "CASH" },
+     }));
      await fetchRepaymentsByLoan(selectedLoanId);
    } catch (err) {
      setError(err.message || "Failed to make repayment");
    } finally {
      setPayingId("");
+   }
+ };
+
+ const handleCreateRepayment = async (e) => {
+   e.preventDefault();
+
+   if (!selectedLoanId || !selectedBorrowerId) {
+     setError("Please select a valid loan first");
+     return;
+   }
+
+   try {
+     setCreating(true);
+     setError("");
+     setMessage("");
+
+     await client.post("/repayments", {
+       loanId: selectedLoanId,
+       borrowerId: selectedBorrowerId,
+       dueDate: createForm.dueDate,
+       amountDue: Number(createForm.amountDue),
+     });
+
+     setMessage("✅ Repayment schedule item created successfully");
+     setCreateForm({ dueDate: "", amountDue: "" });
+     await fetchRepaymentsByLoan(selectedLoanId);
+   } catch (err) {
+     setError(err.message || "Failed to create repayment");
+   } finally {
+     setCreating(false);
    }
  };
 
@@ -90,27 +153,63 @@ export default function Repayments() {
    <div style={styles.page}>
      <h1>Repayments</h1>
      <p style={styles.sub}>
-       View your repayment schedule and make installment payments.
+       {isAdmin
+         ? "Create repayment schedules and monitor installment progress."
+         : "View your repayment schedule and make installment payments."}
      </p>
 
      {message && <div style={styles.success}>{message}</div>}
      {error && <div style={styles.error}>{error}</div>}
 
      <div style={styles.card}>
-       <label style={styles.label}>Select My Loan</label>
+       <label style={styles.label}>{isAdmin ? "Select Loan" : "Select My Loan"}</label>
        <select
          style={styles.input}
          value={selectedLoanId}
          onChange={(e) => setSelectedLoanId(e.target.value)}
        >
          <option value="">-- Select Loan --</option>
-         {myLoans.map((loan) => (
+         {loans.map((loan) => (
            <option key={loan._id} value={loan._id}>
              {loan.title} | {loan.status} | {loan.amount} {loan.currency}
            </option>
          ))}
        </select>
      </div>
+
+     {isAdmin && selectedLoanId && (
+       <div style={styles.card}>
+         <h2>Create Repayment Schedule Item</h2>
+
+         <form onSubmit={handleCreateRepayment}>
+           <div style={styles.payRow}>
+             <input
+               style={styles.smallInput}
+               type="date"
+               value={createForm.dueDate}
+               onChange={(e) =>
+                 setCreateForm((prev) => ({ ...prev, dueDate: e.target.value }))
+               }
+               required
+             />
+             <input
+               style={styles.smallInput}
+               type="number"
+               min="1"
+               placeholder="Amount Due"
+               value={createForm.amountDue}
+               onChange={(e) =>
+                 setCreateForm((prev) => ({ ...prev, amountDue: e.target.value }))
+               }
+               required
+             />
+             <button style={styles.payBtn} type="submit" disabled={creating}>
+               {creating ? "Creating..." : "Create Repayment"}
+             </button>
+           </div>
+         </form>
+       </div>
+     )}
 
      <div style={styles.card}>
        <h2>Repayment Schedule</h2>
@@ -125,6 +224,7 @@ export default function Repayments() {
          <div style={{ display: "grid", gap: "12px" }}>
            {repayments.map((rep) => {
              const remaining = rep.amountDue - rep.amountPaid;
+             const draft = paymentDrafts[rep._id] || { amount: "", method: "CASH" };
 
              return (
                <div key={rep._id} style={styles.repCard}>
@@ -150,26 +250,27 @@ export default function Repayments() {
                      <strong>Payment History</strong>
                      {rep.payments.map((p, idx) => (
                        <div key={idx} style={styles.smallText}>
-                         {p.amount} via {p.method} on{" "}
-                         {new Date(p.paidAt).toLocaleString()}
+                         {p.amount} via {p.method} on {new Date(p.paidAt).toLocaleString()}
                        </div>
                      ))}
                    </div>
                  )}
 
-                 {rep.status !== "PAID" && (
+                 {!isAdmin && rep.status !== "PAID" && (
                    <div style={styles.payRow}>
                      <input
                        style={styles.smallInput}
                        type="number"
-                       value={amount}
-                       onChange={(e) => setAmount(e.target.value)}
+                       min="1"
+                       max={remaining}
+                       value={draft.amount}
+                       onChange={(e) => updateDraft(rep._id, "amount", e.target.value)}
                        placeholder="Amount"
                      />
                      <select
                        style={styles.smallInput}
-                       value={method}
-                       onChange={(e) => setMethod(e.target.value)}
+                       value={draft.method}
+                       onChange={(e) => updateDraft(rep._id, "method", e.target.value)}
                      >
                        <option value="CASH">CASH</option>
                        <option value="BANK">BANK</option>
