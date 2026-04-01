@@ -1,119 +1,115 @@
 import { Link, useNavigate } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
+const linkStyle = {
+ textDecoration: "none",
+ color: "#111827",
+ fontWeight: "500",
+};
+
+function roleHome(role) {
+ if (role === "BORROWER") return "/borrower/dashboard";
+ if (role === "LENDER") return "/lender/dashboard";
+ if (role === "ADMIN") return "/admin/dashboard";
+ return "/";
+}
+
 export default function Navbar() {
-  const { user, logout } = useAuth();
-  const navigate = useNavigate();
+ const { user, logout } = useAuth();
+ const navigate = useNavigate();
 
-  const handleLogout = () => {
-    logout();
-    navigate("/login");
-  };
+ const handleLogout = () => {
+   logout();
+   navigate("/login");
+ };
 
-  const navStyle = {
-    display: "flex",
-    gap: "20px",
-    alignItems: "center",
-    justifyContent: "space-between",
-    padding: "16px 24px",
-    borderBottom: "1px solid #ddd",
-    background: "#fff",
-    position: "sticky",
-    top: 0,
-    zIndex: 100,
-  };
+ return (
+   <nav
+     style={{
+       display: "flex",
+       gap: "20px",
+       alignItems: "center",
+       justifyContent: "space-between",
+       padding: "16px 24px",
+       borderBottom: "1px solid #e5e7eb",
+       background: "#ffffff",
+       position: "sticky",
+       top: 0,
+       zIndex: 100,
+     }}
+   >
+     <div style={{ display: "flex", gap: "24px", alignItems: "center", flexWrap: "wrap" }}>
+       <Link
+         to={user ? roleHome(user.role) : "/"}
+         style={{ textDecoration: "none", fontWeight: "700", fontSize: "20px", color: "#111827" }}
+       >
+         Micro-Loan Connect
+       </Link>
 
-  const leftStyle = {
-    display: "flex",
-    gap: "28px",
-    alignItems: "center",
-  };
+       <Link to="/" style={linkStyle}>Home</Link>
 
-  const rightStyle = {
-    display: "flex",
-    gap: "16px",
-    alignItems: "center",
-  };
+       {user?.role === "BORROWER" && (
+         <>
+           <Link to="/borrower/dashboard" style={linkStyle}>Borrower Dashboard</Link>
+           <Link to="/borrower/profile" style={linkStyle}>Borrower Profile</Link>
+           <Link to="/repayments" style={linkStyle}>Repayments</Link>
+         </>
+       )}
 
-  return (
-    <nav style={navStyle}>
-      <div style={leftStyle}>
-        <Link to="/" style={{ fontWeight: "bold", fontSize: "20px", textDecoration: "none" }}>
-          LoanPlatform
-        </Link>
+       {user?.role === "LENDER" && (
+         <>
+           <Link to="/lender/dashboard" style={linkStyle}>Lender Dashboard</Link>
+           <Link to="/transactions" style={linkStyle}>Transactions</Link>
+           <Link to="/fx" style={linkStyle}>FX Converter</Link>
+         </>
+       )}
 
-        <Link to="/" style={{ textDecoration: "none", color: "#111" }}>
-          Home
-        </Link>
+       {user?.role === "ADMIN" && (
+         <>
+           <Link to="/admin/dashboard" style={linkStyle}>Admin Dashboard</Link>
+           <Link to="/admin/analytics" style={linkStyle}>Analytics</Link>
+           <Link to="/repayments" style={linkStyle}>Repayments</Link>
+           <Link to="/transactions" style={linkStyle}>Transactions</Link>
+           <Link to="/fx" style={linkStyle}>FX Converter</Link>
+         </>
+       )}
+     </div>
 
-        {user?.role === "BORROWER" && (
-          <>
-            <Link to="/borrower/dashboard" style={{ textDecoration: "none", color: "#111" }}>
-              Borrower Dashboard
-            </Link>
-            <Link to="/borrower/profile" style={{ textDecoration: "none", color: "#111" }}>
-              Borrower Profile
-            </Link>
-            <Link to="/repayments" style={{ textDecoration: "none", color: "#111" }}>
-              Repayments
-            </Link>
-          </>
-        )}
-
-        {user?.role === "LENDER" && (
-          <>
-            <Link to="/lender/dashboard" style={{ textDecoration: "none", color: "#111" }}>
-              Lender Dashboard
-            </Link>
-            <Link to="/transactions" style={{ textDecoration: "none", color: "#111" }}>
-              Transactions
-            </Link>
-            <Link to="/fx" style={{ textDecoration: "none", color: "#111" }}>
-              FX Converter
-            </Link>
-          </>
-        )}
-
-        {user?.role === "ADMIN" && (
-          <>
-            <Link to="/admin/dashboard" style={{ textDecoration: "none", color: "#111" }}>
-              Admin Dashboard
-            </Link>
-            <Link to="/admin/analytics" style={{ textDecoration: "none", color: "#111" }}>
-              Analytics
-            </Link>
-          </>
-        )}
-      </div>
-
-      <div style={rightStyle}>
-        {!user ? (
-          <>
-            <Link to="/login" style={{ textDecoration: "none", color: "#111" }}>
-              Login
-            </Link>
-            <Link to="/register" style={{ textDecoration: "none", color: "#111" }}>
-              Register
-            </Link>
-          </>
-        ) : (
-          <>
-            <span
-              style={{
-                background: "#f3f4f6",
-                padding: "8px 12px",
-                borderRadius: "20px",
-                fontSize: "14px",
-              }}
-            >
-              {user.role} | {user.email}
-            </span>
-            <button onClick={handleLogout} style={{ padding: "8px 16px", cursor: "pointer" }}>
-              Logout
-            </button>
-          </>
-        )}
-      </div>
-    </nav>
-  );
+     <div style={{ display: "flex", gap: "14px", alignItems: "center", flexWrap: "wrap" }}>
+       {!user ? (
+         <>
+           <Link to="/login" style={linkStyle}>Login</Link>
+           <Link to="/register" style={linkStyle}>Register</Link>
+         </>
+       ) : (
+         <>
+           <span
+             style={{
+               background: "#f3f4f6",
+               padding: "8px 12px",
+               borderRadius: "999px",
+               fontSize: "14px",
+               color: "#374151",
+             }}
+           >
+             {user.role} | {user.email}
+           </span>
+           <button
+             onClick={handleLogout}
+             style={{
+               padding: "8px 16px",
+               cursor: "pointer",
+               borderRadius: "8px",
+               border: "none",
+               background: "#111827",
+               color: "#fff",
+             }}
+           >
+             Logout
+           </button>
+         </>
+       )}
+     </div>
+   </nav>
+ );
 }
