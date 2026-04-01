@@ -32,11 +32,27 @@ const pay = asyncHandler(async (req, res) => {
  res.json(rep);
 });
 
+const createStripeCheckoutSession = asyncHandler(async (req, res) => {
+ const data = await service.createStripeCheckoutSession(req.user, req.params.id);
+ res.json(data);
+});
+
+const confirmStripeSession = asyncHandler(async (req, res) => {
+ const rep = await service.confirmStripeSession(
+   req.user,
+   req.params.id,
+   req.body.sessionId
+ );
+ res.json(rep);
+});
+
 module.exports = {
  createRepayment,
  listByLoan,
  getRepayment,
  updateRepayment,
  deleteRepayment,
- pay
+ pay,
+ createStripeCheckoutSession,
+ confirmStripeSession
 };
