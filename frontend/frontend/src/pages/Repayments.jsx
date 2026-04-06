@@ -24,6 +24,7 @@ export default function Repayments() {
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [validationError, setValidationError] = useState({});
 
   const isAdmin = user?.role === "ADMIN";
 
@@ -140,16 +141,19 @@ export default function Repayments() {
     };
   }, [repayments]);
 
-  const updateDraft = (repaymentId, field, value) => {
-    setPaymentDrafts((prev) => ({
-      ...prev,
-      [repaymentId]: {
-        amount: prev[repaymentId]?.amount || "",
-        method: prev[repaymentId]?.method || "CASH",
-        [field]: value,
-      },
-    }));
-  };
+ const updateDraft = (repaymentId, field, value) => {
+  setPaymentDrafts((prev) => ({
+    ...prev,
+    [repaymentId]: {
+      amount: prev[repaymentId]?.amount || "",
+      [field]: value,
+    },
+  }));
+  // Clear validation error when user starts typing
+  if (validationError[repaymentId]) {
+    setValidationError((prev) => ({ ...prev, [repaymentId]: undefined }));
+  }
+};
 
   const updateAdminDraft = (repaymentId, field, value) => {
     setAdminDrafts((prev) => ({
@@ -163,37 +167,16 @@ export default function Repayments() {
     }));
   };
 
-  const handlePay = async (repaymentId) => {
-    const draft = paymentDrafts[repaymentId] || { amount: "", method: "CASH" };
-
-    try {
-      setError("");
-      setMessage("");
-      setPayingId(repaymentId);
-
-      await client.post(`/repayments/${repaymentId}/pay`, {
-        amount: Number(draft.amount),
-        method: draft.method,
-      });
-
-      setMessage("✅ Repayment recorded successfully");
-      setPaymentDrafts((prev) => ({
-        ...prev,
-        [repaymentId]: { amount: "", method: "CASH" },
-      }));
-      await fetchRepaymentsByLoan(selectedLoanId);
-    } catch (err) {
-      setError(err.message || "Failed to make repayment");
-    } finally {
-      setPayingId("");
-    }
-  };
 
   const handleStripeCheckout = async (repaymentId) => {
   const draft = paymentDrafts[repaymentId] || { amount: "" };
 
   if (!draft.amount || Number(draft.amount) <= 0) {
+    setValidationError({ [repaymentId]: "Please enter a valid amount greater than 0" });
     setError("Enter a valid amount before Stripe payment");
+    setTimeout(() => {
+      setValidationError((prev) => ({ ...prev, [repaymentId]: undefined }));
+    }, 3000);
     return;
   }
 
@@ -201,11 +184,12 @@ export default function Repayments() {
     setError("");
     setMessage("");
     setStripePayingId(repaymentId);
+    setValidationError({});
 
     const res = await client.post(
       `/repayments/${repaymentId}/stripe-checkout-session`,
       {
-        amount: Number(draft.amount), // ✅ SEND USER INPUT
+        amount: Number(draft.amount),
       }
     );
 
@@ -471,7 +455,7 @@ export default function Repayments() {
           <div style={styles.repaymentsList}>
             {repayments.map((rep) => {
               const remaining = rep.amountDue - rep.amountPaid;
-              const draft = paymentDrafts[rep._id] || { amount: "", method: "CASH" };
+              const draft = paymentDrafts[rep._id] || { amount: "" };              
               const adminDraft = adminDrafts[rep._id] || {
                 dueDate: rep.dueDate ? new Date(rep.dueDate).toISOString().slice(0, 10) : "",
                 amountDue: rep.amountDue || "",
@@ -525,53 +509,39 @@ export default function Repayments() {
                     </div>
                   )}
 
-                  <div style={styles.payRow}>
-  <input
-    style={styles.smallInput}
-    type="number"
-    min="1"
-    max={remaining}
-    value={draft.amount}
-    onChange={(e) => updateDraft(rep._id, "amount", e.target.value)}
-    placeholder="Amount"
-  />
-
-  <select
-    style={styles.smallInput}
-    value={draft.method}
-    onChange={(e) => updateDraft(rep._id, "method", e.target.value)}
-  >
-    <option value="CASH">CASH</option>
-    <option value="BANK">BANK</option>
-    <option value="ONLINE">ONLINE</option>
-  </select>
-
-  {/* ✅ SHOW MANUAL BUTTON ONLY FOR CASH/BANK */}
-  {(draft.method === "CASH" || draft.method === "BANK") && (
-    <button
-      style={styles.payBtn}
-      onClick={() => handlePay(rep._id)}
-      disabled={payingId === rep._id}
-    >
-      {payingId === rep._id ? "Paying..." : "Manual Pay"}
-    </button>
-  )}
-</div>
-
-{/* ✅ SHOW STRIPE BUTTON ONLY FOR ONLINE */}
-{draft.method === "ONLINE" && (
-  <div style={{ marginTop: "10px" }}>
-    <button
-      style={styles.stripeBtn}
-      onClick={() => handleStripeCheckout(rep._id)}
-      disabled={stripePayingId === rep._id}
-    >
-      {stripePayingId === rep._id
-        ? "Redirecting to Stripe..."
-        : "Pay by Stripe"}
-    </button>
-  </div>
-)}
+                  {/* ✅ NEW STRIPE PAYMENT DESIGN WITH VALIDATION */}
+                  <div>
+                    <div style={styles.stripePaymentContainer}>
+                      <input
+                        type="number"
+                        min="1"
+                        max={remaining}
+                        value={draft.amount}
+                        onChange={(e) => updateDraft(rep._id, "amount", e.target.value)}
+                        placeholder="Enter amount"
+                        style={{
+                          ...styles.stripeAmountInput,
+                          borderColor: validationError[rep._id] ? "#dc2626" : "#cbd5e1",
+                        }}
+                      />
+                      <button
+                        onClick={() => handleStripeCheckout(rep._id)}
+                        disabled={stripePayingId === rep._id || !draft.amount || Number(draft.amount) <= 0}
+                        style={{
+                          ...styles.stripePayButton,
+                          opacity: stripePayingId === rep._id ? 0.7 : 1,
+                          cursor: stripePayingId === rep._id ? "not-allowed" : "pointer",
+                        }}
+                      >
+                        {stripePayingId === rep._id ? "Redirecting..." : "Pay with Card"}
+                      </button>
+                    </div>
+                    {validationError[rep._id] && (
+                      <div style={styles.validationErrorMsg}>
+                        ⚠️ {validationError[rep._id]}
+                      </div>
+                    )}
+                  </div>
 
                   {/* Admin Controls */}
                   {isAdmin && (
@@ -1031,54 +1001,43 @@ const styles = {
     padding: "4px 0",
   },
   
-  paymentSection: {
-    marginTop: "16px",
-  },
-  
-  paymentRow: {
+  stripePaymentContainer: {
     display: "flex",
     gap: "12px",
-    marginBottom: "12px",
+    alignItems: "center",
     flexWrap: "wrap",
+    marginTop: "10px",
   },
-  
-  paymentAmount: {
+
+  stripeAmountInput: {
     flex: 1,
-    padding: "10px 12px",
-    borderRadius: "10px",
-    border: "1px solid #e5e7eb",
+    padding: "10px 14px",
     fontSize: "14px",
-  },
-  
-  paymentMethod: {
-    flex: 1,
-    padding: "10px 12px",
     borderRadius: "10px",
-    border: "1px solid #e5e7eb",
-    fontSize: "14px",
+    border: "1px solid #cbd5e1",
+    outline: "none",
+    transition: "border-color 0.2s",
   },
-  
-  manualPayBtn: {
+
+  stripePayButton: {
     padding: "10px 20px",
-    background: "#3b82f6",
+    background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)",
     color: "white",
     border: "none",
     borderRadius: "10px",
     fontSize: "14px",
     fontWeight: "600",
-    cursor: "pointer",
+    transition: "background 0.2s, transform 0.1s",
   },
-  
-  stripePayBtn: {
-    width: "100%",
-    padding: "10px 20px",
-    background: "#111827",
-    color: "white",
-    border: "none",
-    borderRadius: "10px",
-    fontSize: "14px",
-    fontWeight: "600",
-    cursor: "pointer",
+
+  validationErrorMsg: {
+    color: "#dc2626",
+    fontSize: "12px",
+    marginTop: "5px",
+    padding: "6px 10px",
+    background: "#fee2e2",
+    borderRadius: "8px",
+    display: "inline-block",
   },
   
   adminSection: {

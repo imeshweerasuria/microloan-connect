@@ -4,7 +4,7 @@ const PaymentSchema = new mongoose.Schema(
   {
     amount: { type: Number, required: true, min: 1 },
     paidAt: { type: Date, default: Date.now },
-    method: { type: String, default: "CASH" }
+    method: { type: String, default: "STRIPE" }
   },
   { _id: false }
 );

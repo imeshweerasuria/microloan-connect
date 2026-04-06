@@ -53,29 +53,33 @@ async function deleteRepayment(id) {
 }
 
 async function payRepayment(user, repaymentId, amount, method) {
- const rep = await repo.findById(repaymentId);
- if (!rep) throw new AppError("Repayment not found", 404);
+  const rep = await repo.findById(repaymentId);
+  if (!rep) throw new AppError("Repayment not found", 404);
 
- if (user.role === "BORROWER" && String(rep.borrowerId) !== String(user._id)) {
-   throw new AppError("Forbidden: not your repayment", 403);
- }
+  if (user.role === "BORROWER" && String(rep.borrowerId) !== String(user._id)) {
+    throw new AppError("Forbidden: not your repayment", 403);
+  }
 
- if (!amount || amount <= 0) throw new AppError("amount must be > 0", 400);
- if (rep.status === "PAID") throw new AppError("Repayment already PAID", 400);
+  if (!amount || amount <= 0) throw new AppError("amount must be > 0", 400);
+  if (rep.status === "PAID") throw new AppError("Repayment already PAID", 400);
 
- const remaining = rep.amountDue - rep.amountPaid;
- if (amount > remaining) {
-   throw new AppError(`Payment exceeds remaining amount (${remaining})`, 400);
- }
+  const remaining = rep.amountDue - rep.amountPaid;
+  if (amount > remaining) {
+    throw new AppError(`Payment exceeds remaining amount (${remaining})`, 400);
+  }
 
- rep.payments.push({ amount, method: method || "CASH" });
- rep.amountPaid += amount;
+  // ✅ Only allow Stripe payments
+  if (!method?.startsWith("STRIPE:")) {
+    throw new AppError("Only Stripe payments are allowed", 400);
+  }
 
- if (rep.amountPaid >= rep.amountDue) rep.status = "PAID";
- else rep.status = "PARTIAL";
+  rep.payments.push({ amount, method });
+  rep.amountPaid += amount;
 
- await rep.save();
- return rep;
+  rep.status = rep.amountPaid >= rep.amountDue ? "PAID" : "PARTIAL";
+
+  await rep.save();
+  return rep;
 }
 
 async function createStripeCheckoutSession(user, repaymentId, amount) {

@@ -61,13 +61,7 @@ router.get(
  repayment.listByLoan
 );
 
-router.post(
- "/:id/pay",
- protect,
- authorize("BORROWER"),
- validate(paySchema),
- repayment.pay
-);
+
 
 router.post(
  "/:id/stripe-checkout-session",
