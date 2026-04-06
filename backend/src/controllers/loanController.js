@@ -27,13 +27,15 @@ const browseLoans = asyncHandler(async (req, res) => {
 });
 
 const approveLoan = asyncHandler(async (req, res) => {
-  const loan = await service.approveLoan(req.params.loanId);
-  res.json(loan);
+  // Return the full result from service (includes loan, smsResult, and message)
+  const result = await service.approveLoan(req.params.loanId);
+  res.json(result);
 });
 
 const rejectLoan = asyncHandler(async (req, res) => {
-  const loan = await service.rejectLoan(req.params.loanId);
-  res.json(loan);
+  // Return the full result from service (includes loan, smsResult, and message)
+  const result = await service.rejectLoan(req.params.loanId);
+  res.json(result);
 });
 
 module.exports = {
