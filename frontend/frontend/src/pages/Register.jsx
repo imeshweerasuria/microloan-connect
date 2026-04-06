@@ -1,10 +1,11 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
 function roleHome(role) {
   if (role === "BORROWER") return "/borrower/dashboard";
   if (role === "LENDER") return "/lender/dashboard";
+  if (role === "ADMIN") return "/admin/dashboard";
   return "/";
 }
 
@@ -50,6 +51,32 @@ export default function Register() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    const styleId = "register-page-animations";
+
+    if (!document.getElementById(styleId)) {
+      const styleSheet = document.createElement("style");
+      styleSheet.id = styleId;
+      styleSheet.textContent = `
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `;
+      document.head.appendChild(styleSheet);
+    }
+  }, []);
 
   return (
     <div style={styles.page}>
@@ -176,6 +203,21 @@ export default function Register() {
                   <div>
                     <strong>Lender</strong>
                     <p style={styles.roleDesc}>Fund loans and make impact</p>
+                  </div>
+                </div>
+                {/* ADMIN Role Card - Remove this block if admin self-registration should not be allowed */}
+                <div
+                  style={{
+                    ...styles.roleCard,
+                    ...(form.role === "ADMIN" && styles.roleCardActive),
+                    gridColumn: "1 / -1",
+                  }}
+                  onClick={() => setForm({ ...form, role: "ADMIN" })}
+                >
+                  <span style={styles.roleIcon}>🛡️</span>
+                  <div>
+                    <strong>Admin</strong>
+                    <p style={styles.roleDesc}>Manage loans, users, and approvals</p>
                   </div>
                 </div>
               </div>
@@ -644,23 +686,3 @@ const styles = {
     color: "#065f46",
   },
 };
-
-// Add animation keyframes
-const styleSheet = document.createElement("style");
-styleSheet.textContent = `
-  @keyframes spin {
-    to { transform: rotate(360deg); }
-  }
-  
-  @keyframes slideUp {
-    from {
-      opacity: 0;
-      transform: translateY(20px);
-    }
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-`;
-document.head.appendChild(styleSheet);
