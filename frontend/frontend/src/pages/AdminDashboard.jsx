@@ -85,8 +85,15 @@ export default function AdminDashboard() {
       setMessage("");
       
       // Use PATCH /loans/:loanId/approve (admin-only endpoint)
-      await client.patch(`/loans/${loanId}/approve`);
-      setMessage("✅ Loan approved successfully");
+      const response = await client.patch(`/loans/${loanId}/approve`);
+      
+      // Use response.data.message if available, otherwise use default message
+      if (response.data && response.data.message) {
+        setMessage(`✅ ${response.data.message}`);
+      } else {
+        setMessage("✅ Loan approved successfully");
+      }
+      
       await fetchDashboardData();
     } catch (err) {
       setError(err.message || "Failed to approve loan");
@@ -104,9 +111,15 @@ export default function AdminDashboard() {
       setMessage("");
       
       // Use PATCH /loans/:loanId/reject (admin-only endpoint)
-      // Note: rejection reason not saved in backend yet
-      await client.patch(`/loans/${loanId}/reject`);
-      setMessage("❌ Loan rejected");
+      const response = await client.patch(`/loans/${loanId}/reject`);
+      
+      // Use response.data.message if available, otherwise use default message
+      if (response.data && response.data.message) {
+        setMessage(`❌ ${response.data.message}`);
+      } else {
+        setMessage("❌ Loan rejected");
+      }
+      
       await fetchDashboardData();
     } catch (err) {
       setError(err.message || "Failed to reject loan");
