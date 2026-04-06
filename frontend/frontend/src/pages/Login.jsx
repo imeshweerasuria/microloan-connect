@@ -63,20 +63,20 @@ export default function Login() {
         <div style={styles.card}>
           {/* Logo/Brand Section */}
           <div style={styles.brandSection}>
-            <div style={styles.logoIcon}>💰</div>
+            <div style={styles.logoIcon}>🏦</div>
             <h1 style={styles.brandName}>Micro-Loan Connect</h1>
-            <p style={styles.tagline}>Empowering Communities, Ending Poverty</p>
+            <p style={styles.tagline}>Financial Inclusion Platform</p>
           </div>
 
-          {/* SDG Badge */}
-          <div style={styles.sdgBadge}>
-            <span style={styles.sdgIcon}>🎯</span>
-            <span style={styles.sdgText}>SDG Goal 1: No Poverty</span>
+          {/* Financial Badge */}
+          <div style={styles.finBadge}>
+            <span style={styles.finIcon}>📊</span>
+            <span style={styles.finText}>Secure Access</span>
           </div>
 
           <h2 style={styles.heading}>Welcome Back</h2>
           <p style={styles.sub}>
-            Sign in to continue your journey in financial inclusion
+            Sign in to manage your loans, investments, or platform oversight
           </p>
 
           {error && (
@@ -165,7 +165,7 @@ export default function Login() {
               Create an Account
             </Link>
             <p style={styles.registerText}>
-              Join our community of changemakers fighting poverty through micro-loans
+              Join our community of lenders and borrowers driving financial inclusion
             </p>
           </div>
 
@@ -199,7 +199,7 @@ export default function Login() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     position: "relative",
     overflow: "hidden",
   },
@@ -259,7 +259,7 @@ const styles = {
   brandName: {
     fontSize: "24px",
     fontWeight: "800",
-    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
     margin: "0 0 4px 0",
@@ -271,8 +271,8 @@ const styles = {
     margin: 0,
   },
   
-  sdgBadge: {
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+  finBadge: {
+    background: "linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)",
     padding: "8px 16px",
     borderRadius: "40px",
     display: "inline-flex",
@@ -280,14 +280,14 @@ const styles = {
     gap: "8px",
     margin: "0 auto 24px",
     width: "fit-content",
-    boxShadow: "0 2px 8px rgba(16,185,129,0.3)",
+    boxShadow: "0 2px 8px rgba(59,130,246,0.3)",
   },
   
-  sdgIcon: {
+  finIcon: {
     fontSize: "16px",
   },
   
-  sdgText: {
+  finText: {
     color: "white",
     fontWeight: "600",
     fontSize: "12px",
@@ -361,10 +361,6 @@ const styles = {
     transition: "border-color 0.2s, box-shadow 0.2s",
     outline: "none",
     boxSizing: "border-box",
-    ":focus": {
-      borderColor: "#3b82f6",
-      boxShadow: "0 0 0 3px rgba(59,130,246,0.1)",
-    },
   },
   
   passwordWrapper: {
@@ -381,10 +377,6 @@ const styles = {
     transition: "border-color 0.2s, box-shadow 0.2s",
     outline: "none",
     boxSizing: "border-box",
-    ":focus": {
-      borderColor: "#3b82f6",
-      boxShadow: "0 0 0 3px rgba(59,130,246,0.1)",
-    },
   },
   
   passwordToggle: {
@@ -425,14 +417,11 @@ const styles = {
     fontSize: "13px",
     color: "#3b82f6",
     textDecoration: "none",
-    ":hover": {
-      textDecoration: "underline",
-    },
   },
   
   button: {
     width: "100%",
-    background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
+    background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)",
     color: "white",
     border: "none",
     padding: "14px",
@@ -440,10 +429,7 @@ const styles = {
     fontSize: "16px",
     fontWeight: "600",
     cursor: "pointer",
-    transition: "transform 0.1s",
-    ":active": {
-      transform: "scale(0.98)",
-    },
+    transition: "opacity 0.2s",
   },
   
   btnContent: {
@@ -495,9 +481,6 @@ const styles = {
     fontWeight: "600",
     transition: "background 0.2s",
     marginBottom: "12px",
-    ":hover": {
-      background: "#e5e7eb",
-    },
   },
   
   registerText: {
@@ -534,7 +517,7 @@ const styles = {
   },
   
   demoPass: {
-    color: "#10b981",
+    color: "#2563eb",
     fontFamily: "monospace",
     fontSize: "10px",
   },

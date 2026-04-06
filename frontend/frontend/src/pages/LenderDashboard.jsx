@@ -75,15 +75,15 @@ export default function LenderDashboard() {
         <div style={styles.heroContent}>
           <h1 style={styles.title}>
             Lender Dashboard
-            <span style={styles.titleAccent}> | Empower Communities</span>
+            <span style={styles.titleAccent}> | Investment Opportunities</span>
           </h1>
           <p style={styles.subtitle}>
-            Browse approved loan requests, support underserved borrowers, and track your impact
+            Browse approved loan requests, support borrowers, and track your portfolio
           </p>
         </div>
-        <div style={styles.sdgBadge}>
-          <span style={styles.sdgIcon}>🎯</span>
-          <span style={styles.sdgText}>SDG Goal 1: No Poverty</span>
+        <div style={styles.finBadge}>
+          <span style={styles.finIcon}>🏦</span>
+          <span style={styles.finText}>Financial Inclusion</span>
         </div>
       </div>
 
@@ -106,7 +106,7 @@ export default function LenderDashboard() {
           </div>
         </div>
         
-        <div style={{...styles.statCard, borderTopColor: "#10b981"}}>
+        <div style={{...styles.statCard, borderTopColor: "#2563eb"}}>
           <div style={styles.statIcon}>💰</div>
           <div>
             <h3 style={styles.statTitle}>Available for Funding</h3>
@@ -117,7 +117,7 @@ export default function LenderDashboard() {
         <div style={{...styles.statCard, borderTopColor: "#8b5cf6"}}>
           <div style={styles.statIcon}>📊</div>
           <div>
-            <h3 style={styles.statTitle}>Your Transactions</h3>
+            <h3 style={styles.statTitle}>Your Investments</h3>
             <p style={styles.statValue}>{transactions.length}</p>
           </div>
         </div>
@@ -129,8 +129,8 @@ export default function LenderDashboard() {
           <div style={styles.progressHeader}>
             <span style={styles.progressIcon}>📈</span>
             <div>
-              <h4 style={styles.progressTitle}>Overall Community Funding Progress</h4>
-              <p style={styles.progressSubtitle}>Track how we're collectively supporting borrowers</p>
+              <h4 style={styles.progressTitle}>Platform Funding Progress</h4>
+              <p style={styles.progressSubtitle}>Track collective investment in approved loans</p>
             </div>
           </div>
           <div style={styles.progressWrap}>
@@ -149,8 +149,8 @@ export default function LenderDashboard() {
         <div style={styles.sectionHeader}>
           <span style={styles.sectionIcon}>🔍</span>
           <div>
-            <h2 style={styles.sectionTitle}>Browse Loan Opportunities</h2>
-            <p style={styles.sectionDesc}>Find borrowers who match your lending goals</p>
+            <h2 style={styles.sectionTitle}>Browse Investment Opportunities</h2>
+            <p style={styles.sectionDesc}>Find borrowers that match your investment criteria</p>
           </div>
         </div>
 
@@ -160,7 +160,7 @@ export default function LenderDashboard() {
             <span style={styles.searchIcon}>🔍</span>
             <input
               style={styles.searchInput}
-              placeholder="Search by title, purpose, category, or impact plan..."
+              placeholder="Search by title, purpose, category, or growth plan..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
@@ -216,7 +216,7 @@ export default function LenderDashboard() {
                 <div key={loan._id} style={styles.loanCard}>
                   <div style={styles.cardHeader}>
                     <h3 style={styles.loanTitle}>{loan.title}</h3>
-                    <span style={styles.impactTag}>Impact Ready</span>
+                    <span style={styles.investTag}>Ready for Investment</span>
                   </div>
 
                   <div style={styles.loanPurpose}>
@@ -249,9 +249,9 @@ export default function LenderDashboard() {
                   </div>
 
                   <div style={styles.impactBox}>
-                    <span style={styles.impactIcon}>🌱</span>
+                    <span style={styles.impactIcon}>📈</span>
                     <div>
-                      <p style={styles.impactLabel}>Poverty Impact Plan</p>
+                      <p style={styles.impactLabel}>Growth Impact Plan</p>
                       <p style={styles.impactText}>{loan.povertyImpactPlanSnapshot}</p>
                     </div>
                   </div>
@@ -265,8 +265,8 @@ export default function LenderDashboard() {
                   </div>
 
                   <Link to={`/transactions?loanId=${loan._id}`} style={styles.fundBtn}>
-                    <span>💚</span>
-                    Fund This Loan
+                    <span>💰</span>
+                    Invest Now
                   </Link>
                 </div>
               );
@@ -275,14 +275,14 @@ export default function LenderDashboard() {
         )}
       </div>
 
-      {/* Impact Section */}
+      {/* Impact Section - Financial Empowerment */}
       <div style={styles.impactSection}>
         <div style={styles.impactCard}>
           <div style={styles.impactHeader}>
-            <span style={styles.impactLargeIcon}>🌟</span>
+            <span style={styles.impactLargeIcon}>📊</span>
             <div>
-              <h3 style={styles.impactTitle}>Your Impact Matters</h3>
-              <p style={styles.impactSubtitle}>Every loan you fund helps achieve SDG Goal 1: No Poverty</p>
+              <h3 style={styles.impactTitle}>Your Investment Impact</h3>
+              <p style={styles.impactSubtitle}>Every funded loan drives financial inclusion and economic growth</p>
             </div>
           </div>
           <div style={styles.impactStats}>
@@ -295,12 +295,12 @@ export default function LenderDashboard() {
               <span style={styles.impactStatValue}>
                 LKR {transactions.reduce((sum, t) => sum + (t.amount || 0), 0).toLocaleString()}
               </span>
-              <span style={styles.impactStatLabel}>Total Contributed</span>
+              <span style={styles.impactStatLabel}>Total Invested</span>
             </div>
           </div>
           <p style={styles.impactDescription}>
-            By funding micro-loans, you're directly contributing to poverty reduction, 
-            supporting small businesses, and creating sustainable livelihoods in underserved communities.
+            By funding micro-loans, you're directly contributing to economic empowerment,
+            supporting small businesses, and helping create sustainable livelihoods.
           </p>
         </div>
       </div>
@@ -311,7 +311,7 @@ export default function LenderDashboard() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+    background: "linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%)",
     padding: "40px 24px",
   },
   
@@ -326,7 +326,7 @@ const styles = {
     background: "white",
     padding: "30px",
     borderRadius: "20px",
-    boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
   },
   
   heroContent: {
@@ -337,38 +337,38 @@ const styles = {
     fontSize: "32px",
     fontWeight: "800",
     margin: "0 0 8px 0",
-    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
   
   titleAccent: {
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
   
   subtitle: {
-    color: "#6b7280",
+    color: "#4b5563",
     fontSize: "16px",
     margin: 0,
   },
   
-  sdgBadge: {
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+  finBadge: {
+    background: "linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)",
     padding: "12px 20px",
     borderRadius: "40px",
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    boxShadow: "0 4px 12px rgba(16,185,129,0.3)",
+    boxShadow: "0 4px 12px rgba(59,130,246,0.3)",
   },
   
-  sdgIcon: {
+  finIcon: {
     fontSize: "24px",
   },
   
-  sdgText: {
+  finText: {
     color: "white",
     fontWeight: "600",
     fontSize: "14px",
@@ -442,10 +442,6 @@ const styles = {
     borderTop: "4px solid",
     transition: "transform 0.2s, box-shadow 0.2s",
     cursor: "pointer",
-    ":hover": {
-      transform: "translateY(-4px)",
-      boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
-    },
   },
   
   statIcon: {
@@ -514,7 +510,7 @@ const styles = {
   
   progressBar: {
     height: "100%",
-    background: "linear-gradient(90deg, #10b981 0%, #059669 100%)",
+    background: "linear-gradient(90deg, #2563eb 0%, #1e40af 100%)",
     borderRadius: "999px",
     transition: "width 0.3s ease",
   },
@@ -589,9 +585,6 @@ const styles = {
     fontSize: "14px",
     outline: "none",
     transition: "border-color 0.2s",
-    ":focus": {
-      borderColor: "#3b82f6",
-    },
   },
   
   filterSelect: {
@@ -613,9 +606,6 @@ const styles = {
     fontWeight: "500",
     cursor: "pointer",
     transition: "background 0.2s",
-    ":hover": {
-      background: "#e5e7eb",
-    },
   },
   
   resultsCount: {
@@ -636,10 +626,6 @@ const styles = {
     padding: "24px",
     boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
     transition: "all 0.2s",
-    ":hover": {
-      boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
-      transform: "translateY(-4px)",
-    },
   },
   
   cardHeader: {
@@ -656,10 +642,10 @@ const styles = {
     margin: 0,
   },
   
-  impactTag: {
+  investTag: {
     padding: "4px 12px",
-    background: "#d1fae5",
-    color: "#065f46",
+    background: "#dbeafe",
+    color: "#1e40af",
     borderRadius: "20px",
     fontSize: "11px",
     fontWeight: "600",
@@ -724,10 +710,10 @@ const styles = {
     display: "flex",
     gap: "12px",
     padding: "12px",
-    background: "#f0fdf4",
+    background: "#eff6ff",
     borderRadius: "12px",
     marginBottom: "16px",
-    borderLeft: "3px solid #10b981",
+    borderLeft: "3px solid #3b82f6",
   },
   
   impactIcon: {
@@ -737,14 +723,14 @@ const styles = {
   impactLabel: {
     fontSize: "11px",
     fontWeight: "600",
-    color: "#059669",
+    color: "#1e40af",
     margin: "0 0 4px 0",
     textTransform: "uppercase",
   },
   
   impactText: {
     fontSize: "13px",
-    color: "#065f46",
+    color: "#1e3a8a",
     margin: 0,
     lineHeight: "1.4",
   },
@@ -766,7 +752,7 @@ const styles = {
   },
   
   progressPercent: {
-    color: "#10b981",
+    color: "#2563eb",
     fontWeight: "600",
   },
   
@@ -781,16 +767,13 @@ const styles = {
     gap: "8px",
     width: "100%",
     padding: "12px",
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)",
     color: "white",
     textDecoration: "none",
     borderRadius: "12px",
     fontSize: "14px",
     fontWeight: "600",
-    transition: "transform 0.1s",
-    ":active": {
-      transform: "scale(0.98)",
-    },
+    transition: "opacity 0.2s",
   },
   
   emptyState: {
@@ -825,7 +808,7 @@ const styles = {
   },
   
   impactCard: {
-    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     borderRadius: "20px",
     padding: "32px",
     color: "white",

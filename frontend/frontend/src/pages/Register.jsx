@@ -141,20 +141,20 @@ export default function Register() {
         <div style={styles.card}>
           {/* Logo/Brand Section */}
           <div style={styles.brandSection}>
-            <div style={styles.logoIcon}>🤝</div>
+            <div style={styles.logoIcon}>🏦</div>
             <h1 style={styles.brandName}>Micro-Loan Connect</h1>
-            <p style={styles.tagline}>Join the Movement Against Poverty</p>
+            <p style={styles.tagline}>Financial Inclusion Platform</p>
           </div>
 
-          {/* SDG Badge */}
-          <div style={styles.sdgBadge}>
-            <span style={styles.sdgIcon}>🎯</span>
-            <span style={styles.sdgText}>SDG Goal 1: No Poverty</span>
+          {/* Financial Badge */}
+          <div style={styles.finBadge}>
+            <span style={styles.finIcon}>📊</span>
+            <span style={styles.finText}>Join the Network</span>
           </div>
 
           <h2 style={styles.heading}>Create Account</h2>
           <p style={styles.sub}>
-            Join our community of changemakers fighting poverty through micro-loans
+            Join our community of lenders and borrowers driving financial inclusion
           </p>
 
           {error && (
@@ -239,7 +239,7 @@ export default function Register() {
                           ? "#ef4444"
                           : strength === "Medium"
                           ? "#f59e0b"
-                          : "#10b981",
+                          : "#2563eb",
                       width:
                         strength === "Weak"
                           ? "33%"
@@ -252,7 +252,7 @@ export default function Register() {
                     Strength: <strong style={{ color: 
                       strength === "Weak" ? "#ef4444" : 
                       strength === "Medium" ? "#f59e0b" : 
-                      "#10b981"
+                      "#2563eb"
                     }}>{strength}</strong>
                   </p>
                 </div>
@@ -288,7 +288,7 @@ export default function Register() {
               {form.confirmPassword && (
                 <p style={{
                   ...styles.matchIndicator,
-                  color: form.password === form.confirmPassword ? "#10b981" : "#ef4444"
+                  color: form.password === form.confirmPassword ? "#2563eb" : "#ef4444"
                 }}>
                   {form.password === form.confirmPassword ? "✓ Passwords match" : "✗ Passwords do not match"}
                 </p>
@@ -325,7 +325,7 @@ export default function Register() {
                   <span style={styles.roleIcon}>💰</span>
                   <div>
                     <strong>Lender</strong>
-                    <p style={styles.roleDesc}>Fund loans and make impact</p>
+                    <p style={styles.roleDesc}>Fund loans and earn returns</p>
                   </div>
                 </div>
                 {/* ADMIN Role Card - Remove this block if admin self-registration should not be allowed */}
@@ -372,7 +372,7 @@ export default function Register() {
               ) : (
                 <span style={styles.btnContent}>
                   <span>🚀</span>
-                  Join the Community
+                  Join the Platform
                 </span>
               )}
             </button>
@@ -396,7 +396,7 @@ export default function Register() {
           {/* Impact Info */}
           <div style={styles.impactInfo}>
             <div style={styles.impactHeader}>
-              <span style={styles.impactIcon}>🌟</span>
+              <span style={styles.impactIcon}>📈</span>
               <span style={styles.impactTitle}>Why Join Us?</span>
             </div>
             <div style={styles.impactGrid}>
@@ -427,7 +427,7 @@ export default function Register() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     position: "relative",
     overflow: "hidden",
   },
@@ -487,7 +487,7 @@ const styles = {
   brandName: {
     fontSize: "24px",
     fontWeight: "800",
-    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
     margin: "0 0 4px 0",
@@ -499,8 +499,8 @@ const styles = {
     margin: 0,
   },
   
-  sdgBadge: {
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+  finBadge: {
+    background: "linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)",
     padding: "8px 16px",
     borderRadius: "40px",
     display: "inline-flex",
@@ -508,14 +508,14 @@ const styles = {
     gap: "8px",
     margin: "0 auto 24px",
     width: "fit-content",
-    boxShadow: "0 2px 8px rgba(16,185,129,0.3)",
+    boxShadow: "0 2px 8px rgba(59,130,246,0.3)",
   },
   
-  sdgIcon: {
+  finIcon: {
     fontSize: "16px",
   },
   
-  sdgText: {
+  finText: {
     color: "white",
     fontWeight: "600",
     fontSize: "12px",
@@ -589,10 +589,6 @@ const styles = {
     transition: "border-color 0.2s, box-shadow 0.2s",
     outline: "none",
     boxSizing: "border-box",
-    ":focus": {
-      borderColor: "#3b82f6",
-      boxShadow: "0 0 0 3px rgba(59,130,246,0.1)",
-    },
   },
   
   passwordWrapper: {
@@ -609,10 +605,6 @@ const styles = {
     transition: "border-color 0.2s, box-shadow 0.2s",
     outline: "none",
     boxSizing: "border-box",
-    ":focus": {
-      borderColor: "#3b82f6",
-      boxShadow: "0 0 0 3px rgba(59,130,246,0.1)",
-    },
   },
   
   passwordToggle: {
@@ -669,15 +661,11 @@ const styles = {
     borderRadius: "12px",
     cursor: "pointer",
     transition: "all 0.2s",
-    ":hover": {
-      borderColor: "#3b82f6",
-      background: "#f0f9ff",
-    },
   },
   
   roleCardActive: {
-    borderColor: "#10b981",
-    background: "#f0fdf4",
+    borderColor: "#2563eb",
+    background: "#eff6ff",
   },
   
   roleIcon: {
@@ -712,14 +700,11 @@ const styles = {
   termsLink: {
     color: "#3b82f6",
     textDecoration: "none",
-    ":hover": {
-      textDecoration: "underline",
-    },
   },
   
   button: {
     width: "100%",
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)",
     color: "white",
     border: "none",
     padding: "14px",
@@ -727,10 +712,7 @@ const styles = {
     fontSize: "16px",
     fontWeight: "600",
     cursor: "pointer",
-    transition: "transform 0.1s",
-    ":active": {
-      transform: "scale(0.98)",
-    },
+    transition: "opacity 0.2s",
   },
   
   btnContent: {
@@ -782,9 +764,6 @@ const styles = {
     fontWeight: "600",
     transition: "background 0.2s",
     marginBottom: "12px",
-    ":hover": {
-      background: "#e5e7eb",
-    },
   },
   
   loginText: {
@@ -796,9 +775,9 @@ const styles = {
   impactInfo: {
     marginTop: "24px",
     padding: "16px",
-    background: "#f0fdf4",
+    background: "#eff6ff",
     borderRadius: "12px",
-    border: "1px solid #d1fae5",
+    border: "1px solid #bfdbfe",
   },
   
   impactHeader: {
@@ -815,7 +794,7 @@ const styles = {
   impactTitle: {
     fontSize: "13px",
     fontWeight: "600",
-    color: "#065f46",
+    color: "#1e40af",
   },
   
   impactGrid: {
@@ -829,6 +808,6 @@ const styles = {
     alignItems: "center",
     gap: "8px",
     fontSize: "12px",
-    color: "#065f46",
+    color: "#1e3a8a",
   },
 };
