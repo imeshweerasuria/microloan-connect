@@ -160,24 +160,27 @@ export default function LenderDashboard() {
             <span style={styles.searchIcon}>🔍</span>
             <input
               style={styles.searchInput}
-              placeholder="Search by title, purpose, category, or growth plan..."
+              placeholder="Search by title or purpose."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
           </div>
           
-          <select
-            style={styles.filterSelect}
-            value={category}
-            onChange={(e) => setCategory(e.target.value)}
-          >
-            <option value="">All Categories</option>
-            {categories.map((item) => (
-              <option key={item} value={item}>
-                {item}
-              </option>
-            ))}
-          </select>
+          <div style={styles.filterWrapper}>
+            <span style={styles.filterIcon}>📂</span>
+            <select
+              style={styles.filterSelect}
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="">All Categories</option>
+              {categories.map((item) => (
+                <option key={item} value={item}>
+                  {item}
+                </option>
+              ))}
+            </select>
+          </div>
 
           {(search || category) && (
             <button
@@ -256,7 +259,7 @@ export default function LenderDashboard() {
                     </div>
                   </div>
 
-                  <div style={styles.progressWrap}>
+                  <div style={styles.progressWrapSmall}>
                     <div style={{...styles.progressBar, width: `${Math.min(progress, 100)}%`}} />
                   </div>
                   <div style={styles.progressInfo}>
@@ -560,58 +563,89 @@ const styles = {
     display: "flex",
     gap: "16px",
     flexWrap: "wrap",
+    alignItems: "center",
     boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
   },
   
   searchWrapper: {
-    flex: 1,
-    position: "relative",
+    flex: "2",
     minWidth: "250px",
+    position: "relative",
   },
   
   searchIcon: {
     position: "absolute",
-    left: "12px",
+    left: "14px",
     top: "50%",
     transform: "translateY(-50%)",
     fontSize: "18px",
+    color: "#9ca3af",
+    pointerEvents: "none",
   },
   
   searchInput: {
     width: "100%",
-    padding: "12px 12px 12px 40px",
+    padding: "12px 16px 12px 42px",
     border: "1px solid #e5e7eb",
     borderRadius: "12px",
     fontSize: "14px",
     outline: "none",
-    transition: "border-color 0.2s",
+    transition: "all 0.2s",
+    backgroundColor: "#f9fafb",
+  },
+  
+  filterWrapper: {
+    flex: "1",
+    minWidth: "200px",
+    position: "relative",
+  },
+  
+  filterIcon: {
+    position: "absolute",
+    left: "14px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    fontSize: "18px",
+    color: "#9ca3af",
+    pointerEvents: "none",
+    zIndex: 1,
   },
   
   filterSelect: {
-    padding: "12px 16px",
+    width: "100%",
+    padding: "12px 16px 12px 42px",
     border: "1px solid #e5e7eb",
     borderRadius: "12px",
     fontSize: "14px",
     outline: "none",
     cursor: "pointer",
-    background: "white",
+    backgroundColor: "#f9fafb",
+    transition: "all 0.2s",
+    appearance: "none",
+    backgroundImage: `url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3E%3Cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3E%3C/svg%3E")`,
+    backgroundPosition: "right 12px center",
+    backgroundRepeat: "no-repeat",
+    backgroundSize: "20px",
   },
   
   clearBtn: {
-    padding: "12px 20px",
+    padding: "12px 24px",
     background: "#f3f4f6",
     border: "1px solid #e5e7eb",
     borderRadius: "12px",
     fontSize: "14px",
     fontWeight: "500",
     cursor: "pointer",
-    transition: "background 0.2s",
+    transition: "all 0.2s",
+    color: "#374151",
+    whiteSpace: "nowrap",
   },
   
   resultsCount: {
     marginBottom: "20px",
     fontSize: "14px",
     color: "#6b7280",
+    padding: "0 4px",
   },
   
   loanGrid: {
@@ -735,7 +769,7 @@ const styles = {
     lineHeight: "1.4",
   },
   
-  progressWrap: {
+  progressWrapSmall: {
     width: "100%",
     height: "8px",
     background: "#e5e7eb",

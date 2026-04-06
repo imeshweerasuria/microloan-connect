@@ -101,17 +101,19 @@ export default function Navbar() {
               flexWrap: "wrap",
             }}
           >
-            <Link
-              to="/"
-              style={isActive("/") ? activeLinkStyle : linkStyle}
-              onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
-              onMouseLeave={(e) => (e.target.style.color = isActive("/") ? "#3b82f6" : "#4b5563")}
-            >
-              🏠 Home
-            </Link>
+            
 
             {user?.role === "BORROWER" && (
               <>
+                <Link
+                  to="/"
+                  style={isActive("/") ? activeLinkStyle : linkStyle}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/") ? "#3b82f6" : "#4b5563")}
+                >
+                  🏠 Home
+                </Link>
+
                 <Link
                   to="/borrower/dashboard"
                   style={isActive("/borrower/dashboard") ? activeLinkStyle : linkStyle}
@@ -141,6 +143,15 @@ export default function Navbar() {
 
             {user?.role === "LENDER" && (
               <>
+                <Link
+                  to="/"
+                  style={isActive("/") ? activeLinkStyle : linkStyle}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/") ? "#3b82f6" : "#4b5563")}
+                >
+                  🏠 Home
+                </Link>
+
                 <Link
                   to="/lender/dashboard"
                   style={isActive("/lender/dashboard") ? activeLinkStyle : linkStyle}
@@ -186,30 +197,8 @@ export default function Navbar() {
                 >
                   📈 Analytics
                 </Link>
-                <Link
-                  to="/repayments"
-                  style={isActive("/repayments") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/repayments") ? "#3b82f6" : "#4b5563")}
-                >
-                  📅 Repayments
-                </Link>
-                <Link
-                  to="/transactions"
-                  style={isActive("/transactions") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/transactions") ? "#3b82f6" : "#4b5563")}
-                >
-                  📜 Transactions
-                </Link>
-                <Link
-                  to="/fx"
-                  style={isActive("/fx") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/fx") ? "#3b82f6" : "#4b5563")}
-                >
-                  💱 FX Converter
-                </Link>
+                
+                
               </>
             )}
           </div>
