@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Link } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Link, Navigate } from "react-router-dom";
 import Navbar from "./components/Navbar";
 import ProtectedRoute from "./components/ProtectedRoute";
 
@@ -101,7 +101,7 @@ export default function App() {
    <BrowserRouter>
      <Navbar />
      <Routes>
-       <Route path="/" element={<Home />} />
+       <Route path="/" element={<Navigate to="/login" replace />} />
 
        <Route path="/login" element={<Login />} />
        <Route path="/register" element={<Register />} />
