@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useAuth } from "../context/AuthContext";
 
@@ -17,81 +17,33 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
-    confirmPassword: "", // ✅ added confirmPassword
     role: "BORROWER",
   });
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  const [strength, setStrength] = useState(""); // ✅ password strength state
-  const [showPassword, setShowPassword] = useState(false); // ✅ show/hide password
-  const [showConfirmPassword, setShowConfirmPassword] = useState(false); // ✅ show/hide confirm password
-
-  // ✅ Password strength validation function
-  const isStrongPassword = (password) => {
-    const regex =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
-    return regex.test(password);
-  };
-
-  // ✅ Password strength checker for live UI
-  const checkPasswordStrength = (password) => {
-    if (!password) return "";
-    
-    let score = 0;
-
-    if (password.length >= 8) score++;
-    if (/[a-z]/.test(password)) score++;
-    if (/[A-Z]/.test(password)) score++;
-    if (/\d/.test(password)) score++;
-    if (/[@$!%*?&]/.test(password)) score++;
-
-    if (score <= 2) return "Weak";
-    if (score <= 4) return "Medium";
-    return "Strong";
-  };
+  const [showPassword, setShowPassword] = useState(false);
+  const [agreeTerms, setAgreeTerms] = useState(false);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-
     setForm((prev) => ({
       ...prev,
-      [name]: value,
+      [e.target.name]: e.target.value,
     }));
-
-    // ✅ check strength when typing password
-    if (name === "password") {
-      setStrength(checkPasswordStrength(value));
-    }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError("");
 
-    // ✅ check password match
-    if (form.password !== form.confirmPassword) {
-      setError("Passwords do not match");
-      return;
-    }
-
-    // ✅ check password strength
-    if (!isStrongPassword(form.password)) {
-      setError(
-        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character"
-      );
+    if (!agreeTerms) {
+      setError("Please agree to the Terms & Conditions");
       return;
     }
 
     try {
       setLoading(true);
-
-      // ✅ remove confirmPassword before sending
-      // eslint-disable-next-line no-unused-vars
-      const { confirmPassword, ...dataToSend } = form;
-
-      const res = await register(dataToSend);
-
+      const res = await register(form);
       navigate(roleHome(res.user.role));
     } catch (err) {
       setError(err.message || "Registration failed");
@@ -100,231 +52,637 @@ export default function Register() {
     }
   };
 
+  useEffect(() => {
+    const styleId = "register-page-animations";
+
+    if (!document.getElementById(styleId)) {
+      const styleSheet = document.createElement("style");
+      styleSheet.id = styleId;
+      styleSheet.textContent = `
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+
+        @keyframes slideUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
+      `;
+      document.head.appendChild(styleSheet);
+    }
+  }, []);
+
   return (
-    <div style={styles.wrapper}>
-      <div style={styles.card}>
-        <h2 style={styles.heading}>Create Account</h2>
-        <p style={styles.sub}>
-          Register as a borrower, lender, or admin to start using the platform.
-        </p>
-
-        {error && <div style={styles.error}>{error}</div>}
-
-        <form onSubmit={handleSubmit}>
-          <label style={styles.label}>Full Name</label>
-          <input
-            style={styles.input}
-            type="text"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            placeholder="Enter your full name"
-            required
-          />
-
-          <label style={styles.label}>Email</label>
-          <input
-            style={styles.input}
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="Enter your email"
-            required
-          />
-
-          <label style={styles.label}>Password</label>
-          <div style={{ position: "relative", marginBottom: "16px" }}>
-            <input
-              style={styles.input}
-              type={showPassword ? "text" : "password"} // ✅ toggle
-              name="password"
-              value={form.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              required
-            />
-
-            <span
-              onClick={() => setShowPassword(!showPassword)}
-              style={{
-                position: "absolute",
-                right: "12px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-                fontSize: "13px",
-                color: "#555",
-                userSelect: "none",
-              }}
-            >
-              {showPassword ? "Hide" : "Show"}
-            </span>
+    <div style={styles.page}>
+      {/* Background Decorative Elements */}
+      <div style={styles.bgDecoration1}></div>
+      <div style={styles.bgDecoration2}></div>
+      
+      <div style={styles.wrapper}>
+        <div style={styles.card}>
+          {/* Logo/Brand Section */}
+          <div style={styles.brandSection}>
+            <div style={styles.logoIcon}>🤝</div>
+            <h1 style={styles.brandName}>Micro-Loan Connect</h1>
+            <p style={styles.tagline}>Join the Movement Against Poverty</p>
           </div>
 
-          {/* ✅ Password rules hint */}
-          <p style={{ fontSize: "12px", color: "#6b7280", marginBottom: "10px" }}>
-            Password must include uppercase, lowercase, number, special character and be at least 8 characters.
+          {/* SDG Badge */}
+          <div style={styles.sdgBadge}>
+            <span style={styles.sdgIcon}>🎯</span>
+            <span style={styles.sdgText}>SDG Goal 1: No Poverty</span>
+          </div>
+
+          <h2 style={styles.heading}>Create Account</h2>
+          <p style={styles.sub}>
+            Join our community of changemakers fighting poverty through micro-loans
           </p>
 
-          {/* ✅ Live password strength indicator */}
-          {form.password && (
-            <div style={{ marginBottom: "12px" }}>
-              <div
-                style={{
-                  height: "6px",
-                  borderRadius: "4px",
-                  background:
-                    strength === "Weak"
-                      ? "red"
-                      : strength === "Medium"
-                      ? "orange"
-                      : "green",
-                  width:
-                    strength === "Weak"
-                      ? "33%"
-                      : strength === "Medium"
-                      ? "66%"
-                      : "100%",
-                  transition: "0.3s",
-                }}
-              ></div>
-              <p style={{ fontSize: "12px", marginTop: "4px" }}>
-                Strength: <strong>{strength}</strong>
-              </p>
+          {error && (
+            <div style={styles.error}>
+              <span style={styles.messageIcon}>⚠️</span>
+              <span>{error}</span>
+              <button onClick={() => setError("")} style={styles.closeBtn}>×</button>
             </div>
           )}
 
-          <label style={styles.label}>Confirm Password</label>
-          <div style={{ position: "relative", marginBottom: "16px" }}>
-            <input
-              style={styles.input}
-              type={showConfirmPassword ? "text" : "password"} // ✅ toggle
-              name="confirmPassword"
-              value={form.confirmPassword}
-              onChange={handleChange}
-              placeholder="Confirm your password"
-              required
-            />
+          <form onSubmit={handleSubmit}>
+            <div style={styles.formGroup}>
+              <label style={styles.label}>
+                <span style={styles.labelIcon}>👤</span>
+                Full Name
+              </label>
+              <input
+                style={styles.input}
+                type="text"
+                name="name"
+                value={form.name}
+                onChange={handleChange}
+                placeholder="Enter your full name"
+                required
+              />
+            </div>
 
-            <span
-              onClick={() => setShowConfirmPassword(!showConfirmPassword)}
-              style={{
-                position: "absolute",
-                right: "12px",
-                top: "50%",
-                transform: "translateY(-50%)",
-                cursor: "pointer",
-                fontSize: "13px",
-                color: "#555",
-                userSelect: "none",
-              }}
-            >
-              {showConfirmPassword ? "Hide" : "Show"}
-            </span>
+            <div style={styles.formGroup}>
+              <label style={styles.label}>
+                <span style={styles.labelIcon}>📧</span>
+                Email Address
+              </label>
+              <input
+                style={styles.input}
+                type="email"
+                name="email"
+                value={form.email}
+                onChange={handleChange}
+                placeholder="Enter your email"
+                required
+              />
+            </div>
+
+            <div style={styles.formGroup}>
+              <label style={styles.label}>
+                <span style={styles.labelIcon}>🔒</span>
+                Password
+              </label>
+              <div style={styles.passwordWrapper}>
+                <input
+                  style={styles.passwordInput}
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={form.password}
+                  onChange={handleChange}
+                  placeholder="Create a strong password"
+                  required
+                />
+                <button
+                  type="button"
+                  style={styles.passwordToggle}
+                  onClick={() => setShowPassword(!showPassword)}
+                >
+                  {showPassword ? "🙈" : "👁️"}
+                </button>
+              </div>
+              <p style={styles.passwordHint}>
+                Password must be at least 6 characters
+              </p>
+            </div>
+
+            <div style={styles.formGroup}>
+              <label style={styles.label}>
+                <span style={styles.labelIcon}>🎭</span>
+                I want to join as a
+              </label>
+              <div style={styles.roleCards}>
+                <div
+                  style={{
+                    ...styles.roleCard,
+                    ...(form.role === "BORROWER" && styles.roleCardActive),
+                  }}
+                  onClick={() => setForm({ ...form, role: "BORROWER" })}
+                >
+                  <span style={styles.roleIcon}>📝</span>
+                  <div>
+                    <strong>Borrower</strong>
+                    <p style={styles.roleDesc}>Request loans for your needs</p>
+                  </div>
+                </div>
+                <div
+                  style={{
+                    ...styles.roleCard,
+                    ...(form.role === "LENDER" && styles.roleCardActive),
+                  }}
+                  onClick={() => setForm({ ...form, role: "LENDER" })}
+                >
+                  <span style={styles.roleIcon}>💰</span>
+                  <div>
+                    <strong>Lender</strong>
+                    <p style={styles.roleDesc}>Fund loans and make impact</p>
+                  </div>
+                </div>
+                {/* ADMIN Role Card - Remove this block if admin self-registration should not be allowed */}
+                <div
+                  style={{
+                    ...styles.roleCard,
+                    ...(form.role === "ADMIN" && styles.roleCardActive),
+                    gridColumn: "1 / -1",
+                  }}
+                  onClick={() => setForm({ ...form, role: "ADMIN" })}
+                >
+                  <span style={styles.roleIcon}>🛡️</span>
+                  <div>
+                    <strong>Admin</strong>
+                    <p style={styles.roleDesc}>Manage loans, users, and approvals</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div style={styles.termsGroup}>
+              <label style={styles.checkboxLabel}>
+                <input
+                  type="checkbox"
+                  checked={agreeTerms}
+                  onChange={(e) => setAgreeTerms(e.target.checked)}
+                  style={styles.checkbox}
+                />
+                <span>
+                  I agree to the <Link to="/terms" style={styles.termsLink}>Terms & Conditions</Link> and{" "}
+                  <Link to="/privacy" style={styles.termsLink}>Privacy Policy</Link>
+                </span>
+              </label>
+            </div>
+
+            <button type="submit" style={styles.button} disabled={loading}>
+              {loading ? (
+                <span style={styles.btnContent}>
+                  <span style={styles.spinner}></span>
+                  Creating account...
+                </span>
+              ) : (
+                <span style={styles.btnContent}>
+                  <span>🚀</span>
+                  Join the Community
+                </span>
+              )}
+            </button>
+          </form>
+
+          <div style={styles.divider}>
+            <span style={styles.dividerLine}></span>
+            <span style={styles.dividerText}>Already have an account?</span>
+            <span style={styles.dividerLine}></span>
           </div>
 
-          {/* ✅ Live password match indicator */}
-          {form.confirmPassword && (
-            <p
-              style={{
-                fontSize: "12px",
-                color: form.password === form.confirmPassword ? "green" : "red",
-                marginBottom: "10px",
-              }}
-            >
-              {form.password === form.confirmPassword
-                ? "✓ Passwords match"
-                : "✗ Passwords do not match"}
+          <div style={styles.loginSection}>
+            <Link to="/login" style={styles.loginLink}>
+              Sign In Here
+            </Link>
+            <p style={styles.loginText}>
+              Welcome back! Login to continue your journey
             </p>
-          )}
+          </div>
 
-          <label style={styles.label}>Role</label>
-          <select
-            style={styles.input}
-            name="role"
-            value={form.role}
-            onChange={handleChange}
-          >
-            <option value="BORROWER">Borrower</option>
-            <option value="LENDER">Lender</option>
-            <option value="ADMIN">Admin</option>
-          </select>
-
-          <button type="submit" style={styles.button} disabled={loading}>
-            {loading ? "Creating account..." : "Register"}
-          </button>
-        </form>
-
-        <p style={styles.text}>
-          Already have an account? <Link to="/login">Login here</Link>
-        </p>
+          {/* Impact Info */}
+          <div style={styles.impactInfo}>
+            <div style={styles.impactHeader}>
+              <span style={styles.impactIcon}>🌟</span>
+              <span style={styles.impactTitle}>Why Join Us?</span>
+            </div>
+            <div style={styles.impactGrid}>
+              <div style={styles.impactPoint}>
+                <span>✓</span>
+                <span>Zero platform fees</span>
+              </div>
+              <div style={styles.impactPoint}>
+                <span>✓</span>
+                <span>Direct impact tracking</span>
+              </div>
+              <div style={styles.impactPoint}>
+                <span>✓</span>
+                <span>Community support</span>
+              </div>
+              <div style={styles.impactPoint}>
+                <span>✓</span>
+                <span>Transparent process</span>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
 const styles = {
+  page: {
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+    position: "relative",
+    overflow: "hidden",
+  },
+  
+  bgDecoration1: {
+    position: "absolute",
+    top: "-50%",
+    right: "-30%",
+    width: "80%",
+    height: "80%",
+    background: "radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%)",
+    borderRadius: "50%",
+    pointerEvents: "none",
+  },
+  
+  bgDecoration2: {
+    position: "absolute",
+    bottom: "-50%",
+    left: "-30%",
+    width: "80%",
+    height: "80%",
+    background: "radial-gradient(circle, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0) 70%)",
+    borderRadius: "50%",
+    pointerEvents: "none",
+  },
+  
   wrapper: {
-    minHeight: "calc(100vh - 80px)",
+    minHeight: "100vh",
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    background: "#f5f7fb",
     padding: "24px",
+    position: "relative",
+    zIndex: 1,
   },
+  
   card: {
     width: "100%",
-    maxWidth: "500px",
-    background: "#fff",
-    borderRadius: "12px",
-    padding: "32px",
-    boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
+    maxWidth: "560px",
+    background: "white",
+    borderRadius: "24px",
+    padding: "40px",
+    boxShadow: "0 25px 50px -12px rgba(0,0,0,0.25)",
+    animation: "slideUp 0.5s ease-out",
   },
-  heading: {
-    marginBottom: "10px",
+  
+  brandSection: {
     textAlign: "center",
+    marginBottom: "24px",
   },
-  sub: {
-    textAlign: "center",
+  
+  logoIcon: {
+    fontSize: "48px",
+    marginBottom: "12px",
+  },
+  
+  brandName: {
+    fontSize: "24px",
+    fontWeight: "800",
+    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+    margin: "0 0 4px 0",
+  },
+  
+  tagline: {
+    fontSize: "12px",
     color: "#6b7280",
-    marginBottom: "20px",
+    margin: 0,
   },
-  label: {
-    display: "block",
-    marginBottom: "8px",
+  
+  sdgBadge: {
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    padding: "8px 16px",
+    borderRadius: "40px",
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "8px",
+    margin: "0 auto 24px",
+    width: "fit-content",
+    boxShadow: "0 2px 8px rgba(16,185,129,0.3)",
+  },
+  
+  sdgIcon: {
+    fontSize: "16px",
+  },
+  
+  sdgText: {
+    color: "white",
     fontWeight: "600",
+    fontSize: "12px",
   },
-  input: {
-    width: "100%",
-    padding: "12px",
-    marginBottom: "0px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
-    fontSize: "15px",
-    boxSizing: "border-box",
+  
+  heading: {
+    fontSize: "28px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: "0 0 8px 0",
+    textAlign: "center",
   },
-  button: {
-    width: "100%",
-    padding: "12px",
-    border: "none",
-    borderRadius: "8px",
-    background: "#16a34a",
-    color: "#fff",
-    fontWeight: "600",
-    cursor: "pointer",
-    marginTop: "8px",
+  
+  sub: {
+    fontSize: "14px",
+    color: "#6b7280",
+    margin: "0 0 28px 0",
+    textAlign: "center",
   },
+  
   error: {
     background: "#fee2e2",
-    color: "#b91c1c",
-    padding: "10px 12px",
-    borderRadius: "8px",
-    marginBottom: "16px",
+    color: "#991b1b",
+    padding: "12px 16px",
+    borderRadius: "12px",
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    marginBottom: "20px",
+    borderLeft: "3px solid #ef4444",
   },
-  text: {
-    marginTop: "16px",
-    textAlign: "center",
+  
+  messageIcon: {
+    fontSize: "18px",
+  },
+  
+  closeBtn: {
+    marginLeft: "auto",
+    background: "none",
+    border: "none",
+    fontSize: "20px",
+    cursor: "pointer",
+    color: "#991b1b",
+    padding: "0 4px",
+  },
+  
+  formGroup: {
+    marginBottom: "20px",
+  },
+  
+  label: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    fontWeight: "600",
+    marginBottom: "8px",
+    color: "#374151",
     fontSize: "14px",
+  },
+  
+  labelIcon: {
+    fontSize: "16px",
+  },
+  
+  input: {
+    width: "100%",
+    padding: "12px 14px",
+    borderRadius: "12px",
+    border: "1px solid #e5e7eb",
+    fontSize: "14px",
+    transition: "border-color 0.2s, box-shadow 0.2s",
+    outline: "none",
+    boxSizing: "border-box",
+    ":focus": {
+      borderColor: "#3b82f6",
+      boxShadow: "0 0 0 3px rgba(59,130,246,0.1)",
+    },
+  },
+  
+  passwordWrapper: {
+    position: "relative",
+  },
+  
+  passwordInput: {
+    width: "100%",
+    padding: "12px 14px",
+    paddingRight: "44px",
+    borderRadius: "12px",
+    border: "1px solid #e5e7eb",
+    fontSize: "14px",
+    transition: "border-color 0.2s, box-shadow 0.2s",
+    outline: "none",
+    boxSizing: "border-box",
+    ":focus": {
+      borderColor: "#3b82f6",
+      boxShadow: "0 0 0 3px rgba(59,130,246,0.1)",
+    },
+  },
+  
+  passwordToggle: {
+    position: "absolute",
+    right: "12px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    background: "none",
+    border: "none",
+    cursor: "pointer",
+    fontSize: "18px",
+    padding: "4px",
+  },
+  
+  passwordHint: {
+    fontSize: "11px",
+    color: "#9ca3af",
+    marginTop: "6px",
+  },
+  
+  roleCards: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "12px",
+  },
+  
+  roleCard: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    padding: "12px",
+    border: "2px solid #e5e7eb",
+    borderRadius: "12px",
+    cursor: "pointer",
+    transition: "all 0.2s",
+    ":hover": {
+      borderColor: "#3b82f6",
+      background: "#f0f9ff",
+    },
+  },
+  
+  roleCardActive: {
+    borderColor: "#10b981",
+    background: "#f0fdf4",
+  },
+  
+  roleIcon: {
+    fontSize: "28px",
+  },
+  
+  roleDesc: {
+    fontSize: "11px",
+    color: "#6b7280",
+    margin: "4px 0 0 0",
+  },
+  
+  termsGroup: {
+    marginBottom: "24px",
+  },
+  
+  checkboxLabel: {
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    fontSize: "13px",
+    color: "#6b7280",
+    cursor: "pointer",
+  },
+  
+  checkbox: {
+    width: "16px",
+    height: "16px",
+    cursor: "pointer",
+  },
+  
+  termsLink: {
+    color: "#3b82f6",
+    textDecoration: "none",
+    ":hover": {
+      textDecoration: "underline",
+    },
+  },
+  
+  button: {
+    width: "100%",
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    color: "white",
+    border: "none",
+    padding: "14px",
+    borderRadius: "12px",
+    fontSize: "16px",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "transform 0.1s",
+    ":active": {
+      transform: "scale(0.98)",
+    },
+  },
+  
+  btnContent: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+  },
+  
+  spinner: {
+    width: "18px",
+    height: "18px",
+    border: "2px solid white",
+    borderTopColor: "transparent",
+    borderRadius: "50%",
+    animation: "spin 0.6s linear infinite",
+  },
+  
+  divider: {
+    display: "flex",
+    alignItems: "center",
+    gap: "16px",
+    margin: "24px 0",
+  },
+  
+  dividerLine: {
+    flex: 1,
+    height: "1px",
+    background: "#e5e7eb",
+  },
+  
+  dividerText: {
+    fontSize: "12px",
+    color: "#9ca3af",
+  },
+  
+  loginSection: {
+    textAlign: "center",
+  },
+  
+  loginLink: {
+    display: "inline-block",
+    padding: "12px 24px",
+    background: "#f3f4f6",
+    color: "#374151",
+    textDecoration: "none",
+    borderRadius: "12px",
+    fontSize: "14px",
+    fontWeight: "600",
+    transition: "background 0.2s",
+    marginBottom: "12px",
+    ":hover": {
+      background: "#e5e7eb",
+    },
+  },
+  
+  loginText: {
+    fontSize: "12px",
+    color: "#9ca3af",
+    margin: 0,
+  },
+  
+  impactInfo: {
+    marginTop: "24px",
+    padding: "16px",
+    background: "#f0fdf4",
+    borderRadius: "12px",
+    border: "1px solid #d1fae5",
+  },
+  
+  impactHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    marginBottom: "12px",
+  },
+  
+  impactIcon: {
+    fontSize: "18px",
+  },
+  
+  impactTitle: {
+    fontSize: "13px",
+    fontWeight: "600",
+    color: "#065f46",
+  },
+  
+  impactGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(2, 1fr)",
+    gap: "8px",
+  },
+  
+  impactPoint: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    fontSize: "12px",
+    color: "#065f46",
   },
 };

@@ -115,248 +115,700 @@ export default function BorrowerProfile() {
   };
 
   if (loading) {
-    return <div style={{ padding: "24px" }}>Loading borrower profile...</div>;
+    return (
+      <div style={styles.loadingContainer}>
+        <div style={styles.loadingSpinner}></div>
+        <p style={styles.loadingText}>Loading your profile...</p>
+      </div>
+    );
   }
 
   return (
-    <div style={styles.wrapper}>
-      <div style={styles.card}>
-        <div style={styles.headerRow}>
-          <div>
-            <h2 style={{ marginBottom: "8px" }}>Borrower Profile</h2>
-            <p style={{ color: "#666", marginTop: 0 }}>
-              Complete your profile for loan eligibility and verification.
-            </p>
-          </div>
+    <div style={styles.page}>
+      {/* Hero Section */}
+      <div style={styles.heroSection}>
+        <div style={styles.heroContent}>
+          <h1 style={styles.title}>
+            Borrower Profile
+            <span style={styles.titleAccent}> | Your Financial Identity</span>
+          </h1>
+          <p style={styles.subtitle}>
+            Complete your profile to unlock loan eligibility and build trust in the community
+          </p>
+        </div>
+        <div style={styles.sdgBadge}>
+          <span style={styles.sdgIcon}>🎯</span>
+          <span style={styles.sdgText}>SDG Goal 1: No Poverty</span>
+        </div>
+      </div>
 
-          <span
-            style={{
-              ...styles.badge,
-              background: verified ? "#dcfce7" : "#fef3c7",
-              color: verified ? "#166534" : "#92400e",
-            }}
-          >
-            {verified ? "Verified" : "Pending Verification"}
-          </span>
+      {/* Messages */}
+      {message && (
+        <div style={styles.success}>
+          <span style={styles.messageIcon}>✅</span>
+          <span>{message}</span>
+          <button onClick={() => setMessage("")} style={styles.closeBtn}>×</button>
+        </div>
+      )}
+      {error && (
+        <div style={styles.error}>
+          <span style={styles.messageIcon}>⚠️</span>
+          <span>{error}</span>
+          <button onClick={() => setError("")} style={styles.closeBtn}>×</button>
+        </div>
+      )}
+
+      {/* Main Profile Card */}
+      <div style={styles.profileCard}>
+        <div style={styles.cardHeader}>
+          <div style={styles.headerLeft}>
+            <span style={styles.headerIcon}>👤</span>
+            <div>
+              <h2 style={styles.cardTitle}>Your Profile Information</h2>
+              <p style={styles.cardSubtitle}>Help us understand your background to better serve you</p>
+            </div>
+          </div>
+          
+          <div style={styles.verificationBadge}>
+            <span style={styles.badgeIcon}>{verified ? "✓" : "⏳"}</span>
+            <span style={verified ? styles.badgeTextVerified : styles.badgeTextPending}>
+              {verified ? "Verified Borrower" : "Pending Verification"}
+            </span>
+          </div>
         </div>
 
-        {message && <div style={styles.success}>{message}</div>}
-        {error && <div style={styles.error}>{error}</div>}
-
         <form onSubmit={handleSubmit}>
-          <div style={styles.grid}>
-            <div>
-              <label style={styles.label}>Phone</label>
+          {/* Contact Information Section */}
+          <div style={styles.section}>
+            <div style={styles.sectionHeader}>
+              <span style={styles.sectionIcon}>📞</span>
+              <h3 style={styles.sectionTitle}>Contact Information</h3>
+            </div>
+            
+            <div style={styles.twoColGrid}>
+              <div style={styles.formGroup}>
+                <label style={styles.label}>
+                  <span style={styles.labelIcon}>📱</span>
+                  Phone Number
+                </label>
+                <input
+                  style={styles.input}
+                  name="phone"
+                  value={form.phone}
+                  onChange={handleChange}
+                  placeholder="e.g., 0771234567"
+                  required
+                />
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label}>
+                  <span style={styles.labelIcon}>🏘️</span>
+                  Community / Area
+                </label>
+                <input
+                  style={styles.input}
+                  name="community"
+                  value={form.community}
+                  onChange={handleChange}
+                  placeholder="Your community or area name"
+                  required
+                />
+              </div>
+            </div>
+
+            <div style={styles.formGroup}>
+              <label style={styles.label}>
+                <span style={styles.labelIcon}>📍</span>
+                Full Address
+              </label>
               <input
                 style={styles.input}
-                name="phone"
-                value={form.phone}
+                name="address"
+                value={form.address}
                 onChange={handleChange}
-                placeholder="e.g. 0771234567"
+                placeholder="Enter your complete address"
                 required
               />
             </div>
 
-            <div>
-              <label style={styles.label}>Community</label>
-              <input
-                style={styles.input}
-                name="community"
-                value={form.community}
-                onChange={handleChange}
-                placeholder="Your community / area"
-                required
-              />
-            </div>
-          </div>
-
-          <label style={styles.label}>Address</label>
-          <input
-            style={styles.input}
-            name="address"
-            value={form.address}
-            onChange={handleChange}
-            placeholder="Enter your full address"
-            required
-          />
-
-          <div style={{ marginTop: "10px" }}>
             <button
               type="button"
               style={styles.lookupBtn}
               onClick={handleLookupCommunity}
               disabled={lookupLoading}
             >
+              <span style={styles.btnIcon}>🔍</span>
               {lookupLoading ? "Detecting..." : "Auto-detect community from address"}
             </button>
+
+            {lookupPreview && (
+              <div style={styles.previewBox}>
+                <div style={styles.previewHeader}>
+                  <span style={styles.previewIcon}>📍</span>
+                  <h4 style={styles.previewTitle}>Detected Location Details</h4>
+                </div>
+                <div style={styles.previewGrid}>
+                  <div>
+                    <p style={styles.previewLabel}>Community</p>
+                    <p style={styles.previewValue}>{lookupPreview.community || "Not clear"}</p>
+                  </div>
+                  <div>
+                    <p style={styles.previewLabel}>Display Name</p>
+                    <p style={styles.previewValue}>{lookupPreview.displayName || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p style={styles.previewLabel}>Latitude</p>
+                    <p style={styles.previewValue}>{lookupPreview.latitude || "N/A"}</p>
+                  </div>
+                  <div>
+                    <p style={styles.previewLabel}>Longitude</p>
+                    <p style={styles.previewValue}>{lookupPreview.longitude || "N/A"}</p>
+                  </div>
+                </div>
+              </div>
+            )}
           </div>
 
-          {lookupPreview && (
-            <div style={styles.previewBox}>
-              <h4 style={{ marginTop: 0 }}>Detected Address Preview</h4>
-              <p><strong>Community:</strong> {lookupPreview.community || "Not clear"}</p>
-              <p><strong>Display Name:</strong> {lookupPreview.displayName || "N/A"}</p>
-              <p><strong>Latitude:</strong> {lookupPreview.latitude || "N/A"}</p>
-              <p><strong>Longitude:</strong> {lookupPreview.longitude || "N/A"}</p>
+          {/* Business & Financial Section */}
+          <div style={styles.section}>
+            <div style={styles.sectionHeader}>
+              <span style={styles.sectionIcon}>💼</span>
+              <h3 style={styles.sectionTitle}>Business & Financial Information</h3>
             </div>
-          )}
 
-          <div style={styles.grid}>
-            <div>
-              <label style={styles.label}>Business Category</label>
+            <div style={styles.twoColGrid}>
+              <div style={styles.formGroup}>
+                <label style={styles.label}>
+                  <span style={styles.labelIcon}>🏪</span>
+                  Business Category
+                </label>
+                <input
+                  style={styles.input}
+                  name="businessCategory"
+                  value={form.businessCategory}
+                  onChange={handleChange}
+                  placeholder="e.g., farming, tailoring, grocery"
+                  required
+                />
+              </div>
+
+              <div style={styles.formGroup}>
+                <label style={styles.label}>
+                  <span style={styles.labelIcon}>💰</span>
+                  Monthly Income Range
+                </label>
+                <input
+                  style={styles.input}
+                  name="monthlyIncomeRange"
+                  value={form.monthlyIncomeRange}
+                  onChange={handleChange}
+                  placeholder="e.g., LKR 30,000 - 50,000"
+                  required
+                />
+              </div>
+            </div>
+
+            <div style={styles.formGroup}>
+              <label style={styles.label}>
+                <span style={styles.labelIcon}>👨‍👩‍👧‍👦</span>
+                Household Size
+              </label>
               <input
                 style={styles.input}
-                name="businessCategory"
-                value={form.businessCategory}
+                type="number"
+                name="householdSize"
+                value={form.householdSize}
                 onChange={handleChange}
-                placeholder="e.g. farming, tailoring, grocery"
+                min="1"
+                placeholder="Number of family members"
                 required
               />
             </div>
+          </div>
 
-            <div>
-              <label style={styles.label}>Monthly Income Range</label>
-              <input
-                style={styles.input}
-                name="monthlyIncomeRange"
-                value={form.monthlyIncomeRange}
+          {/* Impact Section */}
+          <div style={styles.section}>
+            <div style={styles.sectionHeader}>
+              <span style={styles.sectionIcon}>🌱</span>
+              <h3 style={styles.sectionTitle}>Poverty Impact Plan</h3>
+            </div>
+
+            <div style={styles.formGroup}>
+              <label style={styles.label}>
+                How will this loan reduce poverty or improve your family's living conditions?
+              </label>
+              <textarea
+                style={styles.textarea}
+                name="povertyImpactPlan"
+                value={form.povertyImpactPlan}
                 onChange={handleChange}
-                placeholder="e.g. LKR 30,000 - 50,000"
+                placeholder="Describe your plan to use this loan for poverty reduction, income generation, education, healthcare, or community upliftment..."
                 required
               />
             </div>
           </div>
 
-          <label style={styles.label}>Household Size</label>
-          <input
-            style={styles.input}
-            type="number"
-            name="householdSize"
-            value={form.householdSize}
-            onChange={handleChange}
-            min="1"
-            required
-          />
-
-          <label style={styles.label}>Poverty Impact Plan</label>
-          <textarea
-            style={styles.textarea}
-            name="povertyImpactPlan"
-            value={form.povertyImpactPlan}
-            onChange={handleChange}
-            placeholder="Explain how this loan will reduce poverty or improve your family’s living conditions"
-            required
-          />
-
-          <button type="submit" style={styles.button} disabled={saving}>
-            {saving
-              ? profileExists
-                ? "Updating..."
-                : "Saving..."
-              : profileExists
-              ? "Update Profile"
-              : "Create Profile"}
-          </button>
+          {/* Form Actions */}
+          <div style={styles.formActions}>
+            <button type="submit" style={styles.submitBtn} disabled={saving}>
+              {saving ? (
+                <span style={styles.btnContent}>
+                  <span style={styles.spinner}></span>
+                  {profileExists ? "Updating..." : "Saving..."}
+                </span>
+              ) : (
+                <span style={styles.btnContent}>
+                  {profileExists ? "✏️ Update Profile" : "✅ Create Profile"}
+                </span>
+              )}
+            </button>
+          </div>
         </form>
+      </div>
+
+      {/* Help Section */}
+      <div style={styles.helpSection}>
+        <div style={styles.helpCard}>
+          <span style={styles.helpIcon}>💡</span>
+          <div>
+            <h4 style={styles.helpTitle}>Why complete your profile?</h4>
+            <p style={styles.helpText}>
+              A complete profile helps lenders understand your situation, increases trust, 
+              and improves your chances of loan approval. Your information is kept confidential 
+              and used only for loan assessment purposes.
+            </p>
+          </div>
+        </div>
       </div>
     </div>
   );
 }
 
 const styles = {
-  wrapper: {
-    background: "#f5f7fb",
-    minHeight: "calc(100vh - 80px)",
-    padding: "24px",
+  page: {
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+    padding: "40px 24px",
   },
-  card: {
-    maxWidth: "900px",
-    margin: "0 auto",
-    background: "#fff",
+  
+  heroSection: {
+    maxWidth: "1000px",
+    margin: "0 auto 30px",
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexWrap: "wrap",
+    gap: "20px",
+    background: "white",
+    padding: "30px",
+    borderRadius: "20px",
+    boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
+  },
+  
+  heroContent: {
+    flex: 1,
+  },
+  
+  title: {
+    fontSize: "32px",
+    fontWeight: "800",
+    margin: "0 0 8px 0",
+    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  },
+  
+  titleAccent: {
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  },
+  
+  subtitle: {
+    color: "#6b7280",
+    fontSize: "16px",
+    margin: 0,
+  },
+  
+  sdgBadge: {
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    padding: "12px 20px",
+    borderRadius: "40px",
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    boxShadow: "0 4px 12px rgba(16,185,129,0.3)",
+  },
+  
+  sdgIcon: {
+    fontSize: "24px",
+  },
+  
+  sdgText: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: "14px",
+  },
+  
+  loadingContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: "400px",
+  },
+  
+  loadingSpinner: {
+    width: "50px",
+    height: "50px",
+    border: "4px solid #e5e7eb",
+    borderTopColor: "#3b82f6",
+    borderRadius: "50%",
+    animation: "spin 1s linear infinite",
+  },
+  
+  loadingText: {
+    marginTop: "16px",
+    color: "#6b7280",
+  },
+  
+  success: {
+    maxWidth: "1000px",
+    margin: "0 auto 20px",
+    background: "#d1fae5",
+    color: "#065f46",
+    padding: "14px 20px",
     borderRadius: "12px",
-    padding: "32px",
-    boxShadow: "0 6px 20px rgba(0,0,0,0.08)",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    borderLeft: "4px solid #10b981",
   },
-  headerRow: {
+  
+  error: {
+    maxWidth: "1000px",
+    margin: "0 auto 20px",
+    background: "#fee2e2",
+    color: "#991b1b",
+    padding: "14px 20px",
+    borderRadius: "12px",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    borderLeft: "4px solid #ef4444",
+  },
+  
+  messageIcon: {
+    fontSize: "20px",
+  },
+  
+  closeBtn: {
+    marginLeft: "auto",
+    background: "none",
+    border: "none",
+    fontSize: "24px",
+    cursor: "pointer",
+    color: "inherit",
+    padding: "0 8px",
+  },
+  
+  profileCard: {
+    maxWidth: "1000px",
+    margin: "0 auto",
+    background: "white",
+    borderRadius: "24px",
+    padding: "32px",
+    boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
+  },
+  
+  cardHeader: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "flex-start",
+    gap: "20px",
+    marginBottom: "32px",
+    paddingBottom: "20px",
+    borderBottom: "2px solid #f0fdf4",
+  },
+  
+  headerLeft: {
+    display: "flex",
+    alignItems: "center",
     gap: "16px",
-    marginBottom: "20px",
   },
-  badge: {
-    padding: "8px 14px",
-    borderRadius: "999px",
+  
+  headerIcon: {
+    fontSize: "48px",
+  },
+  
+  cardTitle: {
+    fontSize: "24px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: "0 0 4px 0",
+  },
+  
+  cardSubtitle: {
     fontSize: "14px",
-    fontWeight: "600",
+    color: "#6b7280",
+    margin: 0,
   },
-  grid: {
+  
+  verificationBadge: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    padding: "8px 16px",
+    borderRadius: "40px",
+    background: "#f3f4f6",
+  },
+  
+  badgeIcon: {
+    fontSize: "16px",
+    fontWeight: "700",
+  },
+  
+  badgeTextVerified: {
+    fontSize: "13px",
+    fontWeight: "600",
+    color: "#059669",
+  },
+  
+  badgeTextPending: {
+    fontSize: "13px",
+    fontWeight: "600",
+    color: "#d97706",
+  },
+  
+  section: {
+    marginBottom: "32px",
+    paddingBottom: "24px",
+    borderBottom: "1px solid #f3f4f6",
+  },
+  
+  sectionHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    marginBottom: "24px",
+  },
+  
+  sectionIcon: {
+    fontSize: "28px",
+  },
+  
+  sectionTitle: {
+    fontSize: "18px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: 0,
+  },
+  
+  twoColGrid: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
-    gap: "16px",
+    gap: "20px",
   },
+  
+  formGroup: {
+    marginBottom: "20px",
+  },
+  
   label: {
-    display: "block",
-    marginBottom: "8px",
-    marginTop: "10px",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
     fontWeight: "600",
+    marginBottom: "8px",
+    color: "#374151",
+    fontSize: "14px",
   },
+  
+  labelIcon: {
+    fontSize: "16px",
+  },
+  
   input: {
     width: "100%",
-    padding: "12px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
-    fontSize: "15px",
+    padding: "12px 14px",
+    borderRadius: "10px",
+    border: "1px solid #e5e7eb",
+    fontSize: "14px",
+    transition: "border-color 0.2s, box-shadow 0.2s",
+    outline: "none",
     boxSizing: "border-box",
+    ":focus": {
+      borderColor: "#3b82f6",
+      boxShadow: "0 0 0 3px rgba(59,130,246,0.1)",
+    },
   },
+  
   textarea: {
     width: "100%",
-    minHeight: "130px",
-    padding: "12px",
-    borderRadius: "8px",
-    border: "1px solid #ccc",
-    fontSize: "15px",
+    minHeight: "120px",
+    padding: "12px 14px",
+    borderRadius: "10px",
+    border: "1px solid #e5e7eb",
+    fontSize: "14px",
+    fontFamily: "inherit",
+    transition: "border-color 0.2s, box-shadow 0.2s",
+    outline: "none",
     boxSizing: "border-box",
     resize: "vertical",
+    ":focus": {
+      borderColor: "#3b82f6",
+      boxShadow: "0 0 0 3px rgba(59,130,246,0.1)",
+    },
   },
-  button: {
-    marginTop: "18px",
-    padding: "12px 18px",
-    border: "none",
-    borderRadius: "8px",
-    background: "#2563eb",
-    color: "#fff",
-    fontWeight: "600",
-    cursor: "pointer",
-  },
+  
   lookupBtn: {
-    padding: "10px 14px",
+    display: "inline-flex",
+    alignItems: "center",
+    gap: "8px",
+    padding: "10px 18px",
     border: "none",
-    borderRadius: "8px",
+    borderRadius: "10px",
     background: "#111827",
-    color: "#fff",
+    color: "white",
+    fontWeight: "600",
+    fontSize: "14px",
+    cursor: "pointer",
+    transition: "background 0.2s",
+    marginTop: "8px",
+    ":hover": {
+      background: "#1f2937",
+    },
+  },
+  
+  btnIcon: {
+    fontSize: "16px",
+  },
+  
+  previewBox: {
+    marginTop: "16px",
+    padding: "16px",
+    background: "#f0fdf4",
+    border: "1px solid #d1fae5",
+    borderRadius: "12px",
+  },
+  
+  previewHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    marginBottom: "12px",
+  },
+  
+  previewIcon: {
+    fontSize: "20px",
+  },
+  
+  previewTitle: {
+    fontSize: "14px",
+    fontWeight: "600",
+    color: "#065f46",
+    margin: 0,
+  },
+  
+  previewGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+    gap: "12px",
+  },
+  
+  previewLabel: {
+    fontSize: "11px",
+    fontWeight: "600",
+    color: "#059669",
+    margin: "0 0 4px 0",
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+  },
+  
+  previewValue: {
+    fontSize: "13px",
+    color: "#064e3b",
+    margin: 0,
+    fontWeight: "500",
+  },
+  
+  formActions: {
+    marginTop: "24px",
+  },
+  
+  submitBtn: {
+    width: "100%",
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    color: "white",
+    border: "none",
+    padding: "14px 24px",
+    borderRadius: "12px",
+    fontSize: "16px",
     fontWeight: "600",
     cursor: "pointer",
+    transition: "transform 0.1s",
+    ":active": {
+      transform: "scale(0.98)",
+    },
   },
-  previewBox: {
-    marginTop: "14px",
-    padding: "12px",
-    background: "#f9fafb",
+  
+  btnContent: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+  },
+  
+  spinner: {
+    width: "18px",
+    height: "18px",
+    border: "2px solid white",
+    borderTopColor: "transparent",
+    borderRadius: "50%",
+    animation: "spin 0.6s linear infinite",
+  },
+  
+  helpSection: {
+    maxWidth: "1000px",
+    margin: "30px auto 0",
+  },
+  
+  helpCard: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "16px",
+    padding: "20px",
+    background: "white",
+    borderRadius: "16px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
     border: "1px solid #e5e7eb",
-    borderRadius: "8px",
   },
-  success: {
-    background: "#dcfce7",
-    color: "#166534",
-    padding: "10px 12px",
-    borderRadius: "8px",
-    marginBottom: "16px",
+  
+  helpIcon: {
+    fontSize: "32px",
   },
-  error: {
-    background: "#fee2e2",
-    color: "#b91c1c",
-    padding: "10px 12px",
-    borderRadius: "8px",
-    marginBottom: "16px",
+  
+  helpTitle: {
+    fontSize: "16px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: "0 0 8px 0",
+  },
+  
+  helpText: {
+    fontSize: "14px",
+    color: "#6b7280",
+    margin: 0,
+    lineHeight: "1.5",
   },
 };
+
+// Add animation keyframes
+const styleSheet = document.createElement("style");
+styleSheet.textContent = `
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+`;
+document.head.appendChild(styleSheet);
