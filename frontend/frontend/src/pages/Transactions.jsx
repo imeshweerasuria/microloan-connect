@@ -143,151 +143,310 @@ export default function Transactions() {
 
   return (
     <div style={styles.page}>
-      <h1>Transactions Ledger</h1>
-      <p style={styles.sub}>
-        Fund approved loans, track your funding history, and show the FX-converted transaction values.
-      </p>
-
-      {message && <div style={styles.success}>{message}</div>}
-      {error && <div style={styles.error}>{error}</div>}
-
-      <div style={styles.statsRow}>
-        <div style={styles.statCard}>
-          <h3>My Transactions</h3>
-          <p style={styles.big}>{summary.count}</p>
+      {/* Hero Section */}
+      <div style={styles.heroSection}>
+        <div style={styles.heroContent}>
+          <h1 style={styles.title}>
+            Transactions Ledger
+            <span style={styles.titleAccent}> | Track Your Impact</span>
+          </h1>
+          <p style={styles.subtitle}>
+            Fund approved loans, track your funding history, and see your impact in real-time
+          </p>
         </div>
-        <div style={styles.statCard}>
-          <h3>Total Funded</h3>
-          <p style={styles.big}>LKR {summary.totalFunding}</p>
-        </div>
-        <div style={styles.statCard}>
-          <h3>Total Converted</h3>
-          <p style={styles.big}>USD {summary.totalConverted}</p>
+        <div style={styles.sdgBadge}>
+          <span style={styles.sdgIcon}>🎯</span>
+          <span style={styles.sdgText}>SDG Goal 1: No Poverty</span>
         </div>
       </div>
 
-      <div style={styles.topActions}>
-        <Link to="/fx" style={styles.linkBtn}>
-          Open FX Converter
-        </Link>
+      {/* Messages */}
+      {message && (
+        <div style={styles.success}>
+          <span style={styles.messageIcon}>✅</span>
+          <span>{message}</span>
+          <button onClick={() => setMessage("")} style={styles.closeBtn}>×</button>
+        </div>
+      )}
+      {error && (
+        <div style={styles.error}>
+          <span style={styles.messageIcon}>⚠️</span>
+          <span>{error}</span>
+          <button onClick={() => setError("")} style={styles.closeBtn}>×</button>
+        </div>
+      )}
+
+      {/* Stats Grid */}
+      <div style={styles.statsGrid}>
+        <div style={{...styles.statCard, borderTopColor: "#3b82f6"}}>
+          <div style={styles.statIcon}>📊</div>
+          <div>
+            <h3 style={styles.statTitle}>Total Transactions</h3>
+            <p style={styles.statValue}>{summary.count}</p>
+          </div>
+        </div>
+        
+        <div style={{...styles.statCard, borderTopColor: "#10b981"}}>
+          <div style={styles.statIcon}>💰</div>
+          <div>
+            <h3 style={styles.statTitle}>Total Funded (LKR)</h3>
+            <p style={styles.statValue}>LKR {summary.totalFunding.toLocaleString()}</p>
+          </div>
+        </div>
+        
+        <div style={{...styles.statCard, borderTopColor: "#8b5cf6"}}>
+          <div style={styles.statIcon}>💱</div>
+          <div>
+            <h3 style={styles.statTitle}>Total Converted (USD)</h3>
+            <p style={styles.statValue}>USD {summary.totalConverted.toLocaleString()}</p>
+          </div>
+        </div>
       </div>
 
-      <div style={styles.grid}>
-        <div style={styles.card}>
-          <h2>Create Funding Transaction</h2>
+      {/* FX Converter Link */}
+      <div style={styles.fxLinkCard}>
+        <div style={styles.fxLinkContent}>
+          <span style={styles.fxIcon}>💱</span>
+          <div>
+            <h4 style={styles.fxTitle}>Need currency conversion?</h4>
+            <p style={styles.fxText}>Use our FX converter to check real-time exchange rates</p>
+          </div>
+          <Link to="/fx" style={styles.fxButton}>
+            Open FX Converter →
+          </Link>
+        </div>
+      </div>
+
+      {/* Main Grid */}
+      <div style={styles.mainGrid}>
+        {/* Create Funding Form */}
+        <div style={styles.formCard}>
+          <div style={styles.formHeader}>
+            <span style={styles.formIcon}>💚</span>
+            <h2 style={styles.formTitle}>Create Funding Transaction</h2>
+          </div>
 
           <form onSubmit={handleCreateFunding}>
-            <label style={styles.label}>Select Approved Loan</label>
-            <select
-              style={styles.input}
-              value={selectedLoanId}
-              onChange={(e) => setSelectedLoanId(e.target.value)}
-              required
-            >
-              <option value="">-- Select Loan --</option>
-              {loans.map((loan) => {
-                const remaining =
-                  Number(loan.amount || 0) - Number(loan.fundedAmount || 0);
+            <div style={styles.formGroup}>
+              <label style={styles.label}>
+                <span style={styles.labelIcon}>🏦</span>
+                Select Approved Loan
+              </label>
+              <select
+                style={styles.select}
+                value={selectedLoanId}
+                onChange={(e) => setSelectedLoanId(e.target.value)}
+                required
+              >
+                <option value="">-- Choose a loan to fund --</option>
+                {loans.map((loan) => {
+                  const remaining =
+                    Number(loan.amount || 0) - Number(loan.fundedAmount || 0);
 
-                return (
-                  <option key={loan._id} value={loan._id}>
-                    {loan.title} | {loan.amount} {loan.currency} | remaining: {remaining}
-                  </option>
-                );
-              })}
-            </select>
+                  return (
+                    <option key={loan._id} value={loan._id}>
+                      {loan.title} | {loan.amount} {loan.currency} | Remaining: {remaining}
+                    </option>
+                  );
+                })}
+              </select>
+            </div>
 
             {selectedLoan && (
               <div style={styles.loanInfo}>
-                <p><strong>Purpose:</strong> {selectedLoan.purpose}</p>
-                <p><strong>Category:</strong> {selectedLoan.businessCategory}</p>
-                <p><strong>Impact Plan:</strong> {selectedLoan.povertyImpactPlanSnapshot}</p>
-                <p><strong>Remaining Needed:</strong> {remainingAmount} {selectedLoan.currency}</p>
+                <div style={styles.loanInfoHeader}>
+                  <span>📋</span>
+                  <strong>Loan Details</strong>
+                </div>
+                <div style={styles.loanInfoGrid}>
+                  <div>
+                    <p style={styles.loanInfoLabel}>Purpose</p>
+                    <p style={styles.loanInfoValue}>{selectedLoan.purpose}</p>
+                  </div>
+                  <div>
+                    <p style={styles.loanInfoLabel}>Category</p>
+                    <p style={styles.loanInfoValue}>{selectedLoan.businessCategory}</p>
+                  </div>
+                  <div>
+                    <p style={styles.loanInfoLabel}>Remaining Needed</p>
+                    <p style={{...styles.loanInfoValue, color: "#f59e0b", fontWeight: "700"}}>
+                      {remainingAmount} {selectedLoan.currency}
+                    </p>
+                  </div>
+                </div>
+                <div>
+                  <p style={styles.loanInfoLabel}>Impact Plan</p>
+                  <p style={styles.loanInfoValue}>{selectedLoan.povertyImpactPlanSnapshot}</p>
+                </div>
               </div>
             )}
 
-            <label style={styles.label}>Amount</label>
-            <input
-              style={styles.input}
-              type="number"
-              min="1"
-              max={remainingAmount || undefined}
-              value={amount}
-              onChange={(e) => setAmount(e.target.value)}
-              required
-            />
+            <div style={styles.twoCol}>
+              <div style={styles.formGroup}>
+                <label style={styles.label}>
+                  <span style={styles.labelIcon}>💰</span>
+                  Amount
+                </label>
+                <input
+                  style={styles.input}
+                  type="number"
+                  min="1"
+                  max={remainingAmount || undefined}
+                  value={amount}
+                  onChange={(e) => setAmount(e.target.value)}
+                  placeholder="Enter amount"
+                  required
+                />
+              </div>
 
-            <label style={styles.label}>Currency</label>
-            <input
-              style={styles.input}
-              value={currency}
-              onChange={(e) => setCurrency(e.target.value.toUpperCase())}
-              required
-            />
+              <div style={styles.formGroup}>
+                <label style={styles.label}>
+                  <span style={styles.labelIcon}>🌍</span>
+                  Currency
+                </label>
+                <input
+                  style={styles.input}
+                  value={currency}
+                  onChange={(e) => setCurrency(e.target.value.toUpperCase())}
+                  placeholder="LKR, USD, etc."
+                  required
+                />
+              </div>
+            </div>
 
-            <label style={styles.label}>Note</label>
-            <textarea
-              style={styles.textarea}
-              value={note}
-              onChange={(e) => setNote(e.target.value)}
-              placeholder="Optional note"
-            />
+            <div style={styles.formGroup}>
+              <label style={styles.label}>
+                <span style={styles.labelIcon}>📝</span>
+                Note (Optional)
+              </label>
+              <textarea
+                style={styles.textarea}
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                placeholder="Add a personal note about this funding..."
+              />
+            </div>
 
-            <button type="submit" style={styles.primaryBtn} disabled={funding}>
-              {funding ? "Processing..." : "Create Funding"}
+            <button type="submit" style={styles.submitBtn} disabled={funding}>
+              {funding ? (
+                <span style={styles.btnContent}>
+                  <span style={styles.spinner}></span>
+                  Processing...
+                </span>
+              ) : (
+                <span style={styles.btnContent}>
+                  <span>💚</span>
+                  Create Funding Transaction
+                </span>
+              )}
             </button>
           </form>
         </div>
 
-        <div style={styles.card}>
-          <div style={styles.rowBetween}>
-            <h2 style={{ margin: 0 }}>My Transactions</h2>
-            <input
-              style={styles.searchInput}
-              placeholder="Search transactions..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-            />
+        {/* Transactions List */}
+        <div style={styles.transactionsCard}>
+          <div style={styles.transactionsHeader}>
+            <div style={styles.headerLeft}>
+              <span style={styles.transactionsIcon}>📜</span>
+              <h2 style={styles.transactionsTitle}>My Transactions</h2>
+            </div>
+            <div style={styles.searchWrapper}>
+              <span style={styles.searchIcon}>🔍</span>
+              <input
+                style={styles.searchInput}
+                placeholder="Search transactions..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+              />
+            </div>
           </div>
 
           {loading ? (
-            <p>Loading transactions...</p>
+            <div style={styles.loadingContainer}>
+              <div style={styles.loadingSpinner}></div>
+              <p>Loading transactions...</p>
+            </div>
           ) : filteredTransactions.length === 0 ? (
-            <div>
-              <p>No transactions found.</p>
-              <Link to="/lender/dashboard">Go to lender dashboard</Link>
+            <div style={styles.emptyState}>
+              <span style={styles.emptyIcon}>📭</span>
+              <p>No transactions found</p>
+              <Link to="/lender/dashboard" style={styles.emptyLink}>
+                Browse available loans to fund →
+              </Link>
             </div>
           ) : (
-            <div style={{ display: "grid", gap: "12px", marginTop: "14px" }}>
+            <div style={styles.transactionsList}>
               {filteredTransactions.map((tx) => (
-                <div key={tx._id} style={styles.txCard}>
-                  <div style={styles.rowBetween}>
-                    <strong>{tx.type}</strong>
-                    <span style={styles.badge}>{tx.status}</span>
+                <div key={tx._id} style={styles.transactionItem}>
+                  <div style={styles.txHeader}>
+                    <div style={styles.txType}>
+                      <span style={tx.type === "FUNDING" ? styles.fundingIcon : styles.repaymentIcon}>
+                        {tx.type === "FUNDING" ? "💚" : "🔄"}
+                      </span>
+                      <strong>{tx.type}</strong>
+                    </div>
+                    <span style={{...styles.txStatus, 
+                      background: tx.status === "CONFIRMED" ? "#d1fae5" : "#fef3c7",
+                      color: tx.status === "CONFIRMED" ? "#065f46" : "#92400e"
+                    }}>
+                      {tx.status}
+                    </span>
                   </div>
 
-                  <p><strong>Loan ID:</strong> {tx.loanId}</p>
-                  <p><strong>Amount:</strong> {tx.amount} {tx.currency}</p>
+                  <div style={styles.txDetails}>
+                    <div style={styles.txDetail}>
+                      <span style={styles.txLabel}>Loan ID</span>
+                      <span style={styles.txValue}>{tx.loanId?.slice(-8) || "N/A"}</span>
+                    </div>
+                    <div style={styles.txDetail}>
+                      <span style={styles.txLabel}>Amount</span>
+                      <span style={styles.txValue}>{tx.amount} {tx.currency}</span>
+                    </div>
+                    {tx.amountConverted && (
+                      <div style={styles.txDetail}>
+                        <span style={styles.txLabel}>Converted</span>
+                        <span style={styles.txValue}>{tx.amountConverted} {tx.convertedCurrency}</span>
+                      </div>
+                    )}
+                    {tx.fxRate && (
+                      <div style={styles.txDetail}>
+                        <span style={styles.txLabel}>FX Rate</span>
+                        <span style={styles.txValue}>1 {tx.currency} = {tx.fxRate} {tx.convertedCurrency}</span>
+                      </div>
+                    )}
+                  </div>
 
-                  {tx.amountConverted && (
-                    <p>
-                      <strong>Converted:</strong> {tx.amountConverted} {tx.convertedCurrency}
-                    </p>
+                  {tx.note && (
+                    <div style={styles.txNote}>
+                      <span>📝</span>
+                      <span>{tx.note}</span>
+                    </div>
                   )}
 
-                  {tx.fxRate && (
-                    <p><strong>FX Rate:</strong> {tx.fxRate}</p>
-                  )}
-
-                  {tx.note && <p><strong>Note:</strong> {tx.note}</p>}
-
-                  <p style={styles.smallText}>
-                    Created: {new Date(tx.createdAt).toLocaleString()}
-                  </p>
+                  <div style={styles.txFooter}>
+                    <span style={styles.txDate}>
+                      🕐 {new Date(tx.createdAt).toLocaleDateString()}
+                    </span>
+                  </div>
                 </div>
               ))}
             </div>
           )}
+        </div>
+      </div>
+
+      {/* Impact Summary */}
+      <div style={styles.impactCard}>
+        <div style={styles.impactContent}>
+          <span style={styles.impactEmoji}>🌟</span>
+          <div>
+            <h4 style={styles.impactTitle}>Your Impact So Far</h4>
+            <p style={styles.impactText}>
+              You've funded <strong>{summary.count}</strong> transaction{summary.count !== 1 ? 's' : ''} 
+              totaling <strong>LKR {summary.totalFunding.toLocaleString()}</strong>, 
+              helping underserved communities work towards financial freedom.
+            </p>
+          </div>
         </div>
       </div>
     </div>
@@ -296,133 +455,565 @@ export default function Transactions() {
 
 const styles = {
   page: {
-    padding: "24px",
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+    padding: "40px 24px",
+  },
+  
+  heroSection: {
     maxWidth: "1200px",
-    margin: "0 auto",
-  },
-  sub: {
-    color: "#6b7280",
-    marginBottom: "20px",
-  },
-  statsRow: {
-    display: "grid",
-    gridTemplateColumns: "repeat(3, 1fr)",
-    gap: "16px",
-    marginBottom: "20px",
-  },
-  statCard: {
-    background: "#fff",
-    padding: "20px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
-  },
-  big: {
-    margin: 0,
-    fontSize: "28px",
-    fontWeight: "700",
-  },
-  topActions: {
-    display: "flex",
-    gap: "12px",
-    marginBottom: "20px",
-  },
-  linkBtn: {
-    textDecoration: "none",
-    background: "#111827",
-    color: "#fff",
-    padding: "10px 14px",
-    borderRadius: "8px",
-    fontWeight: "600",
-  },
-  grid: {
-    display: "grid",
-    gridTemplateColumns: "1fr 1fr",
-    gap: "20px",
-  },
-  card: {
-    background: "#fff",
-    padding: "20px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
-  },
-  label: {
-    display: "block",
-    fontWeight: "600",
-    marginTop: "12px",
-    marginBottom: "6px",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    borderRadius: "8px",
-    border: "1px solid #d1d5db",
-    boxSizing: "border-box",
-  },
-  searchInput: {
-    padding: "10px",
-    borderRadius: "8px",
-    border: "1px solid #d1d5db",
-    width: "220px",
-  },
-  textarea: {
-    width: "100%",
-    minHeight: "80px",
-    padding: "10px",
-    borderRadius: "8px",
-    border: "1px solid #d1d5db",
-    boxSizing: "border-box",
-  },
-  primaryBtn: {
-    marginTop: "16px",
-    padding: "10px 16px",
-    borderRadius: "8px",
-    border: "none",
-    background: "#2563eb",
-    color: "#fff",
-    cursor: "pointer",
-  },
-  success: {
-    background: "#dcfce7",
-    color: "#166534",
-    padding: "10px 12px",
-    borderRadius: "8px",
-    marginBottom: "16px",
-  },
-  error: {
-    background: "#fee2e2",
-    color: "#b91c1c",
-    padding: "10px 12px",
-    borderRadius: "8px",
-    marginBottom: "16px",
-  },
-  loanInfo: {
-    background: "#f9fafb",
-    border: "1px solid #e5e7eb",
-    borderRadius: "10px",
-    padding: "10px 12px",
-    marginTop: "12px",
-  },
-  txCard: {
-    border: "1px solid #e5e7eb",
-    borderRadius: "10px",
-    padding: "12px",
-  },
-  rowBetween: {
+    margin: "0 auto 30px",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: "10px",
+    flexWrap: "wrap",
+    gap: "20px",
+    background: "white",
+    padding: "30px",
+    borderRadius: "20px",
+    boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
   },
-  badge: {
+  
+  heroContent: {
+    flex: 1,
+  },
+  
+  title: {
+    fontSize: "32px",
+    fontWeight: "800",
+    margin: "0 0 8px 0",
+    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  },
+  
+  titleAccent: {
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  },
+  
+  subtitle: {
+    color: "#6b7280",
+    fontSize: "16px",
+    margin: 0,
+  },
+  
+  sdgBadge: {
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    padding: "12px 20px",
+    borderRadius: "40px",
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    boxShadow: "0 4px 12px rgba(16,185,129,0.3)",
+  },
+  
+  sdgIcon: {
+    fontSize: "24px",
+  },
+  
+  sdgText: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: "14px",
+  },
+  
+  success: {
+    maxWidth: "1200px",
+    margin: "0 auto 20px",
+    background: "#d1fae5",
+    color: "#065f46",
+    padding: "14px 20px",
+    borderRadius: "12px",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    borderLeft: "4px solid #10b981",
+  },
+  
+  error: {
+    maxWidth: "1200px",
+    margin: "0 auto 20px",
+    background: "#fee2e2",
+    color: "#991b1b",
+    padding: "14px 20px",
+    borderRadius: "12px",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    borderLeft: "4px solid #ef4444",
+  },
+  
+  messageIcon: {
+    fontSize: "20px",
+  },
+  
+  closeBtn: {
+    marginLeft: "auto",
+    background: "none",
+    border: "none",
+    fontSize: "24px",
+    cursor: "pointer",
+    color: "inherit",
+    padding: "0 8px",
+  },
+  
+  statsGrid: {
+    maxWidth: "1200px",
+    margin: "0 auto 30px",
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+    gap: "20px",
+  },
+  
+  statCard: {
+    background: "white",
+    padding: "24px",
+    borderRadius: "16px",
+    display: "flex",
+    alignItems: "center",
+    gap: "16px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+    borderTop: "4px solid",
+    transition: "transform 0.2s, box-shadow 0.2s",
+  },
+  
+  statIcon: {
+    fontSize: "40px",
+  },
+  
+  statTitle: {
+    fontSize: "14px",
+    fontWeight: "600",
+    color: "#6b7280",
+    margin: "0 0 8px 0",
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+  },
+  
+  statValue: {
+    fontSize: "28px",
+    fontWeight: "800",
+    color: "#1f2937",
+    margin: 0,
+  },
+  
+  fxLinkCard: {
+    maxWidth: "1200px",
+    margin: "0 auto 20px",
+    background: "white",
+    borderRadius: "16px",
+    padding: "20px 24px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+  },
+  
+  fxLinkContent: {
+    display: "flex",
+    alignItems: "center",
+    gap: "16px",
+    flexWrap: "wrap",
+  },
+  
+  fxIcon: {
+    fontSize: "32px",
+  },
+  
+  fxTitle: {
+    fontSize: "16px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: "0 0 4px 0",
+  },
+  
+  fxText: {
+    fontSize: "13px",
+    color: "#6b7280",
+    margin: 0,
+  },
+  
+  fxButton: {
+    marginLeft: "auto",
+    padding: "10px 20px",
+    background: "#111827",
+    color: "white",
+    textDecoration: "none",
+    borderRadius: "10px",
+    fontSize: "14px",
+    fontWeight: "600",
+    transition: "background 0.2s",
+  },
+  
+  mainGrid: {
+    maxWidth: "1200px",
+    margin: "0 auto",
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "30px",
+  },
+  
+  formCard: {
+    background: "white",
+    borderRadius: "20px",
+    padding: "28px",
+    boxShadow: "0 4px 14px rgba(0,0,0,0.08)",
+  },
+  
+  formHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    marginBottom: "24px",
+  },
+  
+  formIcon: {
+    fontSize: "28px",
+  },
+  
+  formTitle: {
+    fontSize: "22px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: 0,
+  },
+  
+  formGroup: {
+    marginBottom: "20px",
+  },
+  
+  label: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    fontWeight: "600",
+    marginBottom: "8px",
+    color: "#374151",
+    fontSize: "14px",
+  },
+  
+  labelIcon: {
+    fontSize: "16px",
+  },
+  
+  select: {
+    width: "100%",
+    padding: "12px 14px",
+    borderRadius: "12px",
+    border: "1px solid #e5e7eb",
+    fontSize: "14px",
+    outline: "none",
+  },
+  
+  input: {
+    width: "100%",
+    padding: "12px 14px",
+    borderRadius: "12px",
+    border: "1px solid #e5e7eb",
+    fontSize: "14px",
+    transition: "border-color 0.2s",
+    outline: "none",
+    boxSizing: "border-box",
+  },
+  
+  textarea: {
+    width: "100%",
+    minHeight: "80px",
+    padding: "12px 14px",
+    borderRadius: "12px",
+    border: "1px solid #e5e7eb",
+    fontSize: "14px",
+    fontFamily: "inherit",
+    resize: "vertical",
+    outline: "none",
+  },
+  
+  twoCol: {
+    display: "grid",
+    gridTemplateColumns: "1fr 1fr",
+    gap: "16px",
+  },
+  
+  loanInfo: {
+    background: "#f0fdf4",
+    borderRadius: "12px",
+    padding: "16px",
+    marginBottom: "20px",
+  },
+  
+  loanInfoHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    marginBottom: "12px",
+  },
+  
+  loanInfoGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "12px",
+    marginBottom: "12px",
+  },
+  
+  loanInfoLabel: {
+    fontSize: "11px",
+    fontWeight: "600",
+    color: "#059669",
+    margin: "0 0 4px 0",
+    textTransform: "uppercase",
+  },
+  
+  loanInfoValue: {
+    fontSize: "13px",
+    color: "#065f46",
+    margin: 0,
+  },
+  
+  submitBtn: {
+    width: "100%",
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    color: "white",
+    border: "none",
+    padding: "14px",
+    borderRadius: "12px",
+    fontSize: "16px",
+    fontWeight: "600",
+    cursor: "pointer",
+    transition: "transform 0.1s",
+  },
+  
+  btnContent: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    gap: "8px",
+  },
+  
+  spinner: {
+    width: "18px",
+    height: "18px",
+    border: "2px solid white",
+    borderTopColor: "transparent",
+    borderRadius: "50%",
+    animation: "spin 0.6s linear infinite",
+  },
+  
+  transactionsCard: {
+    background: "white",
+    borderRadius: "20px",
+    padding: "28px",
+    boxShadow: "0 4px 14px rgba(0,0,0,0.08)",
+  },
+  
+  transactionsHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "24px",
+    flexWrap: "wrap",
+    gap: "16px",
+  },
+  
+  headerLeft: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+  },
+  
+  transactionsIcon: {
+    fontSize: "28px",
+  },
+  
+  transactionsTitle: {
+    fontSize: "22px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: 0,
+  },
+  
+  searchWrapper: {
+    position: "relative",
+    minWidth: "200px",
+  },
+  
+  searchIcon: {
+    position: "absolute",
+    left: "12px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    fontSize: "16px",
+  },
+  
+  searchInput: {
+    width: "100%",
+    padding: "10px 12px 10px 36px",
+    borderRadius: "10px",
+    border: "1px solid #e5e7eb",
+    fontSize: "14px",
+    outline: "none",
+  },
+  
+  loadingContainer: {
+    textAlign: "center",
+    padding: "40px",
+  },
+  
+  loadingSpinner: {
+    width: "40px",
+    height: "40px",
+    border: "3px solid #e5e7eb",
+    borderTopColor: "#3b82f6",
+    borderRadius: "50%",
+    animation: "spin 1s linear infinite",
+    margin: "0 auto 16px",
+  },
+  
+  emptyState: {
+    textAlign: "center",
+    padding: "60px 20px",
+  },
+  
+  emptyIcon: {
+    fontSize: "64px",
+    display: "block",
+    marginBottom: "16px",
+  },
+  
+  emptyLink: {
+    display: "inline-block",
+    marginTop: "12px",
+    color: "#3b82f6",
+    textDecoration: "none",
+  },
+  
+  transactionsList: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "16px",
+    maxHeight: "500px",
+    overflowY: "auto",
+    paddingRight: "4px",
+  },
+  
+  transactionItem: {
+    border: "1px solid #e5e7eb",
+    borderRadius: "12px",
+    padding: "16px",
+    transition: "box-shadow 0.2s",
+  },
+  
+  txHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "12px",
+  },
+  
+  txType: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+  },
+  
+  fundingIcon: {
+    fontSize: "18px",
+  },
+  
+  repaymentIcon: {
+    fontSize: "18px",
+  },
+  
+  txStatus: {
     padding: "4px 10px",
-    borderRadius: "999px",
-    border: "1px solid #2563eb",
-    color: "#2563eb",
-    fontSize: "12px",
+    borderRadius: "20px",
+    fontSize: "11px",
     fontWeight: "600",
   },
-  smallText: {
+  
+  txDetails: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(140px, 1fr))",
+    gap: "12px",
+    marginBottom: "12px",
+  },
+  
+  txDetail: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "4px",
+  },
+  
+  txLabel: {
+    fontSize: "10px",
+    fontWeight: "600",
+    color: "#9ca3af",
+    textTransform: "uppercase",
+  },
+  
+  txValue: {
+    fontSize: "13px",
+    fontWeight: "500",
+    color: "#374151",
+  },
+  
+  txNote: {
+    display: "flex",
+    gap: "8px",
+    padding: "8px",
+    background: "#f9fafb",
+    borderRadius: "8px",
     fontSize: "12px",
     color: "#6b7280",
+    marginBottom: "12px",
+  },
+  
+  txFooter: {
+    borderTop: "1px solid #f3f4f6",
+    paddingTop: "8px",
+  },
+  
+  txDate: {
+    fontSize: "11px",
+    color: "#9ca3af",
+  },
+  
+  impactCard: {
+    maxWidth: "1200px",
+    margin: "30px auto 0",
+    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    borderRadius: "20px",
+    padding: "24px",
+    color: "white",
+  },
+  
+  impactContent: {
+    display: "flex",
+    alignItems: "flex-start",
+    gap: "16px",
+  },
+  
+  impactEmoji: {
+    fontSize: "40px",
+  },
+  
+  impactTitle: {
+    fontSize: "18px",
+    fontWeight: "700",
+    margin: "0 0 8px 0",
+  },
+  
+  impactText: {
+    fontSize: "14px",
+    opacity: 0.95,
+    margin: 0,
+    lineHeight: "1.5",
   },
 };
+
+// Add animation keyframes
+const styleSheet = document.createElement("style");
+styleSheet.textContent = `
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+`;
+document.head.appendChild(styleSheet);
