@@ -33,7 +33,14 @@ const pay = asyncHandler(async (req, res) => {
 });
 
 const createStripeCheckoutSession = asyncHandler(async (req, res) => {
- const data = await service.createStripeCheckoutSession(req.user, req.params.id);
+ const { amount } = req.body; // ✅ get amount from frontend
+
+ const data = await service.createStripeCheckoutSession(
+   req.user,
+   req.params.id,
+   Number(amount) // ✅ pass to service
+ );
+
  res.json(data);
 });
 

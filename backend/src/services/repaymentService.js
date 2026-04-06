@@ -78,49 +78,55 @@ async function payRepayment(user, repaymentId, amount, method) {
  return rep;
 }
 
-async function createStripeCheckoutSession(user, repaymentId) {
- if (!stripe) {
-   throw new AppError("Stripe is not configured. Add STRIPE_SECRET_KEY first.", 500);
- }
+async function createStripeCheckoutSession(user, repaymentId, amount) {
+  if (!stripe) {
+    throw new AppError("Stripe is not configured. Add STRIPE_SECRET_KEY first.", 500);
+  }
 
- const rep = await getById(user, repaymentId);
+  const rep = await getById(user, repaymentId);
 
- if (rep.status === "PAID") {
-   throw new AppError("Repayment already PAID", 400);
- }
+  if (rep.status === "PAID") {
+    throw new AppError("Repayment already PAID", 400);
+  }
 
- const remaining = Number(rep.amountDue) - Number(rep.amountPaid);
- if (remaining <= 0) {
-   throw new AppError("No remaining balance for this repayment", 400);
- }
+  const remaining = Number(rep.amountDue) - Number(rep.amountPaid);
 
- const session = await stripe.checkout.sessions.create({
-   mode: "payment",
-   success_url: `${FRONTEND_BASE_URL}/repayments?stripe_success=1&loan_id=${rep.loanId}&repayment_id=${rep._id}&session_id={CHECKOUT_SESSION_ID}`,
-   cancel_url: `${FRONTEND_BASE_URL}/repayments?stripe_cancel=1&loan_id=${rep.loanId}`,
-   line_items: [
-     {
-       quantity: 1,
-       price_data: {
-         currency: "lkr",
-         unit_amount: toMinorUnits(remaining),
-         product_data: {
-           name: `Repayment for loan ${rep.loanId}`
-         }
-       }
-     }
-   ],
-   metadata: {
-     repaymentId: String(rep._id),
-     amountMajor: String(remaining),
-     borrowerId: String(rep.borrowerId)
-   }
- });
+  // ✅ VALIDATION
+  if (!amount || amount <= 0) {
+    throw new AppError("Invalid amount", 400);
+  }
 
- return {
-   sessionId: session.id,
-   url: session.url
- };
+  if (amount > remaining) {
+    throw new AppError(`Amount exceeds remaining balance (${remaining})`, 400);
+  }
+
+  const session = await stripe.checkout.sessions.create({
+    mode: "payment",
+    success_url: `${FRONTEND_BASE_URL}/repayments?stripe_success=1&loan_id=${rep.loanId}&repayment_id=${rep._id}&session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${FRONTEND_BASE_URL}/repayments?stripe_cancel=1&loan_id=${rep.loanId}`,
+    line_items: [
+      {
+        quantity: 1,
+        price_data: {
+          currency: "lkr",
+          unit_amount: toMinorUnits(amount), // ✅ FIXED
+          product_data: {
+            name: `Repayment for loan ${rep.loanId}`
+          }
+        }
+      }
+    ],
+    metadata: {
+      repaymentId: String(rep._id),
+      amountMajor: String(amount), // ✅ FIXED
+      borrowerId: String(rep.borrowerId)
+    }
+  });
+
+  return {
+    sessionId: session.id,
+    url: session.url
+  };
 }
 
 async function confirmStripeSession(user, repaymentId, sessionId) {

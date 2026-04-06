@@ -27,6 +27,10 @@ const confirmStripeSchema = Joi.object({
  sessionId: Joi.string().required()
 });
 
+const stripeCheckoutSchema = Joi.object({
+  amount: Joi.number().min(1).required()
+});
+
 router.post(
  "/",
  protect,
@@ -69,6 +73,7 @@ router.post(
  "/:id/stripe-checkout-session",
  protect,
  authorize("BORROWER"),
+ validate(stripeCheckoutSchema), // ✅ ADD THIS
  repayment.createStripeCheckoutSession
 );
 
