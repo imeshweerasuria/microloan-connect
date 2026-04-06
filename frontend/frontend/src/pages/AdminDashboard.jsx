@@ -17,11 +17,9 @@ export default function AdminDashboard() {
       setLoading(true);
       setError("");
       
-      // Fetch all loans (admin has access to /loans)
       const loansRes = await client.get("/loans");
       setAllLoans(loansRes.data || []);
       
-      // Fetch submitted loans for pending approvals
       const submittedRes = await client.get("/loans?status=SUBMITTED");
       setSubmittedLoans(submittedRes.data || []);
       
@@ -65,7 +63,6 @@ export default function AdminDashboard() {
     }
     
     return loansToFilter.filter((loan) => {
-      // Search by title, purpose, business category, or borrowerId (since borrower object not populated)
       const matchesSearch = !q ||
         String(loan.title || "").toLowerCase().includes(q) ||
         String(loan.purpose || "").toLowerCase().includes(q) ||
@@ -84,9 +81,14 @@ export default function AdminDashboard() {
       setError("");
       setMessage("");
       
-      // Use PATCH /loans/:loanId/approve (admin-only endpoint)
-      await client.patch(`/loans/${loanId}/approve`);
-      setMessage("✅ Loan approved successfully");
+      const response = await client.patch(`/loans/${loanId}/approve`);
+
+      if (response.data && response.data.message) {
+        setMessage(`✅ ${response.data.message}`);
+      } else {
+        setMessage("✅ Loan approved successfully");
+      }
+
       await fetchDashboardData();
     } catch (err) {
       setError(err.message || "Failed to approve loan");
@@ -103,10 +105,14 @@ export default function AdminDashboard() {
       setError("");
       setMessage("");
       
-      // Use PATCH /loans/:loanId/reject (admin-only endpoint)
-      // Note: rejection reason not saved in backend yet
-      await client.patch(`/loans/${loanId}/reject`);
-      setMessage("❌ Loan rejected");
+      const response = await client.patch(`/loans/${loanId}/reject`);
+
+      if (response.data && response.data.message) {
+        setMessage(`❌ ${response.data.message}`);
+      } else {
+        setMessage("❌ Loan rejected");
+      }
+
       await fetchDashboardData();
     } catch (err) {
       setError(err.message || "Failed to reject loan");
@@ -117,22 +123,27 @@ export default function AdminDashboard() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "DRAFT":
-        return "#92400e";
-      case "SUBMITTED":
-        return "#1d4ed8";
-      case "APPROVED":
-        return "#166534";
-      case "REJECTED":
-        return "#b91c1c";
-      case "FUNDED":
-        return "#7c3aed";
-      case "ACTIVE":
-        return "#7c3aed";
-      case "CLOSED":
-        return "#374151";
-      default:
-        return "#111827";
+      case "DRAFT": return "#f59e0b";
+      case "SUBMITTED": return "#3b82f6";
+      case "APPROVED": return "#10b981";
+      case "REJECTED": return "#ef4444";
+      case "FUNDED": return "#8b5cf6";
+      case "ACTIVE": return "#06b6d4";
+      case "CLOSED": return "#6b7280";
+      default: return "#374151";
+    }
+  };
+
+  const getStatusBgColor = (status) => {
+    switch (status) {
+      case "DRAFT": return "#fef3c7";
+      case "SUBMITTED": return "#dbeafe";
+      case "APPROVED": return "#d1fae5";
+      case "REJECTED": return "#fee2e2";
+      case "FUNDED": return "#ede9fe";
+      case "ACTIVE": return "#cffafe";
+      case "CLOSED": return "#f3f4f6";
+      default: return "#f9fafb";
     }
   };
 
@@ -142,27 +153,26 @@ export default function AdminDashboard() {
         return (
           <div style={styles.actionButtons}>
             <button 
-              style={{...styles.smallBtn, background: "#166534"}} 
+              style={styles.approveBtn} 
               onClick={() => handleApproveLoan(loan._id)}
               disabled={processingAction}
             >
-              Approve
+              <span>✓</span> Approve
             </button>
             <button 
-              style={{...styles.smallBtn, background: "#b91c1c"}} 
+              style={styles.rejectBtn} 
               onClick={() => handleRejectLoan(loan._id)}
               disabled={processingAction}
             >
-              Reject
+              <span>✗</span> Reject
             </button>
           </div>
         );
       case "APPROVED":
-        // Mark as funded button removed - backend doesn't support it yet
         return (
           <div style={styles.actionButtons}>
-            <span style={{...styles.infoText, color: "#7c3aed"}}>
-              ⚠️ Funding status update not available yet
+            <span style={styles.infoText}>
+              📋 Awaiting funding
             </span>
           </div>
         );
@@ -174,89 +184,174 @@ export default function AdminDashboard() {
   if (loading) {
     return (
       <div style={styles.page}>
-        <h1>Admin Dashboard</h1>
-        <p>Loading dashboard data...</p>
+        <div style={styles.loadingContainer}>
+          <div style={styles.loadingSpinner}></div>
+          <p style={styles.loadingText}>Loading dashboard...</p>
+        </div>
       </div>
     );
   }
 
   return (
     <div style={styles.page}>
-      <h1>Admin Dashboard</h1>
-      <p style={styles.sub}>
-        Manage loans, review submissions, and track funding progress.
-      </p>
+      {/* Hero Section */}
+      <div style={styles.heroSection}>
+        <div style={styles.heroContent}>
+          <h1 style={styles.title}>
+            Admin Dashboard
+            <span style={styles.titleAccent}> | Financial Inclusion Hub</span>
+          </h1>
+          <p style={styles.subtitle}>
+            Empowering underserved communities through transparent micro-loan management
+          </p>
+        </div>
+        <div style={styles.sdgBadge}>
+          <span style={styles.sdgIcon}>🎯</span>
+          <span style={styles.sdgText}>SDG Goal 1: No Poverty</span>
+        </div>
+      </div>
 
-      {message && <div style={styles.success}>{message}</div>}
-      {error && <div style={styles.error}>{error}</div>}
+      {/* Messages */}
+      {message && (
+        <div style={styles.success}>
+          <span style={styles.messageIcon}>✅</span>
+          <span>{message}</span>
+          <button onClick={() => setMessage("")} style={styles.closeBtn}>×</button>
+        </div>
+      )}
+      {error && (
+        <div style={styles.error}>
+          <span style={styles.messageIcon}>⚠️</span>
+          <span>{error}</span>
+          <button onClick={() => setError("")} style={styles.closeBtn}>×</button>
+        </div>
+      )}
 
-      {/* Stats Cards */}
-      <div style={styles.statsRow}>
-        <div style={styles.statCard}>
-          <h3>Total Loans</h3>
-          <p style={styles.big}>{stats.totalLoans}</p>
+      {/* Stats Grid */}
+      <div style={styles.statsGrid}>
+        <div style={{...styles.statCard, borderTopColor: "#3b82f6"}}>
+          <div style={styles.statIcon}>📊</div>
+          <div>
+            <h3 style={styles.statTitle}>Total Loans</h3>
+            <p style={styles.statValue}>{stats.totalLoans}</p>
+          </div>
         </div>
-        <div style={styles.statCard}>
-          <h3>Pending Approvals</h3>
-          <p style={{...styles.big, color: "#1d4ed8"}}>{stats.pendingApprovals}</p>
+        
+        <div style={{...styles.statCard, borderTopColor: "#f59e0b"}}>
+          <div style={styles.statIcon}>⏳</div>
+          <div>
+            <h3 style={styles.statTitle}>Pending Approvals</h3>
+            <p style={{...styles.statValue, color: "#f59e0b"}}>{stats.pendingApprovals}</p>
+          </div>
         </div>
-        <div style={styles.statCard}>
-          <h3>Approved</h3>
-          <p style={{...styles.big, color: "#166534"}}>{stats.approvedLoans}</p>
+        
+        <div style={{...styles.statCard, borderTopColor: "#10b981"}}>
+          <div style={styles.statIcon}>✅</div>
+          <div>
+            <h3 style={styles.statTitle}>Approved</h3>
+            <p style={{...styles.statValue, color: "#10b981"}}>{stats.approvedLoans}</p>
+          </div>
         </div>
-        <div style={styles.statCard}>
-          <h3>Rejected</h3>
-          <p style={{...styles.big, color: "#b91c1c"}}>{stats.rejectedLoans}</p>
+        
+        <div style={{...styles.statCard, borderTopColor: "#ef4444"}}>
+          <div style={styles.statIcon}>❌</div>
+          <div>
+            <h3 style={styles.statTitle}>Rejected</h3>
+            <p style={{...styles.statValue, color: "#ef4444"}}>{stats.rejectedLoans}</p>
+          </div>
         </div>
       </div>
 
       {/* Financial Stats */}
-      <div style={styles.statsRow}>
-        <div style={styles.statCard}>
-          <h3>Total Requested</h3>
-          <p style={styles.big}>LKR {stats.totalAmount.toLocaleString()}</p>
+      <div style={styles.financialGrid}>
+        <div style={styles.financialCard}>
+          <div style={styles.financialIcon}>💰</div>
+          <div>
+            <p style={styles.financialLabel}>Total Requested</p>
+            <p style={styles.financialValue}>LKR {stats.totalAmount.toLocaleString()}</p>
+          </div>
         </div>
-        <div style={styles.statCard}>
-          <h3>Total Funded</h3>
-          <p style={styles.big}>LKR {stats.fundedAmount.toLocaleString()}</p>
+        
+        <div style={styles.financialCard}>
+          <div style={styles.financialIcon}>🤝</div>
+          <div>
+            <p style={styles.financialLabel}>Total Funded</p>
+            <p style={styles.financialValue}>LKR {stats.fundedAmount.toLocaleString()}</p>
+          </div>
         </div>
-        <div style={styles.statCard}>
-          <h3>Funded/Active Loans</h3>
-          <p style={{...styles.big, color: "#7c3aed"}}>{stats.fundedLoans}</p>
+        
+        <div style={styles.financialCard}>
+          <div style={styles.financialIcon}>🚀</div>
+          <div>
+            <p style={styles.financialLabel}>Active/Funded</p>
+            <p style={{...styles.financialValue, color: "#8b5cf6"}}>{stats.fundedLoans}</p>
+          </div>
         </div>
-      </div>
-
-      {/* Note about admin routes */}
-      <div style={{...styles.infoBox, marginBottom: "20px"}}>
-        <strong>ℹ️ Admin Actions:</strong> Approve and reject loans using the buttons below.
-        Funding status updates will be available in a future update.
+        
+        <div style={styles.financialCard}>
+          <div style={styles.financialIcon}>📈</div>
+          <div>
+            <p style={styles.financialLabel}>Funding Rate</p>
+            <p style={styles.financialValue}>
+              {stats.totalAmount > 0 ? Math.round((stats.fundedAmount / stats.totalAmount) * 100) : 0}%
+            </p>
+          </div>
+        </div>
       </div>
 
       {/* Pending Approvals Section */}
       {submittedLoans.length > 0 && (
-        <div style={styles.card}>
-          <h2>Pending Approvals ({submittedLoans.length})</h2>
-          <div style={styles.pendingList}>
+        <div style={styles.section}>
+          <div style={styles.sectionHeader}>
+            <h2 style={styles.sectionTitle}>
+              📋 Pending Approvals
+              <span style={styles.badge}>{submittedLoans.length}</span>
+            </h2>
+            <p style={styles.sectionDesc}>Review and take action on loan requests</p>
+          </div>
+          
+          <div style={styles.pendingGrid}>
             {submittedLoans.map((loan) => (
-              <div key={loan._id} style={styles.loanCard}>
-                <div style={styles.loanTop}>
-                  <strong>{loan.title}</strong>
-                  <span style={{...styles.badge, color: getStatusColor(loan.status), borderColor: getStatusColor(loan.status)}}>
+              <div key={loan._id} style={styles.pendingCard}>
+                <div style={styles.cardHeader}>
+                  <h3 style={styles.loanTitle}>{loan.title}</h3>
+                  <span style={{...styles.statusBadge, background: getStatusBgColor(loan.status), color: getStatusColor(loan.status)}}>
                     {loan.status}
                   </span>
                 </div>
-                <p><strong>Borrower ID:</strong> {loan.borrowerId || "Unknown"}</p>
-                <p><strong>Amount:</strong> {loan.amount} {loan.currency}</p>
-                <p><strong>Tenure:</strong> {loan.tenureMonths} months</p>
-                <p><strong>Purpose:</strong> {loan.purpose}</p>
-                <p><strong>Business Category:</strong> {loan.businessCategory}</p>
-                <p><strong>Description:</strong> {loan.description}</p>
+                
+                <p style={styles.loanDescription}>{loan.description}</p>
+                
+                <div style={styles.detailsGrid}>
+                  <div style={styles.detailItem}>
+                    <span style={styles.detailLabel}>Borrower ID</span>
+                    <span style={styles.detailValue}>{loan.borrowerId?.slice(-8) || "Unknown"}</span>
+                  </div>
+                  <div style={styles.detailItem}>
+                    <span style={styles.detailLabel}>Amount</span>
+                    <span style={styles.detailValue}>{loan.amount} {loan.currency}</span>
+                  </div>
+                  <div style={styles.detailItem}>
+                    <span style={styles.detailLabel}>Tenure</span>
+                    <span style={styles.detailValue}>{loan.tenureMonths} months</span>
+                  </div>
+                  <div style={styles.detailItem}>
+                    <span style={styles.detailLabel}>Category</span>
+                    <span style={styles.detailValue}>{loan.businessCategory}</span>
+                  </div>
+                </div>
+                
+                <div style={styles.purposeBox}>
+                  <span style={styles.purposeLabel}>Purpose:</span>
+                  <span style={styles.purposeText}>{loan.purpose}</span>
+                </div>
+                
                 <div style={styles.actionButtons}>
-                  <button style={{...styles.smallBtn, background: "#166534"}} onClick={() => handleApproveLoan(loan._id)} disabled={processingAction}>
-                    Approve
+                  <button style={styles.approveBtn} onClick={() => handleApproveLoan(loan._id)} disabled={processingAction}>
+                    ✓ Approve Loan
                   </button>
-                  <button style={{...styles.smallBtn, background: "#b91c1c"}} onClick={() => handleRejectLoan(loan._id)} disabled={processingAction}>
-                    Reject
+                  <button style={styles.rejectBtn} onClick={() => handleRejectLoan(loan._id)} disabled={processingAction}>
+                    ✗ Reject Loan
                   </button>
                 </div>
               </div>
@@ -265,69 +360,93 @@ export default function AdminDashboard() {
         </div>
       )}
 
-      {/* All Loans with Filters */}
-      <div style={styles.card}>
-        <div style={styles.filterToolbar}>
-          <h2 style={{ margin: 0 }}>All Loans</h2>
-          
-          <div style={styles.filterRow}>
+      {/* All Loans Section */}
+      <div style={styles.section}>
+        <div style={styles.sectionHeader}>
+          <h2 style={styles.sectionTitle}>📚 All Loans</h2>
+          <p style={styles.sectionDesc}>Browse and filter all loan applications</p>
+        </div>
+        
+        {/* Filters */}
+        <div style={styles.filterBar}>
+          <div style={styles.searchWrapper}>
+            <span style={styles.searchIcon}>🔍</span>
             <input
               style={styles.searchInput}
-              placeholder="Search by title, purpose, category, or borrower ID..."
+              placeholder="Search by title, purpose, category, or borrower..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
             />
-            
-            <select
-              style={styles.select}
-              value={statusFilter}
-              onChange={(e) => setStatusFilter(e.target.value)}
-            >
-              <option value="ALL">All statuses</option>
-              <option value="DRAFT">DRAFT</option>
-              <option value="SUBMITTED">SUBMITTED</option>
-              <option value="APPROVED">APPROVED</option>
-              <option value="REJECTED">REJECTED</option>
-              <option value="FUNDED">FUNDED</option>
-              <option value="ACTIVE">ACTIVE</option>
-              <option value="CLOSED">CLOSED</option>
-            </select>
           </div>
+          
+          <select
+            style={styles.filterSelect}
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="ALL">📊 All Statuses</option>
+            <option value="DRAFT">📝 DRAFT</option>
+            <option value="SUBMITTED">⏳ SUBMITTED</option>
+            <option value="APPROVED">✅ APPROVED</option>
+            <option value="REJECTED">❌ REJECTED</option>
+            <option value="FUNDED">💰 FUNDED</option>
+            <option value="ACTIVE">🚀 ACTIVE</option>
+            <option value="CLOSED">🔒 CLOSED</option>
+          </select>
         </div>
 
         {filteredLoans.length === 0 ? (
-          <p style={{ marginTop: "20px" }}>No loans match your filter.</p>
+          <div style={styles.emptyState}>
+            <span style={styles.emptyIcon}>🔍</span>
+            <p style={styles.emptyText}>No loans match your search criteria</p>
+            <button style={styles.clearBtn} onClick={() => { setSearch(""); setStatusFilter("ALL"); }}>
+              Clear Filters
+            </button>
+          </div>
         ) : (
-          <div style={{ display: "grid", gap: "12px", marginTop: "14px" }}>
+          <div style={styles.loansGrid}>
             {filteredLoans.map((loan) => (
               <div key={loan._id} style={styles.loanCard}>
-                <div style={styles.loanTop}>
-                  <strong>{loan.title}</strong>
-                  <span style={{...styles.badge, color: getStatusColor(loan.status), borderColor: getStatusColor(loan.status)}}>
+                <div style={styles.cardHeader}>
+                  <h3 style={styles.loanTitle}>{loan.title}</h3>
+                  <span style={{...styles.statusBadge, background: getStatusBgColor(loan.status), color: getStatusColor(loan.status)}}>
                     {loan.status}
                   </span>
                 </div>
                 
-                <p style={{ margin: "8px 0" }}>{loan.description}</p>
+                <p style={styles.loanDescription}>{loan.description}</p>
                 
-                <div style={styles.meta}>
-                  <span><strong>Borrower ID:</strong> {loan.borrowerId || "Unknown"}</span>
-                  <span><strong>Amount:</strong> {loan.amount} {loan.currency}</span>
-                </div>
-                
-                <div style={styles.meta}>
-                  <span><strong>Tenure:</strong> {loan.tenureMonths} months</span>
-                  <span><strong>Funded:</strong> {loan.fundedAmount || 0}</span>
-                </div>
-                
-                <div style={styles.meta}>
-                  <span><strong>Category:</strong> {loan.businessCategory}</span>
-                  <span><strong>Purpose:</strong> {loan.purpose}</span>
+                <div style={styles.detailsGrid}>
+                  <div style={styles.detailItem}>
+                    <span style={styles.detailLabel}>Borrower</span>
+                    <span style={styles.detailValue}>{loan.borrowerId?.slice(-8) || "Unknown"}</span>
+                  </div>
+                  <div style={styles.detailItem}>
+                    <span style={styles.detailLabel}>Amount</span>
+                    <span style={styles.detailValue}>{loan.amount} {loan.currency}</span>
+                  </div>
+                  <div style={styles.detailItem}>
+                    <span style={styles.detailLabel}>Tenure</span>
+                    <span style={styles.detailValue}>{loan.tenureMonths}m</span>
+                  </div>
+                  <div style={styles.detailItem}>
+                    <span style={styles.detailLabel}>Funded</span>
+                    <span style={styles.detailValue}>{loan.fundedAmount || 0}</span>
+                  </div>
+                  <div style={styles.detailItem}>
+                    <span style={styles.detailLabel}>Category</span>
+                    <span style={styles.detailValue}>{loan.businessCategory}</span>
+                  </div>
+                  <div style={styles.detailItem}>
+                    <span style={styles.detailLabel}>Purpose</span>
+                    <span style={styles.detailValue}>{loan.purpose}</span>
+                  </div>
                 </div>
                 
                 {loan.rejectionReason && loan.status === "REJECTED" && (
-                  <div style={{...styles.error, marginTop: "8px", fontSize: "14px"}}>
-                    <strong>Rejection reason:</strong> {loan.rejectionReason}
+                  <div style={styles.rejectionBox}>
+                    <span style={styles.rejectionLabel}>Rejection reason:</span>
+                    <span style={styles.rejectionText}>{loan.rejectionReason}</span>
                   </div>
                 )}
                 
@@ -343,131 +462,515 @@ export default function AdminDashboard() {
 
 const styles = {
   page: {
-    padding: "24px",
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+    padding: "40px 24px",
+  },
+  
+  heroSection: {
     maxWidth: "1200px",
-    margin: "0 auto",
-  },
-  sub: {
-    color: "#6b7280",
-    marginBottom: "20px",
-  },
-  statsRow: {
-    display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
-    gap: "16px",
-    marginBottom: "20px",
-  },
-  statCard: {
-    background: "#fff",
-    padding: "20px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
-  },
-  big: {
-    margin: 0,
-    fontSize: "28px",
-    fontWeight: "700",
-  },
-  card: {
-    background: "#fff",
-    padding: "20px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
-    marginBottom: "20px",
-  },
-  pendingList: {
-    display: "grid",
-    gap: "12px",
-    marginTop: "14px",
-  },
-  loanCard: {
-    border: "1px solid #e5e7eb",
-    borderRadius: "10px",
-    padding: "14px",
-  },
-  loanTop: {
+    margin: "0 auto 40px",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: "10px",
-    marginBottom: "8px",
+    flexWrap: "wrap",
+    gap: "20px",
+    background: "white",
+    padding: "30px",
+    borderRadius: "20px",
+    boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
   },
+  
+  heroContent: {
+    flex: 1,
+  },
+  
+  title: {
+    fontSize: "32px",
+    fontWeight: "800",
+    margin: "0 0 8px 0",
+    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  },
+  
+  titleAccent: {
+    background: "linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  },
+  
+  subtitle: {
+    color: "#6b7280",
+    fontSize: "16px",
+    margin: 0,
+  },
+  
+  sdgBadge: {
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    padding: "12px 20px",
+    borderRadius: "40px",
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    boxShadow: "0 4px 12px rgba(16,185,129,0.3)",
+  },
+  
+  sdgIcon: {
+    fontSize: "24px",
+  },
+  
+  sdgText: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: "14px",
+  },
+  
+  loadingContainer: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    minHeight: "400px",
+  },
+  
+  loadingSpinner: {
+    width: "50px",
+    height: "50px",
+    border: "4px solid #e5e7eb",
+    borderTopColor: "#3b82f6",
+    borderRadius: "50%",
+    animation: "spin 1s linear infinite",
+  },
+  
+  loadingText: {
+    marginTop: "16px",
+    color: "#6b7280",
+  },
+  
+  success: {
+    maxWidth: "1200px",
+    margin: "0 auto 20px",
+    background: "#d1fae5",
+    color: "#065f46",
+    padding: "14px 20px",
+    borderRadius: "12px",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    borderLeft: "4px solid #10b981",
+  },
+  
+  error: {
+    maxWidth: "1200px",
+    margin: "0 auto 20px",
+    background: "#fee2e2",
+    color: "#991b1b",
+    padding: "14px 20px",
+    borderRadius: "12px",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    borderLeft: "4px solid #ef4444",
+  },
+  
+  messageIcon: {
+    fontSize: "20px",
+  },
+  
+  closeBtn: {
+    marginLeft: "auto",
+    background: "none",
+    border: "none",
+    fontSize: "24px",
+    cursor: "pointer",
+    color: "inherit",
+    padding: "0 8px",
+  },
+  
+  statsGrid: {
+    maxWidth: "1200px",
+    margin: "0 auto 30px",
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+    gap: "20px",
+  },
+  
+  statCard: {
+    background: "white",
+    padding: "24px",
+    borderRadius: "16px",
+    display: "flex",
+    alignItems: "center",
+    gap: "16px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+    borderTop: "4px solid",
+    transition: "transform 0.2s, box-shadow 0.2s",
+    cursor: "pointer",
+    ":hover": {
+      transform: "translateY(-4px)",
+      boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+    },
+  },
+  
+  statIcon: {
+    fontSize: "40px",
+  },
+  
+  statTitle: {
+    fontSize: "14px",
+    fontWeight: "600",
+    color: "#6b7280",
+    margin: "0 0 8px 0",
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+  },
+  
+  statValue: {
+    fontSize: "32px",
+    fontWeight: "800",
+    color: "#1f2937",
+    margin: 0,
+  },
+  
+  financialGrid: {
+    maxWidth: "1200px",
+    margin: "0 auto 30px",
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(240px, 1fr))",
+    gap: "16px",
+  },
+  
+  financialCard: {
+    background: "white",
+    padding: "20px",
+    borderRadius: "16px",
+    display: "flex",
+    alignItems: "center",
+    gap: "16px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+  },
+  
+  financialIcon: {
+    fontSize: "32px",
+  },
+  
+  financialLabel: {
+    fontSize: "13px",
+    fontWeight: "500",
+    color: "#6b7280",
+    margin: "0 0 4px 0",
+  },
+  
+  financialValue: {
+    fontSize: "24px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: 0,
+  },
+  
+  section: {
+    maxWidth: "1200px",
+    margin: "0 auto 40px",
+  },
+  
+  sectionHeader: {
+    marginBottom: "24px",
+  },
+  
+  sectionTitle: {
+    fontSize: "24px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: "0 0 8px 0",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+  },
+  
+  sectionDesc: {
+    color: "#6b7280",
+    margin: 0,
+    fontSize: "14px",
+  },
+  
   badge: {
-    padding: "4px 10px",
-    borderRadius: "999px",
-    border: "1px solid",
+    background: "#ef4444",
+    color: "white",
+    padding: "2px 10px",
+    borderRadius: "20px",
+    fontSize: "14px",
+    fontWeight: "600",
+  },
+  
+  filterBar: {
+    background: "white",
+    padding: "20px",
+    borderRadius: "16px",
+    marginBottom: "24px",
+    display: "flex",
+    gap: "16px",
+    flexWrap: "wrap",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+  },
+  
+  searchWrapper: {
+    flex: 1,
+    position: "relative",
+    minWidth: "250px",
+  },
+  
+  searchIcon: {
+    position: "absolute",
+    left: "12px",
+    top: "50%",
+    transform: "translateY(-50%)",
+    fontSize: "18px",
+  },
+  
+  searchInput: {
+    width: "100%",
+    padding: "12px 12px 12px 40px",
+    border: "1px solid #e5e7eb",
+    borderRadius: "12px",
+    fontSize: "14px",
+    outline: "none",
+    transition: "border-color 0.2s",
+    ":focus": {
+      borderColor: "#3b82f6",
+    },
+  },
+  
+  filterSelect: {
+    padding: "12px 16px",
+    border: "1px solid #e5e7eb",
+    borderRadius: "12px",
+    fontSize: "14px",
+    outline: "none",
+    cursor: "pointer",
+    background: "white",
+  },
+  
+  pendingGrid: {
+    display: "grid",
+    gap: "20px",
+  },
+  
+  loansGrid: {
+    display: "grid",
+    gap: "20px",
+  },
+  
+  pendingCard: {
+    background: "white",
+    borderRadius: "16px",
+    padding: "24px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+    transition: "all 0.2s",
+    border: "1px solid #fef3c7",
+    ":hover": {
+      boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+      transform: "translateY(-2px)",
+    },
+  },
+  
+  loanCard: {
+    background: "white",
+    borderRadius: "16px",
+    padding: "24px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+    transition: "all 0.2s",
+    ":hover": {
+      boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
+      transform: "translateY(-2px)",
+    },
+  },
+  
+  cardHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "start",
+    marginBottom: "16px",
+    flexWrap: "wrap",
+    gap: "12px",
+  },
+  
+  loanTitle: {
+    fontSize: "18px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: 0,
+  },
+  
+  statusBadge: {
+    padding: "4px 12px",
+    borderRadius: "20px",
     fontSize: "12px",
     fontWeight: "600",
   },
-  meta: {
-    display: "flex",
-    justifyContent: "space-between",
+  
+  loanDescription: {
+    color: "#6b7280",
+    fontSize: "14px",
+    lineHeight: "1.5",
+    marginBottom: "16px",
+  },
+  
+  detailsGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(150px, 1fr))",
     gap: "12px",
+    marginBottom: "16px",
+  },
+  
+  detailItem: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "4px",
+  },
+  
+  detailLabel: {
+    fontSize: "11px",
+    fontWeight: "600",
+    color: "#9ca3af",
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+  },
+  
+  detailValue: {
+    fontSize: "14px",
+    fontWeight: "500",
+    color: "#374151",
+  },
+  
+  purposeBox: {
+    background: "#f3f4f6",
+    padding: "12px",
+    borderRadius: "8px",
+    marginBottom: "16px",
+  },
+  
+  purposeLabel: {
+    fontSize: "12px",
+    fontWeight: "600",
+    color: "#6b7280",
+    display: "block",
+    marginBottom: "4px",
+  },
+  
+  purposeText: {
     fontSize: "14px",
     color: "#374151",
-    marginTop: "6px",
-    flexWrap: "wrap",
   },
+  
+  rejectionBox: {
+    background: "#fee2e2",
+    padding: "12px",
+    borderRadius: "8px",
+    marginBottom: "16px",
+    borderLeft: "3px solid #ef4444",
+  },
+  
+  rejectionLabel: {
+    fontSize: "12px",
+    fontWeight: "600",
+    color: "#991b1b",
+    display: "block",
+    marginBottom: "4px",
+  },
+  
+  rejectionText: {
+    fontSize: "14px",
+    color: "#7f1d1d",
+  },
+  
   actionButtons: {
     display: "flex",
-    gap: "8px",
-    marginTop: "12px",
+    gap: "12px",
+    marginTop: "16px",
+    flexWrap: "wrap",
   },
-  smallBtn: {
-    padding: "8px 12px",
-    borderRadius: "8px",
+  
+  approveBtn: {
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    color: "white",
     border: "none",
-    color: "#fff",
+    padding: "10px 20px",
+    borderRadius: "10px",
+    fontSize: "14px",
+    fontWeight: "600",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    transition: "transform 0.1s",
+    ":active": {
+      transform: "scale(0.98)",
+    },
+  },
+  
+  rejectBtn: {
+    background: "linear-gradient(135deg, #ef4444 0%, #dc2626 100%)",
+    color: "white",
+    border: "none",
+    padding: "10px 20px",
+    borderRadius: "10px",
+    fontSize: "14px",
+    fontWeight: "600",
+    cursor: "pointer",
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    transition: "transform 0.1s",
+    ":active": {
+      transform: "scale(0.98)",
+    },
+  },
+  
+  infoText: {
+    fontSize: "13px",
+    color: "#8b5cf6",
+    fontStyle: "italic",
+    background: "#ede9fe",
+    padding: "8px 16px",
+    borderRadius: "8px",
+  },
+  
+  emptyState: {
+    textAlign: "center",
+    padding: "60px 20px",
+    background: "white",
+    borderRadius: "16px",
+  },
+  
+  emptyIcon: {
+    fontSize: "48px",
+    display: "block",
+    marginBottom: "16px",
+  },
+  
+  emptyText: {
+    color: "#6b7280",
+    fontSize: "16px",
+    marginBottom: "16px",
+  },
+  
+  clearBtn: {
+    background: "#3b82f6",
+    color: "white",
+    border: "none",
+    padding: "8px 20px",
+    borderRadius: "8px",
     cursor: "pointer",
     fontSize: "14px",
   },
-  filterToolbar: {
-    display: "flex",
-    justifyContent: "space-between",
-    gap: "12px",
-    alignItems: "center",
-    flexWrap: "wrap",
-    marginBottom: "16px",
-  },
-  filterRow: {
-    display: "flex",
-    gap: "10px",
-    flexWrap: "wrap",
-  },
-  searchInput: {
-    padding: "10px",
-    borderRadius: "8px",
-    border: "1px solid #d1d5db",
-    minWidth: "250px",
-  },
-  select: {
-    padding: "10px",
-    borderRadius: "8px",
-    border: "1px solid #d1d5db",
-  },
-  success: {
-    background: "#dcfce7",
-    color: "#166534",
-    padding: "10px 12px",
-    borderRadius: "8px",
-    marginBottom: "16px",
-  },
-  error: {
-    background: "#fee2e2",
-    color: "#b91c1c",
-    padding: "10px 12px",
-    borderRadius: "8px",
-    marginBottom: "16px",
-  },
-  infoBox: {
-    background: "#e0f2fe",
-    color: "#0369a1",
-    padding: "10px 12px",
-    borderRadius: "8px",
-    border: "1px solid #bae6fd",
-  },
-  infoText: {
-    fontSize: "13px",
-    fontStyle: "italic",
-  },
 };
+
+// Add animation keyframes
+const styleSheet = document.createElement("style");
+styleSheet.textContent = `
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+`;
+document.head.appendChild(styleSheet);

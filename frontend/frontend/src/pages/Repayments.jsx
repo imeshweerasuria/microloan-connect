@@ -291,56 +291,108 @@ export default function Repayments() {
 
   const getStatusColor = (status) => {
     switch (status) {
-      case "PAID":
-        return "#166534";
-      case "PARTIAL":
-        return "#92400e";
-      case "OVERDUE":
-        return "#b91c1c";
-      default:
-        return "#1d4ed8";
+      case "PAID": return "#10b981";
+      case "PARTIAL": return "#f59e0b";
+      case "OVERDUE": return "#ef4444";
+      default: return "#3b82f6";
+    }
+  };
+
+  const getStatusBgColor = (status) => {
+    switch (status) {
+      case "PAID": return "#d1fae5";
+      case "PARTIAL": return "#fef3c7";
+      case "OVERDUE": return "#fee2e2";
+      default: return "#dbeafe";
     }
   };
 
   return (
     <div style={styles.page}>
-      <h1>Repayments</h1>
-      <p style={styles.sub}>
-        {isAdmin
-          ? "Create, edit, and manage repayment schedules for the final demo."
-          : "View your repayment schedule, pay manually, or use Stripe test checkout."}
-      </p>
-
-      {message && <div style={styles.success}>{message}</div>}
-      {error && <div style={styles.error}>{error}</div>}
-
-      <div style={styles.statsRow}>
-        <div style={styles.statCard}>
-          <h3>Total Items</h3>
-          <p style={styles.big}>{summary.total}</p>
+      {/* Hero Section */}
+      <div style={styles.heroSection}>
+        <div style={styles.heroContent}>
+          <h1 style={styles.title}>
+            Repayments
+            <span style={styles.titleAccent}> | Track Your Progress</span>
+          </h1>
+          <p style={styles.subtitle}>
+            {isAdmin
+              ? "Manage repayment schedules and track borrower payments"
+              : "View your repayment schedule, make payments, and build credit history"}
+          </p>
         </div>
-        <div style={styles.statCard}>
-          <h3>Paid</h3>
-          <p style={styles.big}>{summary.paid}</p>
-        </div>
-        <div style={styles.statCard}>
-          <h3>Pending</h3>
-          <p style={styles.big}>{summary.pending}</p>
-        </div>
-        <div style={styles.statCard}>
-          <h3>Overdue</h3>
-          <p style={styles.big}>{summary.overdue}</p>
+        <div style={styles.sdgBadge}>
+          <span style={styles.sdgIcon}>🎯</span>
+          <span style={styles.sdgText}>SDG Goal 1: No Poverty</span>
         </div>
       </div>
 
-      <div style={styles.card}>
-        <label style={styles.label}>{isAdmin ? "Select Loan" : "Select My Loan"}</label>
+      {/* Messages */}
+      {message && (
+        <div style={styles.success}>
+          <span style={styles.messageIcon}>✅</span>
+          <span>{message}</span>
+          <button onClick={() => setMessage("")} style={styles.closeBtn}>×</button>
+        </div>
+      )}
+      {error && (
+        <div style={styles.error}>
+          <span style={styles.messageIcon}>⚠️</span>
+          <span>{error}</span>
+          <button onClick={() => setError("")} style={styles.closeBtn}>×</button>
+        </div>
+      )}
+
+      {/* Stats Grid */}
+      <div style={styles.statsGrid}>
+        <div style={{...styles.statCard, borderTopColor: "#3b82f6"}}>
+          <div style={styles.statIcon}>📋</div>
+          <div>
+            <h3 style={styles.statTitle}>Total Items</h3>
+            <p style={styles.statValue}>{summary.total}</p>
+          </div>
+        </div>
+        
+        <div style={{...styles.statCard, borderTopColor: "#10b981"}}>
+          <div style={styles.statIcon}>✅</div>
+          <div>
+            <h3 style={styles.statTitle}>Paid</h3>
+            <p style={{...styles.statValue, color: "#10b981"}}>{summary.paid}</p>
+          </div>
+        </div>
+        
+        <div style={{...styles.statCard, borderTopColor: "#f59e0b"}}>
+          <div style={styles.statIcon}>⏳</div>
+          <div>
+            <h3 style={styles.statTitle}>Pending</h3>
+            <p style={{...styles.statValue, color: "#f59e0b"}}>{summary.pending}</p>
+          </div>
+        </div>
+        
+        <div style={{...styles.statCard, borderTopColor: "#ef4444"}}>
+          <div style={styles.statIcon}>⚠️</div>
+          <div>
+            <h3 style={styles.statTitle}>Overdue</h3>
+            <p style={{...styles.statValue, color: "#ef4444"}}>{summary.overdue}</p>
+          </div>
+        </div>
+      </div>
+
+      {/* Loan Selection Card */}
+      <div style={styles.selectionCard}>
+        <div style={styles.selectionHeader}>
+          <span style={styles.selectionIcon}>🏦</span>
+          <h2 style={styles.selectionTitle}>
+            {isAdmin ? "Select Loan to Manage" : "Select Your Loan"}
+          </h2>
+        </div>
         <select
-          style={styles.input}
+          style={styles.loanSelect}
           value={selectedLoanId}
           onChange={(e) => setSelectedLoanId(e.target.value)}
         >
-          <option value="">-- Select Loan --</option>
+          <option value="">-- Choose a loan --</option>
           {loans.map((loan) => (
             <option key={loan._id} value={loan._id}>
               {loan.title} | {loan.status} | {loan.amount} {loan.currency}
@@ -349,33 +401,42 @@ export default function Repayments() {
         </select>
       </div>
 
+      {/* Admin Create Repayment Section */}
       {isAdmin && selectedLoanId && (
-        <div style={styles.card}>
-          <h2>Create Repayment Schedule Item</h2>
-
+        <div style={styles.createCard}>
+          <div style={styles.createHeader}>
+            <span style={styles.createIcon}>➕</span>
+            <h2 style={styles.createTitle}>Create Repayment Schedule Item</h2>
+          </div>
           <form onSubmit={handleCreateRepayment}>
-            <div style={styles.payRow}>
-              <input
-                style={styles.smallInput}
-                type="date"
-                value={createForm.dueDate}
-                onChange={(e) =>
-                  setCreateForm((prev) => ({ ...prev, dueDate: e.target.value }))
-                }
-                required
-              />
-              <input
-                style={styles.smallInput}
-                type="number"
-                min="1"
-                placeholder="Amount Due"
-                value={createForm.amountDue}
-                onChange={(e) =>
-                  setCreateForm((prev) => ({ ...prev, amountDue: e.target.value }))
-                }
-                required
-              />
-              <button style={styles.payBtn} type="submit" disabled={creating}>
+            <div style={styles.createRow}>
+              <div style={styles.createField}>
+                <label style={styles.fieldLabel}>Due Date</label>
+                <input
+                  style={styles.dateInput}
+                  type="date"
+                  value={createForm.dueDate}
+                  onChange={(e) =>
+                    setCreateForm((prev) => ({ ...prev, dueDate: e.target.value }))
+                  }
+                  required
+                />
+              </div>
+              <div style={styles.createField}>
+                <label style={styles.fieldLabel}>Amount Due</label>
+                <input
+                  style={styles.amountInput}
+                  type="number"
+                  min="1"
+                  placeholder="Enter amount"
+                  value={createForm.amountDue}
+                  onChange={(e) =>
+                    setCreateForm((prev) => ({ ...prev, amountDue: e.target.value }))
+                  }
+                  required
+                />
+              </div>
+              <button style={styles.createBtn} type="submit" disabled={creating}>
                 {creating ? "Creating..." : "Create Repayment"}
               </button>
             </div>
@@ -383,17 +444,31 @@ export default function Repayments() {
         </div>
       )}
 
-      <div style={styles.card}>
-        <h2>Repayment Schedule</h2>
+      {/* Repayments List */}
+      <div style={styles.repaymentsCard}>
+        <div style={styles.repaymentsHeader}>
+          <span style={styles.repaymentsIcon}>📅</span>
+          <h2 style={styles.repaymentsTitle}>Repayment Schedule</h2>
+        </div>
 
         {loading ? (
-          <p>Loading...</p>
+          <div style={styles.loadingContainer}>
+            <div style={styles.loadingSpinner}></div>
+            <p>Loading repayment schedule...</p>
+          </div>
         ) : selectedLoanId === "" ? (
-          <p>Select a loan to view repayments.</p>
+          <div style={styles.emptyState}>
+            <span style={styles.emptyIcon}>🏦</span>
+            <p>Select a loan to view repayment schedule</p>
+          </div>
         ) : repayments.length === 0 ? (
-          <p>No repayments found for this loan.</p>
+          <div style={styles.emptyState}>
+            <span style={styles.emptyIcon}>📭</span>
+            <p>No repayments found for this loan</p>
+            {isAdmin && <p style={styles.emptySubtext}>Create a repayment schedule using the form above</p>}
+          </div>
         ) : (
-          <div style={{ display: "grid", gap: "12px" }}>
+          <div style={styles.repaymentsList}>
             {repayments.map((rep) => {
               const remaining = rep.amountDue - rep.amountPaid;
               const draft = paymentDrafts[rep._id] || { amount: "", method: "CASH" };
@@ -404,30 +479,47 @@ export default function Repayments() {
               };
 
               return (
-                <div key={rep._id} style={styles.repCard}>
-                  <div style={styles.repTop}>
-                    <strong>Due: {new Date(rep.dueDate).toLocaleDateString()}</strong>
-                    <span
-                      style={{
-                        ...styles.badge,
-                        color: getStatusColor(rep.status),
-                        borderColor: getStatusColor(rep.status),
-                      }}
-                    >
+                <div key={rep._id} style={styles.repaymentItem}>
+                  <div style={styles.itemHeader}>
+                    <div>
+                      <span style={styles.calendarIcon}>📅</span>
+                      <strong style={styles.dueDate}>
+                        Due: {new Date(rep.dueDate).toLocaleDateString()}
+                      </strong>
+                    </div>
+                    <span style={{...styles.statusBadge, background: getStatusBgColor(rep.status), color: getStatusColor(rep.status)}}>
                       {rep.status}
                     </span>
                   </div>
 
-                  <p><strong>Amount Due:</strong> {rep.amountDue}</p>
-                  <p><strong>Amount Paid:</strong> {rep.amountPaid}</p>
-                  <p><strong>Remaining:</strong> {remaining}</p>
+                  <div style={styles.amountGrid}>
+                    <div>
+                      <p style={styles.amountLabel}>Amount Due</p>
+                      <p style={styles.amountValue}>LKR {rep.amountDue.toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <p style={styles.amountLabel}>Amount Paid</p>
+                      <p style={styles.amountValue}>LKR {rep.amountPaid.toLocaleString()}</p>
+                    </div>
+                    <div>
+                      <p style={styles.amountLabel}>Remaining</p>
+                      <p style={{...styles.amountValue, color: remaining > 0 ? "#ef4444" : "#10b981"}}>
+                        LKR {remaining.toLocaleString()}
+                      </p>
+                    </div>
+                  </div>
 
                   {rep.payments?.length > 0 && (
                     <div style={styles.historyBox}>
-                      <strong>Payment History</strong>
+                      <div style={styles.historyHeader}>
+                        <span>📜</span>
+                        <strong>Payment History</strong>
+                      </div>
                       {rep.payments.map((p, idx) => (
-                        <div key={idx} style={styles.smallText}>
-                          {p.amount} via {p.method} on {new Date(p.paidAt).toLocaleString()}
+                        <div key={idx} style={styles.historyItem}>
+                          <span>💰 LKR {p.amount}</span>
+                          <span>via {p.method}</span>
+                          <span>on {new Date(p.paidAt).toLocaleDateString()}</span>
                         </div>
                       ))}
                     </div>
@@ -481,47 +573,49 @@ export default function Repayments() {
   </div>
 )}
 
+                  {/* Admin Controls */}
                   {isAdmin && (
-                    <div style={styles.adminBox}>
-                      <h4 style={{ marginTop: 0 }}>Admin Controls</h4>
-
-                      <div style={styles.payRow}>
+                    <div style={styles.adminSection}>
+                      <div style={styles.adminHeader}>
+                        <span>⚙️</span>
+                        <strong>Admin Controls</strong>
+                      </div>
+                      <div style={styles.adminRow}>
                         <input
-                          style={styles.smallInput}
+                          style={styles.adminInput}
                           type="date"
                           value={adminDraft.dueDate}
                           onChange={(e) => updateAdminDraft(rep._id, "dueDate", e.target.value)}
                         />
                         <input
-                          style={styles.smallInput}
+                          style={styles.adminInput}
                           type="number"
                           min="1"
+                          placeholder="Amount"
                           value={adminDraft.amountDue}
                           onChange={(e) => updateAdminDraft(rep._id, "amountDue", e.target.value)}
                         />
                         <select
-                          style={styles.smallInput}
+                          style={styles.adminSelect}
                           value={adminDraft.status}
                           onChange={(e) => updateAdminDraft(rep._id, "status", e.target.value)}
                         >
-                          <option value="PENDING">PENDING</option>
-                          <option value="PARTIAL">PARTIAL</option>
-                          <option value="PAID">PAID</option>
-                          <option value="OVERDUE">OVERDUE</option>
+                          <option value="PENDING">⏳ PENDING</option>
+                          <option value="PARTIAL">🟡 PARTIAL</option>
+                          <option value="PAID">✅ PAID</option>
+                          <option value="OVERDUE">🔴 OVERDUE</option>
                         </select>
                       </div>
-
-                      <div style={styles.payRow}>
+                      <div style={styles.adminActions}>
                         <button
-                          style={styles.payBtn}
+                          style={styles.saveBtn}
                           onClick={() => handleAdminSave(rep._id)}
                           disabled={savingAdminId === rep._id}
                         >
                           {savingAdminId === rep._id ? "Saving..." : "Save Changes"}
                         </button>
-
                         <button
-                          style={styles.deleteBtn}
+                          style={styles.deleteAdminBtn}
                           onClick={() => handleDeleteRepayment(rep._id)}
                           disabled={deletingId === rep._id}
                         >
@@ -542,133 +636,521 @@ export default function Repayments() {
 
 const styles = {
   page: {
-    padding: "24px",
-    maxWidth: "1100px",
-    margin: "0 auto",
+    minHeight: "100vh",
+    background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+    padding: "40px 24px",
   },
-  sub: {
-    color: "#6b7280",
-    marginBottom: "20px",
-  },
-  statsRow: {
-    display: "grid",
-    gridTemplateColumns: "repeat(4, 1fr)",
-    gap: "16px",
-    marginBottom: "20px",
-  },
-  statCard: {
-    background: "#fff",
-    padding: "20px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
-  },
-  big: {
-    margin: 0,
-    fontSize: "28px",
-    fontWeight: "700",
-  },
-  card: {
-    background: "#fff",
-    padding: "20px",
-    borderRadius: "12px",
-    boxShadow: "0 4px 14px rgba(0,0,0,0.06)",
-    marginBottom: "20px",
-  },
-  label: {
-    display: "block",
-    fontWeight: "600",
-    marginBottom: "6px",
-  },
-  input: {
-    width: "100%",
-    padding: "10px",
-    borderRadius: "8px",
-    border: "1px solid #d1d5db",
-    boxSizing: "border-box",
-  },
-  repCard: {
-    border: "1px solid #e5e7eb",
-    borderRadius: "10px",
-    padding: "14px",
-  },
-  repTop: {
+  
+  heroSection: {
+    maxWidth: "1200px",
+    margin: "0 auto 30px",
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
-    gap: "10px",
+    flexWrap: "wrap",
+    gap: "20px",
+    background: "white",
+    padding: "30px",
+    borderRadius: "20px",
+    boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
   },
-  badge: {
-    padding: "4px 10px",
-    borderRadius: "999px",
-    border: "1px solid",
+  
+  heroContent: {
+    flex: 1,
+  },
+  
+  title: {
+    fontSize: "32px",
+    fontWeight: "800",
+    margin: "0 0 8px 0",
+    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  },
+  
+  titleAccent: {
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    WebkitBackgroundClip: "text",
+    WebkitTextFillColor: "transparent",
+  },
+  
+  subtitle: {
+    color: "#6b7280",
+    fontSize: "16px",
+    margin: 0,
+  },
+  
+  sdgBadge: {
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    padding: "12px 20px",
+    borderRadius: "40px",
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+    boxShadow: "0 4px 12px rgba(16,185,129,0.3)",
+  },
+  
+  sdgIcon: {
+    fontSize: "24px",
+  },
+  
+  sdgText: {
+    color: "white",
+    fontWeight: "600",
+    fontSize: "14px",
+  },
+  
+  success: {
+    maxWidth: "1200px",
+    margin: "0 auto 20px",
+    background: "#d1fae5",
+    color: "#065f46",
+    padding: "14px 20px",
+    borderRadius: "12px",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    borderLeft: "4px solid #10b981",
+  },
+  
+  error: {
+    maxWidth: "1200px",
+    margin: "0 auto 20px",
+    background: "#fee2e2",
+    color: "#991b1b",
+    padding: "14px 20px",
+    borderRadius: "12px",
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    borderLeft: "4px solid #ef4444",
+  },
+  
+  messageIcon: {
+    fontSize: "20px",
+  },
+  
+  closeBtn: {
+    marginLeft: "auto",
+    background: "none",
+    border: "none",
+    fontSize: "24px",
+    cursor: "pointer",
+    color: "inherit",
+    padding: "0 8px",
+  },
+  
+  statsGrid: {
+    maxWidth: "1200px",
+    margin: "0 auto 30px",
+    display: "grid",
+    gridTemplateColumns: "repeat(auto-fit, minmax(250px, 1fr))",
+    gap: "20px",
+  },
+  
+  statCard: {
+    background: "white",
+    padding: "24px",
+    borderRadius: "16px",
+    display: "flex",
+    alignItems: "center",
+    gap: "16px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+    borderTop: "4px solid",
+    transition: "transform 0.2s, box-shadow 0.2s",
+  },
+  
+  statIcon: {
+    fontSize: "40px",
+  },
+  
+  statTitle: {
+    fontSize: "14px",
+    fontWeight: "600",
+    color: "#6b7280",
+    margin: "0 0 8px 0",
+    textTransform: "uppercase",
+    letterSpacing: "0.5px",
+  },
+  
+  statValue: {
+    fontSize: "32px",
+    fontWeight: "800",
+    color: "#1f2937",
+    margin: 0,
+  },
+  
+  selectionCard: {
+    maxWidth: "1200px",
+    margin: "0 auto 20px",
+    background: "white",
+    borderRadius: "16px",
+    padding: "24px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+  },
+  
+  selectionHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    marginBottom: "16px",
+  },
+  
+  selectionIcon: {
+    fontSize: "28px",
+  },
+  
+  selectionTitle: {
+    fontSize: "20px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: 0,
+  },
+  
+  loanSelect: {
+    width: "100%",
+    padding: "12px 14px",
+    borderRadius: "12px",
+    border: "1px solid #e5e7eb",
+    fontSize: "14px",
+    outline: "none",
+  },
+  
+  createCard: {
+    maxWidth: "1200px",
+    margin: "0 auto 20px",
+    background: "white",
+    borderRadius: "16px",
+    padding: "24px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+  },
+  
+  createHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    marginBottom: "20px",
+  },
+  
+  createIcon: {
+    fontSize: "28px",
+  },
+  
+  createTitle: {
+    fontSize: "20px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: 0,
+  },
+  
+  createRow: {
+    display: "flex",
+    gap: "16px",
+    alignItems: "flex-end",
+    flexWrap: "wrap",
+  },
+  
+  createField: {
+    flex: 1,
+    minWidth: "150px",
+  },
+  
+  fieldLabel: {
+    display: "block",
+    fontSize: "12px",
+    fontWeight: "600",
+    color: "#6b7280",
+    marginBottom: "6px",
+  },
+  
+  dateInput: {
+    width: "100%",
+    padding: "10px 12px",
+    borderRadius: "10px",
+    border: "1px solid #e5e7eb",
+    fontSize: "14px",
+  },
+  
+  amountInput: {
+    width: "100%",
+    padding: "10px 12px",
+    borderRadius: "10px",
+    border: "1px solid #e5e7eb",
+    fontSize: "14px",
+  },
+  
+  createBtn: {
+    padding: "10px 24px",
+    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    color: "white",
+    border: "none",
+    borderRadius: "10px",
+    fontSize: "14px",
+    fontWeight: "600",
+    cursor: "pointer",
+  },
+  
+  repaymentsCard: {
+    maxWidth: "1200px",
+    margin: "0 auto",
+    background: "white",
+    borderRadius: "16px",
+    padding: "24px",
+    boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
+  },
+  
+  repaymentsHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "12px",
+    marginBottom: "24px",
+  },
+  
+  repaymentsIcon: {
+    fontSize: "28px",
+  },
+  
+  repaymentsTitle: {
+    fontSize: "20px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: 0,
+  },
+  
+  loadingContainer: {
+    textAlign: "center",
+    padding: "40px",
+  },
+  
+  loadingSpinner: {
+    width: "40px",
+    height: "40px",
+    border: "3px solid #e5e7eb",
+    borderTopColor: "#3b82f6",
+    borderRadius: "50%",
+    animation: "spin 1s linear infinite",
+    margin: "0 auto 16px",
+  },
+  
+  emptyState: {
+    textAlign: "center",
+    padding: "60px 20px",
+    color: "#9ca3af",
+  },
+  
+  emptyIcon: {
+    fontSize: "64px",
+    display: "block",
+    marginBottom: "16px",
+  },
+  
+  emptySubtext: {
+    fontSize: "13px",
+    marginTop: "8px",
+  },
+  
+  repaymentsList: {
+    display: "flex",
+    flexDirection: "column",
+    gap: "20px",
+  },
+  
+  repaymentItem: {
+    border: "1px solid #e5e7eb",
+    borderRadius: "16px",
+    padding: "20px",
+    transition: "box-shadow 0.2s",
+  },
+  
+  itemHeader: {
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    marginBottom: "16px",
+  },
+  
+  calendarIcon: {
+    marginRight: "8px",
+  },
+  
+  dueDate: {
+    fontSize: "16px",
+  },
+  
+  statusBadge: {
+    padding: "4px 12px",
+    borderRadius: "20px",
     fontSize: "12px",
     fontWeight: "600",
   },
+  
+  amountGrid: {
+    display: "grid",
+    gridTemplateColumns: "repeat(3, 1fr)",
+    gap: "16px",
+    padding: "16px",
+    background: "#f9fafb",
+    borderRadius: "12px",
+    marginBottom: "16px",
+  },
+  
+  amountLabel: {
+    fontSize: "11px",
+    fontWeight: "600",
+    color: "#9ca3af",
+    margin: "0 0 4px 0",
+    textTransform: "uppercase",
+  },
+  
+  amountValue: {
+    fontSize: "18px",
+    fontWeight: "700",
+    color: "#1f2937",
+    margin: 0,
+  },
+  
   historyBox: {
-    marginTop: "10px",
-    padding: "10px",
-    background: "#f9fafb",
-    borderRadius: "8px",
-  },
-  adminBox: {
-    marginTop: "14px",
     padding: "12px",
-    background: "#f9fafb",
-    borderRadius: "8px",
-    border: "1px solid #e5e7eb",
+    background: "#f0fdf4",
+    borderRadius: "12px",
+    marginBottom: "16px",
   },
-  smallText: {
-    fontSize: "12px",
-    color: "#6b7280",
-    marginTop: "4px",
-  },
-  payRow: {
+  
+  historyHeader: {
     display: "flex",
+    alignItems: "center",
     gap: "8px",
-    marginTop: "12px",
+    marginBottom: "8px",
+  },
+  
+  historyItem: {
+    display: "flex",
+    gap: "16px",
+    fontSize: "13px",
+    color: "#065f46",
+    padding: "4px 0",
+  },
+  
+  paymentSection: {
+    marginTop: "16px",
+  },
+  
+  paymentRow: {
+    display: "flex",
+    gap: "12px",
+    marginBottom: "12px",
     flexWrap: "wrap",
   },
-  smallInput: {
+  
+  paymentAmount: {
+    flex: 1,
+    padding: "10px 12px",
+    borderRadius: "10px",
+    border: "1px solid #e5e7eb",
+    fontSize: "14px",
+  },
+  
+  paymentMethod: {
+    flex: 1,
+    padding: "10px 12px",
+    borderRadius: "10px",
+    border: "1px solid #e5e7eb",
+    fontSize: "14px",
+  },
+  
+  manualPayBtn: {
+    padding: "10px 20px",
+    background: "#3b82f6",
+    color: "white",
+    border: "none",
+    borderRadius: "10px",
+    fontSize: "14px",
+    fontWeight: "600",
+    cursor: "pointer",
+  },
+  
+  stripePayBtn: {
+    width: "100%",
+    padding: "10px 20px",
+    background: "#111827",
+    color: "white",
+    border: "none",
+    borderRadius: "10px",
+    fontSize: "14px",
+    fontWeight: "600",
+    cursor: "pointer",
+  },
+  
+  adminSection: {
+    marginTop: "16px",
+    padding: "16px",
+    background: "#f9fafb",
+    borderRadius: "12px",
+  },
+  
+  adminHeader: {
+    display: "flex",
+    alignItems: "center",
+    gap: "8px",
+    marginBottom: "12px",
+  },
+  
+  adminRow: {
+    display: "flex",
+    gap: "12px",
+    marginBottom: "12px",
+    flexWrap: "wrap",
+  },
+  
+  adminInput: {
+    flex: 1,
     padding: "8px 10px",
     borderRadius: "8px",
-    border: "1px solid #d1d5db",
+    border: "1px solid #e5e7eb",
+    fontSize: "13px",
   },
-  payBtn: {
-    padding: "8px 12px",
+  
+  adminSelect: {
+    flex: 1,
+    padding: "8px 10px",
     borderRadius: "8px",
+    border: "1px solid #e5e7eb",
+    fontSize: "13px",
+  },
+  
+  adminActions: {
+    display: "flex",
+    gap: "12px",
+  },
+  
+  saveBtn: {
+    padding: "8px 16px",
+    background: "#10b981",
+    color: "white",
     border: "none",
-    background: "#2563eb",
-    color: "#fff",
+    borderRadius: "8px",
+    fontSize: "13px",
+    fontWeight: "600",
     cursor: "pointer",
   },
-  stripeBtn: {
-    padding: "10px 14px",
-    borderRadius: "8px",
+  
+  deleteAdminBtn: {
+    padding: "8px 16px",
+    background: "#ef4444",
+    color: "white",
     border: "none",
-    background: "#111827",
-    color: "#fff",
+    borderRadius: "8px",
+    fontSize: "13px",
+    fontWeight: "600",
     cursor: "pointer",
-  },
-  deleteBtn: {
-    padding: "8px 12px",
-    borderRadius: "8px",
-    border: "none",
-    background: "#dc2626",
-    color: "#fff",
-    cursor: "pointer",
-  },
-  success: {
-    background: "#dcfce7",
-    color: "#166534",
-    padding: "10px 12px",
-    borderRadius: "8px",
-    marginBottom: "16px",
-  },
-  error: {
-    background: "#fee2e2",
-    color: "#b91c1c",
-    padding: "10px 12px",
-    borderRadius: "8px",
-    marginBottom: "16px",
   },
 };
+
+// Add animation keyframes
+const styleSheet = document.createElement("style");
+styleSheet.textContent = `
+  @keyframes spin {
+    to { transform: rotate(360deg); }
+  }
+`;
+document.head.appendChild(styleSheet);
