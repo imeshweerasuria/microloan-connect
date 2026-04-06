@@ -17,19 +17,53 @@ export default function Register() {
     name: "",
     email: "",
     password: "",
+    confirmPassword: "",
     role: "BORROWER",
   });
 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
+  const [strength, setStrength] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [agreeTerms, setAgreeTerms] = useState(false);
 
+  // Password strength validation function
+  const isStrongPassword = (password) => {
+    const regex =
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$/;
+    return regex.test(password);
+  };
+
+  // Password strength checker for live UI
+  const checkPasswordStrength = (password) => {
+    if (!password) return "";
+    
+    let score = 0;
+
+    if (password.length >= 8) score++;
+    if (/[a-z]/.test(password)) score++;
+    if (/[A-Z]/.test(password)) score++;
+    if (/\d/.test(password)) score++;
+    if (/[@$!%*?&]/.test(password)) score++;
+
+    if (score <= 2) return "Weak";
+    if (score <= 4) return "Medium";
+    return "Strong";
+  };
+
   const handleChange = (e) => {
+    const { name, value } = e.target;
+
     setForm((prev) => ({
       ...prev,
-      [e.target.name]: e.target.value,
+      [name]: value,
     }));
+
+    // Check strength when typing password
+    if (name === "password") {
+      setStrength(checkPasswordStrength(value));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -41,9 +75,28 @@ export default function Register() {
       return;
     }
 
+    // Check password match
+    if (form.password !== form.confirmPassword) {
+      setError("Passwords do not match");
+      return;
+    }
+
+    // Check password strength
+    if (!isStrongPassword(form.password)) {
+      setError(
+        "Password must be at least 8 characters and include uppercase, lowercase, number, and special character (@$!%*?&)"
+      );
+      return;
+    }
+
     try {
       setLoading(true);
-      const res = await register(form);
+
+      // Remove confirmPassword before sending
+      // eslint-disable-next-line no-unused-vars
+      const { confirmPassword, ...dataToSend } = form;
+
+      const res = await register(dataToSend);
       navigate(roleHome(res.user.role));
     } catch (err) {
       setError(err.message || "Registration failed");
@@ -145,6 +198,7 @@ export default function Register() {
               />
             </div>
 
+            {/* Password Field with Strength Indicator */}
             <div style={styles.formGroup}>
               <label style={styles.label}>
                 <span style={styles.labelIcon}>🔒</span>
@@ -168,11 +222,80 @@ export default function Register() {
                   {showPassword ? "🙈" : "👁️"}
                 </button>
               </div>
+              
+              {/* Password Requirements Hint */}
               <p style={styles.passwordHint}>
-                Password must be at least 6 characters
+                Password must include uppercase, lowercase, number, and special character (@$!%*?&)
               </p>
+
+              {/* Live Password Strength Indicator */}
+              {form.password && (
+                <div style={styles.strengthContainer}>
+                  <div
+                    style={{
+                      ...styles.strengthBar,
+                      background:
+                        strength === "Weak"
+                          ? "#ef4444"
+                          : strength === "Medium"
+                          ? "#f59e0b"
+                          : "#10b981",
+                      width:
+                        strength === "Weak"
+                          ? "33%"
+                          : strength === "Medium"
+                          ? "66%"
+                          : "100%",
+                    }}
+                  ></div>
+                  <p style={styles.strengthText}>
+                    Strength: <strong style={{ color: 
+                      strength === "Weak" ? "#ef4444" : 
+                      strength === "Medium" ? "#f59e0b" : 
+                      "#10b981"
+                    }}>{strength}</strong>
+                  </p>
+                </div>
+              )}
             </div>
 
+            {/* Confirm Password Field */}
+            <div style={styles.formGroup}>
+              <label style={styles.label}>
+                <span style={styles.labelIcon}>✓</span>
+                Confirm Password
+              </label>
+              <div style={styles.passwordWrapper}>
+                <input
+                  style={styles.passwordInput}
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={form.confirmPassword}
+                  onChange={handleChange}
+                  placeholder="Confirm your password"
+                  required
+                />
+                <button
+                  type="button"
+                  style={styles.passwordToggle}
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                >
+                  {showConfirmPassword ? "🙈" : "👁️"}
+                </button>
+              </div>
+
+              {/* Live Password Match Indicator */}
+              {form.confirmPassword && (
+                <p style={{
+                  ...styles.matchIndicator,
+                  color: form.password === form.confirmPassword ? "#10b981" : "#ef4444"
+                }}>
+                  {form.password === form.confirmPassword ? "✓ Passwords match" : "✗ Passwords do not match"}
+                </p>
+              )}
+            </div>
+
+            {/* Role Selection */}
             <div style={styles.formGroup}>
               <label style={styles.label}>
                 <span style={styles.labelIcon}>🎭</span>
@@ -223,6 +346,7 @@ export default function Register() {
               </div>
             </div>
 
+            {/* Terms & Conditions */}
             <div style={styles.termsGroup}>
               <label style={styles.checkboxLabel}>
                 <input
@@ -238,6 +362,7 @@ export default function Register() {
               </label>
             </div>
 
+            {/* Submit Button */}
             <button type="submit" style={styles.button} disabled={loading}>
               {loading ? (
                 <span style={styles.btnContent}>
@@ -505,6 +630,27 @@ const styles = {
   passwordHint: {
     fontSize: "11px",
     color: "#9ca3af",
+    marginTop: "6px",
+  },
+  
+  strengthContainer: {
+    marginTop: "8px",
+  },
+  
+  strengthBar: {
+    height: "4px",
+    borderRadius: "2px",
+    transition: "width 0.3s ease",
+  },
+  
+  strengthText: {
+    fontSize: "11px",
+    marginTop: "4px",
+    color: "#6b7280",
+  },
+  
+  matchIndicator: {
+    fontSize: "11px",
     marginTop: "6px",
   },
   
