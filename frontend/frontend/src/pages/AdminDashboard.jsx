@@ -125,7 +125,7 @@ export default function AdminDashboard() {
     switch (status) {
       case "DRAFT": return "#f59e0b";
       case "SUBMITTED": return "#3b82f6";
-      case "APPROVED": return "#10b981";
+      case "APPROVED": return "#2563eb";
       case "REJECTED": return "#ef4444";
       case "FUNDED": return "#8b5cf6";
       case "ACTIVE": return "#06b6d4";
@@ -138,7 +138,7 @@ export default function AdminDashboard() {
     switch (status) {
       case "DRAFT": return "#fef3c7";
       case "SUBMITTED": return "#dbeafe";
-      case "APPROVED": return "#d1fae5";
+      case "APPROVED": return "#e0e7ff";
       case "REJECTED": return "#fee2e2";
       case "FUNDED": return "#ede9fe";
       case "ACTIVE": return "#cffafe";
@@ -199,15 +199,15 @@ export default function AdminDashboard() {
         <div style={styles.heroContent}>
           <h1 style={styles.title}>
             Admin Dashboard
-            <span style={styles.titleAccent}> | Financial Inclusion Hub</span>
+            <span style={styles.titleAccent}> | Loan Management</span>
           </h1>
           <p style={styles.subtitle}>
-            Empowering underserved communities through transparent micro-loan management
+            Oversee loan applications, manage approvals, and track funding
           </p>
         </div>
-        <div style={styles.sdgBadge}>
-          <span style={styles.sdgIcon}>🎯</span>
-          <span style={styles.sdgText}>SDG Goal 1: No Poverty</span>
+        <div style={styles.finBadge}>
+          <span style={styles.finIcon}>🏦</span>
+          <span style={styles.finText}>Financial Inclusion</span>
         </div>
       </div>
 
@@ -245,11 +245,11 @@ export default function AdminDashboard() {
           </div>
         </div>
         
-        <div style={{...styles.statCard, borderTopColor: "#10b981"}}>
+        <div style={{...styles.statCard, borderTopColor: "#2563eb"}}>
           <div style={styles.statIcon}>✅</div>
           <div>
             <h3 style={styles.statTitle}>Approved</h3>
-            <p style={{...styles.statValue, color: "#10b981"}}>{stats.approvedLoans}</p>
+            <p style={{...styles.statValue, color: "#2563eb"}}>{stats.approvedLoans}</p>
           </div>
         </div>
         
@@ -463,7 +463,7 @@ export default function AdminDashboard() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+    background: "linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%)",
     padding: "40px 24px",
   },
   
@@ -478,7 +478,7 @@ const styles = {
     background: "white",
     padding: "30px",
     borderRadius: "20px",
-    boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
   },
   
   heroContent: {
@@ -489,38 +489,38 @@ const styles = {
     fontSize: "32px",
     fontWeight: "800",
     margin: "0 0 8px 0",
-    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
   
   titleAccent: {
-    background: "linear-gradient(135deg, #f59e0b 0%, #ef4444 100%)",
+    background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
   
   subtitle: {
-    color: "#6b7280",
+    color: "#4b5563",
     fontSize: "16px",
     margin: 0,
   },
   
-  sdgBadge: {
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+  finBadge: {
+    background: "linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)",
     padding: "12px 20px",
     borderRadius: "40px",
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    boxShadow: "0 4px 12px rgba(16,185,129,0.3)",
+    boxShadow: "0 4px 12px rgba(59,130,246,0.3)",
   },
   
-  sdgIcon: {
+  finIcon: {
     fontSize: "24px",
   },
   
-  sdgText: {
+  finText: {
     color: "white",
     fontWeight: "600",
     fontSize: "14px",
@@ -607,10 +607,6 @@ const styles = {
     borderTop: "4px solid",
     transition: "transform 0.2s, box-shadow 0.2s",
     cursor: "pointer",
-    ":hover": {
-      transform: "translateY(-4px)",
-      boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
-    },
   },
   
   statIcon: {
@@ -736,9 +732,6 @@ const styles = {
     fontSize: "14px",
     outline: "none",
     transition: "border-color 0.2s",
-    ":focus": {
-      borderColor: "#3b82f6",
-    },
   },
   
   filterSelect: {
@@ -768,10 +761,6 @@ const styles = {
     boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
     transition: "all 0.2s",
     border: "1px solid #fef3c7",
-    ":hover": {
-      boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
-      transform: "translateY(-2px)",
-    },
   },
   
   loanCard: {
@@ -780,10 +769,6 @@ const styles = {
     padding: "24px",
     boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
     transition: "all 0.2s",
-    ":hover": {
-      boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
-      transform: "translateY(-2px)",
-    },
   },
   
   cardHeader: {
@@ -892,7 +877,7 @@ const styles = {
   },
   
   approveBtn: {
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    background: "linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%)",
     color: "white",
     border: "none",
     padding: "10px 20px",
@@ -903,10 +888,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     gap: "8px",
-    transition: "transform 0.1s",
-    ":active": {
-      transform: "scale(0.98)",
-    },
+    transition: "opacity 0.2s",
   },
   
   rejectBtn: {
@@ -921,10 +903,7 @@ const styles = {
     display: "flex",
     alignItems: "center",
     gap: "8px",
-    transition: "transform 0.1s",
-    ":active": {
-      transform: "scale(0.98)",
-    },
+    transition: "opacity 0.2s",
   },
   
   infoText: {

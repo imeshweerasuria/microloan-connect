@@ -45,9 +45,9 @@ export default function FxConverter() {
             Real-time exchange rates to help you understand international loan values
           </p>
         </div>
-        <div style={styles.sdgBadge}>
-          <span style={styles.sdgIcon}>🎯</span>
-          <span style={styles.sdgText}>SDG Goal 1: No Poverty</span>
+        <div style={styles.finBadge}>
+          <span style={styles.finIcon}>💱</span>
+          <span style={styles.finText}>Live Exchange Rates</span>
         </div>
       </div>
 
@@ -215,7 +215,7 @@ export default function FxConverter() {
             <p style={styles.infoText}>
               Understanding exchange rates helps borrowers and lenders make informed decisions 
               about cross-border loans, international funding, and fair value assessment. 
-              This tool supports financial inclusion by providing transparent rate information.
+              This tool provides transparent rate information for better financial planning.
             </p>
           </div>
         </div>
@@ -260,7 +260,7 @@ export default function FxConverter() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+    background: "linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%)",
     padding: "40px 24px",
   },
   
@@ -275,7 +275,7 @@ const styles = {
     background: "white",
     padding: "30px",
     borderRadius: "20px",
-    boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
   },
   
   heroContent: {
@@ -286,38 +286,38 @@ const styles = {
     fontSize: "32px",
     fontWeight: "800",
     margin: "0 0 8px 0",
-    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
   
   titleAccent: {
-    background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
+    background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
   
   subtitle: {
-    color: "#6b7280",
+    color: "#4b5563",
     fontSize: "16px",
     margin: 0,
   },
   
-  sdgBadge: {
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+  finBadge: {
+    background: "linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)",
     padding: "12px 20px",
     borderRadius: "40px",
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    boxShadow: "0 4px 12px rgba(16,185,129,0.3)",
+    boxShadow: "0 4px 12px rgba(59,130,246,0.3)",
   },
   
-  sdgIcon: {
+  finIcon: {
     fontSize: "24px",
   },
   
-  sdgText: {
+  finText: {
     color: "white",
     fontWeight: "600",
     fontSize: "14px",
@@ -365,7 +365,7 @@ const styles = {
     gap: "16px",
     marginBottom: "32px",
     paddingBottom: "20px",
-    borderBottom: "2px solid #f0fdf4",
+    borderBottom: "2px solid #eff6ff",
   },
   
   headerIcon: {
@@ -410,10 +410,6 @@ const styles = {
     borderRadius: "12px",
     overflow: "hidden",
     transition: "border-color 0.2s, box-shadow 0.2s",
-    ":focus-within": {
-      borderColor: "#3b82f6",
-      boxShadow: "0 0 0 3px rgba(59,130,246,0.1)",
-    },
   },
   
   currencySymbol: {
@@ -431,9 +427,6 @@ const styles = {
     border: "none",
     fontSize: "16px",
     outline: "none",
-    "::placeholder": {
-      color: "#9ca3af",
-    },
   },
   
   twoColGrid: {
@@ -451,10 +444,6 @@ const styles = {
     transition: "border-color 0.2s, box-shadow 0.2s",
     outline: "none",
     boxSizing: "border-box",
-    ":focus": {
-      borderColor: "#3b82f6",
-      boxShadow: "0 0 0 3px rgba(59,130,246,0.1)",
-    },
   },
   
   helperText: {
@@ -482,10 +471,6 @@ const styles = {
     color: "#374151",
     cursor: "pointer",
     transition: "all 0.2s",
-    ":hover": {
-      background: "#e5e7eb",
-      transform: "scale(1.05)",
-    },
   },
   
   swapIcon: {
@@ -494,7 +479,7 @@ const styles = {
   
   convertBtn: {
     width: "100%",
-    background: "linear-gradient(135deg, #3b82f6 0%, #2563eb 100%)",
+    background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)",
     color: "white",
     border: "none",
     padding: "14px 24px",
@@ -502,11 +487,8 @@ const styles = {
     fontSize: "16px",
     fontWeight: "600",
     cursor: "pointer",
-    transition: "transform 0.1s",
+    transition: "opacity 0.2s",
     marginTop: "8px",
-    ":active": {
-      transform: "scale(0.98)",
-    },
   },
   
   btnContent: {
@@ -528,9 +510,9 @@ const styles = {
   resultContainer: {
     marginTop: "32px",
     padding: "24px",
-    background: "linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%)",
+    background: "#eff6ff",
     borderRadius: "16px",
-    border: "1px solid #d1fae5",
+    border: "1px solid #bfdbfe",
   },
   
   resultHeader: {
@@ -547,7 +529,7 @@ const styles = {
   resultTitle: {
     fontSize: "18px",
     fontWeight: "700",
-    color: "#065f46",
+    color: "#1e40af",
     margin: 0,
   },
   
@@ -572,17 +554,17 @@ const styles = {
   
   resultArrow: {
     fontSize: "28px",
-    color: "#10b981",
+    color: "#3b82f6",
   },
   
   resultToAmount: {
     fontSize: "28px",
     fontWeight: "800",
-    color: "#059669",
+    color: "#2563eb",
   },
   
   resultDetails: {
-    borderTop: "1px solid #d1fae5",
+    borderTop: "1px solid #bfdbfe",
     paddingTop: "20px",
   },
   
@@ -596,13 +578,13 @@ const styles = {
   detailLabel: {
     fontSize: "13px",
     fontWeight: "600",
-    color: "#047857",
+    color: "#1e40af",
   },
   
   detailValue: {
     fontSize: "14px",
     fontWeight: "500",
-    color: "#065f46",
+    color: "#1e3a8a",
   },
   
   infoSection: {
@@ -683,11 +665,6 @@ const styles = {
     color: "#374151",
     cursor: "pointer",
     transition: "all 0.2s",
-    ":hover": {
-      background: "#3b82f6",
-      color: "white",
-      borderColor: "#3b82f6",
-    },
   },
   
   quickRefNote: {

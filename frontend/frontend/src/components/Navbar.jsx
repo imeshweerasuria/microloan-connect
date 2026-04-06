@@ -13,8 +13,8 @@ const linkStyle = {
 
 const activeLinkStyle = {
   ...linkStyle,
-  color: "#10b981",
-  borderBottom: "2px solid #10b981",
+  color: "#3b82f6",
+  borderBottom: "2px solid #3b82f6",
 };
 
 function roleHome(role) {
@@ -67,7 +67,7 @@ export default function Navbar() {
               style={{
                 width: "40px",
                 height: "40px",
-                background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                background: "linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)",
                 borderRadius: "12px",
                 display: "flex",
                 alignItems: "center",
@@ -75,7 +75,7 @@ export default function Navbar() {
                 fontSize: "20px",
               }}
             >
-              💚
+              🏦
             </div>
             <Link
               to={user ? roleHome(user.role) : "/"}
@@ -83,7 +83,7 @@ export default function Navbar() {
                 textDecoration: "none",
                 fontWeight: "800",
                 fontSize: "20px",
-                background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+                background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -104,8 +104,8 @@ export default function Navbar() {
             <Link
               to="/"
               style={isActive("/") ? activeLinkStyle : linkStyle}
-              onMouseEnter={(e) => (e.target.style.color = "#10b981")}
-              onMouseLeave={(e) => (e.target.style.color = isActive("/") ? "#10b981" : "#4b5563")}
+              onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+              onMouseLeave={(e) => (e.target.style.color = isActive("/") ? "#3b82f6" : "#4b5563")}
             >
               🏠 Home
             </Link>
@@ -115,24 +115,24 @@ export default function Navbar() {
                 <Link
                   to="/borrower/dashboard"
                   style={isActive("/borrower/dashboard") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#10b981")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/borrower/dashboard") ? "#10b981" : "#4b5563")}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/borrower/dashboard") ? "#3b82f6" : "#4b5563")}
                 >
                   📊 Dashboard
                 </Link>
                 <Link
                   to="/borrower/profile"
                   style={isActive("/borrower/profile") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#10b981")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/borrower/profile") ? "#10b981" : "#4b5563")}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/borrower/profile") ? "#3b82f6" : "#4b5563")}
                 >
                   👤 Profile
                 </Link>
                 <Link
                   to="/repayments"
                   style={isActive("/repayments") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#10b981")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/repayments") ? "#10b981" : "#4b5563")}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/repayments") ? "#3b82f6" : "#4b5563")}
                 >
                   📅 Repayments
                 </Link>
@@ -144,24 +144,24 @@ export default function Navbar() {
                 <Link
                   to="/lender/dashboard"
                   style={isActive("/lender/dashboard") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#10b981")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/lender/dashboard") ? "#10b981" : "#4b5563")}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/lender/dashboard") ? "#3b82f6" : "#4b5563")}
                 >
                   📊 Dashboard
                 </Link>
                 <Link
                   to="/transactions"
                   style={isActive("/transactions") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#10b981")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/transactions") ? "#10b981" : "#4b5563")}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/transactions") ? "#3b82f6" : "#4b5563")}
                 >
                   📜 Transactions
                 </Link>
                 <Link
                   to="/fx"
                   style={isActive("/fx") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#10b981")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/fx") ? "#10b981" : "#4b5563")}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/fx") ? "#3b82f6" : "#4b5563")}
                 >
                   💱 FX Converter
                 </Link>
@@ -173,40 +173,40 @@ export default function Navbar() {
                 <Link
                   to="/admin/dashboard"
                   style={isActive("/admin/dashboard") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#10b981")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/admin/dashboard") ? "#10b981" : "#4b5563")}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/admin/dashboard") ? "#3b82f6" : "#4b5563")}
                 >
                   📊 Dashboard
                 </Link>
                 <Link
                   to="/admin/analytics"
                   style={isActive("/admin/analytics") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#10b981")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/admin/analytics") ? "#10b981" : "#4b5563")}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/admin/analytics") ? "#3b82f6" : "#4b5563")}
                 >
                   📈 Analytics
                 </Link>
                 <Link
                   to="/repayments"
                   style={isActive("/repayments") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#10b981")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/repayments") ? "#10b981" : "#4b5563")}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/repayments") ? "#3b82f6" : "#4b5563")}
                 >
                   📅 Repayments
                 </Link>
                 <Link
                   to="/transactions"
                   style={isActive("/transactions") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#10b981")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/transactions") ? "#10b981" : "#4b5563")}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/transactions") ? "#3b82f6" : "#4b5563")}
                 >
                   📜 Transactions
                 </Link>
                 <Link
                   to="/fx"
                   style={isActive("/fx") ? activeLinkStyle : linkStyle}
-                  onMouseEnter={(e) => (e.target.style.color = "#10b981")}
-                  onMouseLeave={(e) => (e.target.style.color = isActive("/fx") ? "#10b981" : "#4b5563")}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/fx") ? "#3b82f6" : "#4b5563")}
                 >
                   💱 FX Converter
                 </Link>
@@ -244,7 +244,7 @@ export default function Navbar() {
                   to="/register"
                   style={{
                     padding: "8px 16px",
-                    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                    background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)",
                     color: "white",
                     textDecoration: "none",
                     fontWeight: "600",
@@ -274,7 +274,7 @@ export default function Navbar() {
                     style={{
                       width: "32px",
                       height: "32px",
-                      background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+                      background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)",
                       borderRadius: "50%",
                       display: "flex",
                       alignItems: "center",
@@ -289,7 +289,7 @@ export default function Navbar() {
                   </div>
                   <div style={{ fontSize: "13px", fontWeight: "500", color: "#374151" }}>
                     <div>{user.name || user.email?.split("@")[0]}</div>
-                    <div style={{ fontSize: "10px", color: "#10b981", fontWeight: "600" }}>
+                    <div style={{ fontSize: "10px", color: "#2563eb", fontWeight: "600" }}>
                       {user.role}
                     </div>
                   </div>
@@ -335,19 +335,19 @@ export default function Navbar() {
           </button>
         </div>
 
-        {/* SDG Goal Banner */}
+        {/* Financial Inclusion Banner */}
         <div
           style={{
-            background: "linear-gradient(90deg, #fef3c7 0%, #fde68a 100%)",
+            background: "linear-gradient(90deg, #eff6ff 0%, #dbeafe 100%)",
             padding: "6px 16px",
             textAlign: "center",
             fontSize: "11px",
             fontWeight: "500",
-            color: "#92400e",
-            borderTop: "1px solid #fde68a",
+            color: "#1e40af",
+            borderTop: "1px solid #bfdbfe",
           }}
         >
-          🎯 Supporting SDG Goal 1: No Poverty - Financial Inclusion for Underserved Communities
+          🏦 Financial Inclusion Platform | Empowering Communities Through Accessible Credit
         </div>
       </nav>
 

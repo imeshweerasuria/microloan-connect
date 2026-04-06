@@ -151,12 +151,12 @@ export default function Transactions() {
             <span style={styles.titleAccent}> | Track Your Impact</span>
           </h1>
           <p style={styles.subtitle}>
-            Fund approved loans, track your funding history, and see your impact in real-time
+            Fund approved loans, track your funding history, and see your portfolio in real-time
           </p>
         </div>
-        <div style={styles.sdgBadge}>
-          <span style={styles.sdgIcon}>🎯</span>
-          <span style={styles.sdgText}>SDG Goal 1: No Poverty</span>
+        <div style={styles.finBadge}>
+          <span style={styles.finIcon}>📊</span>
+          <span style={styles.finText}>Transaction Ledger</span>
         </div>
       </div>
 
@@ -186,7 +186,7 @@ export default function Transactions() {
           </div>
         </div>
         
-        <div style={{...styles.statCard, borderTopColor: "#10b981"}}>
+        <div style={{...styles.statCard, borderTopColor: "#2563eb"}}>
           <div style={styles.statIcon}>💰</div>
           <div>
             <h3 style={styles.statTitle}>Total Funded (LKR)</h3>
@@ -222,7 +222,7 @@ export default function Transactions() {
         {/* Create Funding Form */}
         <div style={styles.formCard}>
           <div style={styles.formHeader}>
-            <span style={styles.formIcon}>💚</span>
+            <span style={styles.formIcon}>💰</span>
             <h2 style={styles.formTitle}>Create Funding Transaction</h2>
           </div>
 
@@ -275,7 +275,7 @@ export default function Transactions() {
                   </div>
                 </div>
                 <div>
-                  <p style={styles.loanInfoLabel}>Impact Plan</p>
+                  <p style={styles.loanInfoLabel}>Growth Impact Plan</p>
                   <p style={styles.loanInfoValue}>{selectedLoan.povertyImpactPlanSnapshot}</p>
                 </div>
               </div>
@@ -335,7 +335,7 @@ export default function Transactions() {
                 </span>
               ) : (
                 <span style={styles.btnContent}>
-                  <span>💚</span>
+                  <span>💰</span>
                   Create Funding Transaction
                 </span>
               )}
@@ -381,7 +381,7 @@ export default function Transactions() {
                   <div style={styles.txHeader}>
                     <div style={styles.txType}>
                       <span style={tx.type === "FUNDING" ? styles.fundingIcon : styles.repaymentIcon}>
-                        {tx.type === "FUNDING" ? "💚" : "🔄"}
+                        {tx.type === "FUNDING" ? "💰" : "🔄"}
                       </span>
                       <strong>{tx.type}</strong>
                     </div>
@@ -435,16 +435,16 @@ export default function Transactions() {
         </div>
       </div>
 
-      {/* Impact Summary */}
+      {/* Portfolio Summary */}
       <div style={styles.impactCard}>
         <div style={styles.impactContent}>
-          <span style={styles.impactEmoji}>🌟</span>
+          <span style={styles.impactEmoji}>📈</span>
           <div>
-            <h4 style={styles.impactTitle}>Your Impact So Far</h4>
+            <h4 style={styles.impactTitle}>Your Investment Portfolio</h4>
             <p style={styles.impactText}>
               You've funded <strong>{summary.count}</strong> transaction{summary.count !== 1 ? 's' : ''} 
               totaling <strong>LKR {summary.totalFunding.toLocaleString()}</strong>, 
-              helping underserved communities work towards financial freedom.
+              supporting borrowers and driving financial inclusion.
             </p>
           </div>
         </div>
@@ -456,7 +456,7 @@ export default function Transactions() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+    background: "linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%)",
     padding: "40px 24px",
   },
   
@@ -471,7 +471,7 @@ const styles = {
     background: "white",
     padding: "30px",
     borderRadius: "20px",
-    boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
   },
   
   heroContent: {
@@ -482,38 +482,38 @@ const styles = {
     fontSize: "32px",
     fontWeight: "800",
     margin: "0 0 8px 0",
-    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
   
   titleAccent: {
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
   
   subtitle: {
-    color: "#6b7280",
+    color: "#4b5563",
     fontSize: "16px",
     margin: 0,
   },
   
-  sdgBadge: {
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+  finBadge: {
+    background: "linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)",
     padding: "12px 20px",
     borderRadius: "40px",
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    boxShadow: "0 4px 12px rgba(16,185,129,0.3)",
+    boxShadow: "0 4px 12px rgba(59,130,246,0.3)",
   },
   
-  sdgIcon: {
+  finIcon: {
     fontSize: "24px",
   },
   
-  sdgText: {
+  finText: {
     color: "white",
     fontWeight: "600",
     fontSize: "14px",
@@ -734,7 +734,7 @@ const styles = {
   },
   
   loanInfo: {
-    background: "#f0fdf4",
+    background: "#eff6ff",
     borderRadius: "12px",
     padding: "16px",
     marginBottom: "20px",
@@ -757,20 +757,20 @@ const styles = {
   loanInfoLabel: {
     fontSize: "11px",
     fontWeight: "600",
-    color: "#059669",
+    color: "#1e40af",
     margin: "0 0 4px 0",
     textTransform: "uppercase",
   },
   
   loanInfoValue: {
     fontSize: "13px",
-    color: "#065f46",
+    color: "#1e3a8a",
     margin: 0,
   },
   
   submitBtn: {
     width: "100%",
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)",
     color: "white",
     border: "none",
     padding: "14px",
@@ -778,7 +778,7 @@ const styles = {
     fontSize: "16px",
     fontWeight: "600",
     cursor: "pointer",
-    transition: "transform 0.1s",
+    transition: "opacity 0.2s",
   },
   
   btnContent: {
@@ -979,7 +979,7 @@ const styles = {
   impactCard: {
     maxWidth: "1200px",
     margin: "30px auto 0",
-    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     borderRadius: "20px",
     padding: "24px",
     color: "white",

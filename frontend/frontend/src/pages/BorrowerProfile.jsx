@@ -130,15 +130,15 @@ export default function BorrowerProfile() {
         <div style={styles.heroContent}>
           <h1 style={styles.title}>
             Borrower Profile
-            <span style={styles.titleAccent}> | Your Financial Identity</span>
+            <span style={styles.titleAccent}> | Financial Identity</span>
           </h1>
           <p style={styles.subtitle}>
-            Complete your profile to unlock loan eligibility and build trust in the community
+            Complete your profile to unlock loan eligibility and build trust with lenders
           </p>
         </div>
-        <div style={styles.sdgBadge}>
-          <span style={styles.sdgIcon}>🎯</span>
-          <span style={styles.sdgText}>SDG Goal 1: No Poverty</span>
+        <div style={styles.finBadge}>
+          <span style={styles.finIcon}>🏦</span>
+          <span style={styles.finText}>Financial Profile</span>
         </div>
       </div>
 
@@ -280,7 +280,7 @@ export default function BorrowerProfile() {
             <div style={styles.twoColGrid}>
               <div style={styles.formGroup}>
                 <label style={styles.label}>
-                  <span style={styles.labelIcon}>🏪</span>
+                  <span style={styles.labelIcon}>🏢</span>
                   Business Category
                 </label>
                 <input
@@ -288,7 +288,7 @@ export default function BorrowerProfile() {
                   name="businessCategory"
                   value={form.businessCategory}
                   onChange={handleChange}
-                  placeholder="e.g., farming, tailoring, grocery"
+                  placeholder="e.g., retail, services, manufacturing"
                   required
                 />
               </div>
@@ -327,23 +327,23 @@ export default function BorrowerProfile() {
             </div>
           </div>
 
-          {/* Impact Section */}
+          {/* Impact Section - Financial Growth Focus */}
           <div style={styles.section}>
             <div style={styles.sectionHeader}>
-              <span style={styles.sectionIcon}>🌱</span>
-              <h3 style={styles.sectionTitle}>Poverty Impact Plan</h3>
+              <span style={styles.sectionIcon}>📈</span>
+              <h3 style={styles.sectionTitle}>Financial Growth Plan</h3>
             </div>
 
             <div style={styles.formGroup}>
               <label style={styles.label}>
-                How will this loan reduce poverty or improve your family's living conditions?
+                How will this loan support your business growth and financial stability?
               </label>
               <textarea
                 style={styles.textarea}
                 name="povertyImpactPlan"
                 value={form.povertyImpactPlan}
                 onChange={handleChange}
-                placeholder="Describe your plan to use this loan for poverty reduction, income generation, education, healthcare, or community upliftment..."
+                placeholder="Describe your plan to use this loan for business expansion, income generation, skill development, or improving household financial security..."
                 required
               />
             </div>
@@ -374,7 +374,7 @@ export default function BorrowerProfile() {
           <div>
             <h4 style={styles.helpTitle}>Why complete your profile?</h4>
             <p style={styles.helpText}>
-              A complete profile helps lenders understand your situation, increases trust, 
+              A complete profile helps lenders understand your financial needs, increases trust, 
               and improves your chances of loan approval. Your information is kept confidential 
               and used only for loan assessment purposes.
             </p>
@@ -388,7 +388,7 @@ export default function BorrowerProfile() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+    background: "linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%)",
     padding: "40px 24px",
   },
   
@@ -403,7 +403,7 @@ const styles = {
     background: "white",
     padding: "30px",
     borderRadius: "20px",
-    boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
   },
   
   heroContent: {
@@ -414,38 +414,38 @@ const styles = {
     fontSize: "32px",
     fontWeight: "800",
     margin: "0 0 8px 0",
-    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
   
   titleAccent: {
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
   
   subtitle: {
-    color: "#6b7280",
+    color: "#4b5563",
     fontSize: "16px",
     margin: 0,
   },
   
-  sdgBadge: {
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+  finBadge: {
+    background: "linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)",
     padding: "12px 20px",
     borderRadius: "40px",
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    boxShadow: "0 4px 12px rgba(16,185,129,0.3)",
+    boxShadow: "0 4px 12px rgba(59,130,246,0.3)",
   },
   
-  sdgIcon: {
+  finIcon: {
     fontSize: "24px",
   },
   
-  sdgText: {
+  finText: {
     color: "white",
     fontWeight: "600",
     fontSize: "14px",
@@ -529,7 +529,7 @@ const styles = {
     gap: "20px",
     marginBottom: "32px",
     paddingBottom: "20px",
-    borderBottom: "2px solid #f0fdf4",
+    borderBottom: "2px solid #eff6ff",
   },
   
   headerLeft: {
@@ -638,10 +638,6 @@ const styles = {
     transition: "border-color 0.2s, box-shadow 0.2s",
     outline: "none",
     boxSizing: "border-box",
-    ":focus": {
-      borderColor: "#3b82f6",
-      boxShadow: "0 0 0 3px rgba(59,130,246,0.1)",
-    },
   },
   
   textarea: {
@@ -656,10 +652,6 @@ const styles = {
     outline: "none",
     boxSizing: "border-box",
     resize: "vertical",
-    ":focus": {
-      borderColor: "#3b82f6",
-      boxShadow: "0 0 0 3px rgba(59,130,246,0.1)",
-    },
   },
   
   lookupBtn: {
@@ -676,9 +668,6 @@ const styles = {
     cursor: "pointer",
     transition: "background 0.2s",
     marginTop: "8px",
-    ":hover": {
-      background: "#1f2937",
-    },
   },
   
   btnIcon: {
@@ -688,8 +677,8 @@ const styles = {
   previewBox: {
     marginTop: "16px",
     padding: "16px",
-    background: "#f0fdf4",
-    border: "1px solid #d1fae5",
+    background: "#eff6ff",
+    border: "1px solid #bfdbfe",
     borderRadius: "12px",
   },
   
@@ -707,7 +696,7 @@ const styles = {
   previewTitle: {
     fontSize: "14px",
     fontWeight: "600",
-    color: "#065f46",
+    color: "#1e40af",
     margin: 0,
   },
   
@@ -720,7 +709,7 @@ const styles = {
   previewLabel: {
     fontSize: "11px",
     fontWeight: "600",
-    color: "#059669",
+    color: "#3b82f6",
     margin: "0 0 4px 0",
     textTransform: "uppercase",
     letterSpacing: "0.5px",
@@ -728,7 +717,7 @@ const styles = {
   
   previewValue: {
     fontSize: "13px",
-    color: "#064e3b",
+    color: "#1e3a8a",
     margin: 0,
     fontWeight: "500",
   },
@@ -739,7 +728,7 @@ const styles = {
   
   submitBtn: {
     width: "100%",
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)",
     color: "white",
     border: "none",
     padding: "14px 24px",
@@ -747,10 +736,7 @@ const styles = {
     fontSize: "16px",
     fontWeight: "600",
     cursor: "pointer",
-    transition: "transform 0.1s",
-    ":active": {
-      transform: "scale(0.98)",
-    },
+    transition: "opacity 0.2s",
   },
   
   btnContent: {

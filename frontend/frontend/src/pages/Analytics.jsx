@@ -65,7 +65,7 @@ export default function Analytics() {
     switch (status) {
       case "DRAFT": return "#f59e0b";
       case "SUBMITTED": return "#3b82f6";
-      case "APPROVED": return "#10b981";
+      case "APPROVED": return "#2563eb";
       case "REJECTED": return "#ef4444";
       case "FUNDED": return "#8b5cf6";
       case "ACTIVE": return "#06b6d4";
@@ -81,15 +81,15 @@ export default function Analytics() {
         <div style={styles.heroContent}>
           <h1 style={styles.title}>
             Analytics Dashboard
-            <span style={styles.titleAccent}> | Impact & Insights</span>
+            <span style={styles.titleAccent}> | Performance Insights</span>
           </h1>
           <p style={styles.subtitle}>
-            Track platform performance, funding visibility, and SDG 1 poverty reduction evidence
+            Track platform metrics, funding visibility, and loan portfolio performance
           </p>
         </div>
-        <div style={styles.sdgBadge}>
-          <span style={styles.sdgIcon}>🎯</span>
-          <span style={styles.sdgText}>SDG Goal 1: No Poverty</span>
+        <div style={styles.finBadge}>
+          <span style={styles.finIcon}>📊</span>
+          <span style={styles.finText}>Financial Analytics</span>
         </div>
       </div>
 
@@ -110,7 +110,7 @@ export default function Analytics() {
         <>
           {/* Key Metrics Grid */}
           <div style={styles.statsGrid}>
-            <div style={{...styles.statCard, borderTopColor: "#10b981"}}>
+            <div style={{...styles.statCard, borderTopColor: "#2563eb"}}>
               <div style={styles.statIcon}>💰</div>
               <div>
                 <h3 style={styles.statTitle}>Total Funded</h3>
@@ -118,7 +118,7 @@ export default function Analytics() {
               </div>
             </div>
 
-            <div style={{...styles.statCard, borderTopColor: "#3b82f6"}}>
+            <div style={{...styles.statCard, borderTopColor: "#10b981"}}>
               <div style={styles.statIcon}>🔄</div>
               <div>
                 <h3 style={styles.statTitle}>Total Repaid</h3>
@@ -147,7 +147,7 @@ export default function Analytics() {
           <div style={styles.progressSection}>
             <div style={styles.progressHeader}>
               <h2 style={styles.sectionTitle}>📈 Overall Funding Progress</h2>
-              <p style={styles.sectionDesc}>Track community-driven micro-loan funding</p>
+              <p style={styles.sectionDesc}>Track loan funding across the platform</p>
             </div>
             
             <div style={styles.progressCard}>
@@ -186,7 +186,7 @@ export default function Analytics() {
             {/* Categories Section */}
             <div style={styles.analyticsCard}>
               <div style={styles.cardHeader}>
-                <span style={styles.cardIcon}>🏪</span>
+                <span style={styles.cardIcon}>🏢</span>
                 <h2 style={styles.cardTitle}>Loan Categories</h2>
               </div>
               {Object.keys(categoryCounts).length === 0 ? (
@@ -233,56 +233,56 @@ export default function Analytics() {
             </div>
           </div>
 
-          {/* SDG Justification Section */}
-          <div style={styles.sdgSection}>
-            <div style={styles.sdgCard}>
-              <div style={styles.sdgHeader}>
-                <span style={styles.sdgLargeIcon}>🌍</span>
+          {/* Financial Inclusion Impact Section */}
+          <div style={styles.impactSection}>
+            <div style={styles.impactCard}>
+              <div style={styles.impactHeader}>
+                <span style={styles.impactLargeIcon}>🏦</span>
                 <div>
-                  <h2 style={styles.sdgTitle}>SDG 1 - No Poverty Justification</h2>
-                  <p style={styles.sdgSubtitle}>Financial Inclusion Impact Evidence</p>
+                  <h2 style={styles.impactTitle}>Financial Inclusion Impact</h2>
+                  <p style={styles.impactSubtitle}>Platform contribution to economic empowerment</p>
                 </div>
               </div>
               
               <div style={styles.impactGrid}>
                 <div style={styles.impactItem}>
-                  <span style={styles.impactIcon}>🤝</span>
+                  <span style={styles.impactItemIcon}>🤝</span>
                   <div>
-                    <h4 style={styles.impactTitle}>Peer-to-Peer Funding</h4>
-                    <p style={styles.impactText}>Connecting lenders directly with underserved borrowers</p>
+                    <h4 style={styles.impactItemTitle}>Peer-to-Peer Lending</h4>
+                    <p style={styles.impactItemText}>Connecting lenders directly with borrowers</p>
                   </div>
                 </div>
                 
                 <div style={styles.impactItem}>
-                  <span style={styles.impactIcon}>📈</span>
+                  <span style={styles.impactItemIcon}>📈</span>
                   <div>
-                    <h4 style={styles.impactTitle}>Income Generation</h4>
-                    <p style={styles.impactText}>Loans support small businesses and livelihood creation</p>
+                    <h4 style={styles.impactItemTitle}>Business Growth</h4>
+                    <p style={styles.impactItemText}>Loans support small businesses and expansion</p>
                   </div>
                 </div>
                 
                 <div style={styles.impactItem}>
-                  <span style={styles.impactIcon}>🎓</span>
+                  <span style={styles.impactItemIcon}>🎓</span>
                   <div>
-                    <h4 style={styles.impactTitle}>Education & Healthcare</h4>
-                    <p style={styles.impactText}>Funds enable access to essential services</p>
+                    <h4 style={styles.impactItemTitle}>Education Access</h4>
+                    <p style={styles.impactItemText}>Funds enable educational opportunities</p>
                   </div>
                 </div>
                 
                 <div style={styles.impactItem}>
-                  <span style={styles.impactIcon}>🏘️</span>
+                  <span style={styles.impactItemIcon}>🏘️</span>
                   <div>
-                    <h4 style={styles.impactTitle}>Community Upliftment</h4>
-                    <p style={styles.impactText}>Structured repayments build credit history and trust</p>
+                    <h4 style={styles.impactItemTitle}>Community Development</h4>
+                    <p style={styles.impactItemText}>Structured repayments build credit history</p>
                   </div>
                 </div>
               </div>
               
-              <p style={styles.sdgDescription}>
-                This platform supports financial inclusion by enabling underserved borrowers to request loans, 
-                receive peer funding, and repay through structured installments. The tracked business categories 
-                and impact plans demonstrate how loans contribute to poverty reduction, income generation, 
-                education, healthcare, and community upliftment.
+              <p style={styles.impactDescription}>
+                This platform enables financial inclusion by connecting borrowers with lenders, 
+                facilitating transparent loan requests, funding, and repayments. Tracked business 
+                categories and growth plans demonstrate how loans contribute to economic empowerment, 
+                business sustainability, and community development.
               </p>
             </div>
           </div>
@@ -295,7 +295,7 @@ export default function Analytics() {
 const styles = {
   page: {
     minHeight: "100vh",
-    background: "linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%)",
+    background: "linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%)",
     padding: "40px 24px",
   },
   
@@ -310,7 +310,7 @@ const styles = {
     background: "white",
     padding: "30px",
     borderRadius: "20px",
-    boxShadow: "0 10px 40px rgba(0,0,0,0.1)",
+    boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
   },
   
   heroContent: {
@@ -321,38 +321,38 @@ const styles = {
     fontSize: "32px",
     fontWeight: "800",
     margin: "0 0 8px 0",
-    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+    background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
   
   titleAccent: {
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+    background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
   
   subtitle: {
-    color: "#6b7280",
+    color: "#4b5563",
     fontSize: "16px",
     margin: 0,
   },
   
-  sdgBadge: {
-    background: "linear-gradient(135deg, #10b981 0%, #059669 100%)",
+  finBadge: {
+    background: "linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)",
     padding: "12px 20px",
     borderRadius: "40px",
     display: "flex",
     alignItems: "center",
     gap: "10px",
-    boxShadow: "0 4px 12px rgba(16,185,129,0.3)",
+    boxShadow: "0 4px 12px rgba(59,130,246,0.3)",
   },
   
-  sdgIcon: {
+  finIcon: {
     fontSize: "24px",
   },
   
-  sdgText: {
+  finText: {
     color: "white",
     fontWeight: "600",
     fontSize: "14px",
@@ -426,10 +426,6 @@ const styles = {
     borderTop: "4px solid",
     transition: "transform 0.2s, box-shadow 0.2s",
     cursor: "pointer",
-    ":hover": {
-      transform: "translateY(-4px)",
-      boxShadow: "0 8px 24px rgba(0,0,0,0.1)",
-    },
   },
   
   statIcon: {
@@ -512,7 +508,7 @@ const styles = {
   
   progressBar: {
     height: "100%",
-    background: "linear-gradient(90deg, #10b981 0%, #059669 100%)",
+    background: "linear-gradient(90deg, #2563eb 0%, #1e40af 100%)",
     borderRadius: "999px",
     transition: "width 0.3s ease",
   },
@@ -527,7 +523,7 @@ const styles = {
   progressPercent: {
     fontSize: "18px",
     fontWeight: "700",
-    color: "#10b981",
+    color: "#2563eb",
   },
   
   progressText: {
@@ -582,9 +578,6 @@ const styles = {
     background: "#f9fafb",
     borderRadius: "8px",
     transition: "background 0.2s",
-    ":hover": {
-      background: "#f3f4f6",
-    },
   },
   
   categoryName: {
@@ -613,9 +606,6 @@ const styles = {
     background: "#f9fafb",
     borderRadius: "8px",
     transition: "background 0.2s",
-    ":hover": {
-      background: "#f3f4f6",
-    },
   },
   
   statusInfo: {
@@ -655,37 +645,37 @@ const styles = {
     marginBottom: "12px",
   },
   
-  sdgSection: {
+  impactSection: {
     maxWidth: "1200px",
     margin: "0 auto",
   },
   
-  sdgCard: {
-    background: "linear-gradient(135deg, #1e3c72 0%, #2a5298 100%)",
+  impactCard: {
+    background: "linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%)",
     borderRadius: "20px",
     padding: "32px",
     color: "white",
     boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
   },
   
-  sdgHeader: {
+  impactHeader: {
     display: "flex",
     alignItems: "center",
     gap: "16px",
     marginBottom: "24px",
   },
   
-  sdgLargeIcon: {
+  impactLargeIcon: {
     fontSize: "48px",
   },
   
-  sdgTitle: {
+  impactTitle: {
     fontSize: "24px",
     fontWeight: "700",
     margin: "0 0 4px 0",
   },
   
-  sdgSubtitle: {
+  impactSubtitle: {
     fontSize: "14px",
     opacity: 0.9,
     margin: 0,
@@ -708,24 +698,24 @@ const styles = {
     backdropFilter: "blur(10px)",
   },
   
-  impactIcon: {
+  impactItemIcon: {
     fontSize: "28px",
   },
   
-  impactTitle: {
+  impactItemTitle: {
     fontSize: "16px",
     fontWeight: "600",
     margin: "0 0 4px 0",
   },
   
-  impactText: {
+  impactItemText: {
     fontSize: "13px",
     opacity: 0.9,
     margin: 0,
     lineHeight: "1.4",
   },
   
-  sdgDescription: {
+  impactDescription: {
     fontSize: "14px",
     lineHeight: "1.6",
     opacity: 0.95,
