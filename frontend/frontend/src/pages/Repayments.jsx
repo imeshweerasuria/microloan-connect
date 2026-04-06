@@ -190,18 +190,31 @@ export default function Repayments() {
   };
 
   const handleStripeCheckout = async (repaymentId) => {
-    try {
-      setError("");
-      setMessage("");
-      setStripePayingId(repaymentId);
+  const draft = paymentDrafts[repaymentId] || { amount: "" };
 
-      const res = await client.post(`/repayments/${repaymentId}/stripe-checkout-session`);
-      window.location.href = res.data.url;
-    } catch (err) {
-      setError(err.message || "Failed to start Stripe checkout");
-      setStripePayingId("");
-    }
-  };
+  if (!draft.amount || Number(draft.amount) <= 0) {
+    setError("Enter a valid amount before Stripe payment");
+    return;
+  }
+
+  try {
+    setError("");
+    setMessage("");
+    setStripePayingId(repaymentId);
+
+    const res = await client.post(
+      `/repayments/${repaymentId}/stripe-checkout-session`,
+      {
+        amount: Number(draft.amount), // ✅ SEND USER INPUT
+      }
+    );
+
+    window.location.href = res.data.url;
+  } catch (err) {
+    setError(err.message || "Failed to start Stripe checkout");
+    setStripePayingId("");
+  }
+};
 
   const handleCreateRepayment = async (e) => {
     e.preventDefault();
@@ -420,49 +433,53 @@ export default function Repayments() {
                     </div>
                   )}
 
-                  {!isAdmin && rep.status !== "PAID" && (
-                    <>
-                      <div style={styles.payRow}>
-                        <input
-                          style={styles.smallInput}
-                          type="number"
-                          min="1"
-                          max={remaining}
-                          value={draft.amount}
-                          onChange={(e) => updateDraft(rep._id, "amount", e.target.value)}
-                          placeholder="Amount"
-                        />
-                        <select
-                          style={styles.smallInput}
-                          value={draft.method}
-                          onChange={(e) => updateDraft(rep._id, "method", e.target.value)}
-                        >
-                          <option value="CASH">CASH</option>
-                          <option value="BANK">BANK</option>
-                          <option value="ONLINE">ONLINE</option>
-                        </select>
-                        <button
-                          style={styles.payBtn}
-                          onClick={() => handlePay(rep._id)}
-                          disabled={payingId === rep._id}
-                        >
-                          {payingId === rep._id ? "Paying..." : "Manual Pay"}
-                        </button>
-                      </div>
+                  <div style={styles.payRow}>
+  <input
+    style={styles.smallInput}
+    type="number"
+    min="1"
+    max={remaining}
+    value={draft.amount}
+    onChange={(e) => updateDraft(rep._id, "amount", e.target.value)}
+    placeholder="Amount"
+  />
 
-                      <div style={{ marginTop: "10px" }}>
-                        <button
-                          style={styles.stripeBtn}
-                          onClick={() => handleStripeCheckout(rep._id)}
-                          disabled={stripePayingId === rep._id}
-                        >
-                          {stripePayingId === rep._id
-                            ? "Redirecting to Stripe..."
-                            : "Pay by Stripe Test"}
-                        </button>
-                      </div>
-                    </>
-                  )}
+  <select
+    style={styles.smallInput}
+    value={draft.method}
+    onChange={(e) => updateDraft(rep._id, "method", e.target.value)}
+  >
+    <option value="CASH">CASH</option>
+    <option value="BANK">BANK</option>
+    <option value="ONLINE">ONLINE</option>
+  </select>
+
+  {/* ✅ SHOW MANUAL BUTTON ONLY FOR CASH/BANK */}
+  {(draft.method === "CASH" || draft.method === "BANK") && (
+    <button
+      style={styles.payBtn}
+      onClick={() => handlePay(rep._id)}
+      disabled={payingId === rep._id}
+    >
+      {payingId === rep._id ? "Paying..." : "Manual Pay"}
+    </button>
+  )}
+</div>
+
+{/* ✅ SHOW STRIPE BUTTON ONLY FOR ONLINE */}
+{draft.method === "ONLINE" && (
+  <div style={{ marginTop: "10px" }}>
+    <button
+      style={styles.stripeBtn}
+      onClick={() => handleStripeCheckout(rep._id)}
+      disabled={stripePayingId === rep._id}
+    >
+      {stripePayingId === rep._id
+        ? "Redirecting to Stripe..."
+        : "Pay by Stripe"}
+    </button>
+  </div>
+)}
 
                   {isAdmin && (
                     <div style={styles.adminBox}>
