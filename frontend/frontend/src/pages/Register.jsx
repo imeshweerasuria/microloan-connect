@@ -5,6 +5,7 @@ import { useAuth } from "../context/AuthContext";
 function roleHome(role) {
   if (role === "BORROWER") return "/borrower/dashboard";
   if (role === "LENDER") return "/lender/dashboard";
+  if (role === "ADMIN") return "/admin/dashboard";
   return "/";
 }
 
@@ -49,7 +50,7 @@ export default function Register() {
       <div style={styles.card}>
         <h2 style={styles.heading}>Create Account</h2>
         <p style={styles.sub}>
-          Register as a borrower or lender to start using the platform.
+          Register as a borrower, lender, or admin to start using the platform.
         </p>
 
         {error && <div style={styles.error}>{error}</div>}
@@ -97,6 +98,7 @@ export default function Register() {
           >
             <option value="BORROWER">Borrower</option>
             <option value="LENDER">Lender</option>
+            <option value="ADMIN">Admin</option>
           </select>
 
           <button type="submit" style={styles.button} disabled={loading}>
