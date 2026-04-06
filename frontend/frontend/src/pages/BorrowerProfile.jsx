@@ -20,6 +20,7 @@ export default function BorrowerProfile() {
   const [lookupPreview, setLookupPreview] = useState(null);
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+  const [fieldErrors, setFieldErrors] = useState({});
 
   const fetchProfile = async () => {
     try {
@@ -39,7 +40,8 @@ export default function BorrowerProfile() {
 
       setVerified(Boolean(res.data.verified));
       setProfileExists(true);
-    } catch (err) {
+    } catch {
+      // Profile doesn't exist or error fetching - just set profileExists to false
       setProfileExists(false);
     } finally {
       setLoading(false);
@@ -50,17 +52,113 @@ export default function BorrowerProfile() {
     fetchProfile();
   }, []);
 
+  // Phone number validation function
+  const validatePhoneNumber = (phone) => {
+    // Remove any non-digit characters for validation
+    const cleanPhone = phone.replace(/\D/g, '');
+    
+    // Check if phone number is empty
+    if (!cleanPhone) {
+      return "Phone number is required";
+    }
+    
+    // Check length (assuming Sri Lankan phone numbers are 9-10 digits)
+    if (cleanPhone.length < 9 || cleanPhone.length > 10) {
+      return "Phone number must be 9-10 digits";
+    }
+    
+    // Check if starts with valid prefixes (Sri Lankan mobile numbers)
+    const validPrefixes = ['07', '7', '011', '021', '031', '041', '051', '061', '081', '091'];
+    const startsValid = validPrefixes.some(prefix => phone.startsWith(prefix));
+    
+    if (!startsValid && phone.length > 0) {
+      return "Please enter a valid phone number format";
+    }
+    
+    return "";
+  };
+
+  const validateForm = () => {
+    const errors = {};
+    
+    // Validate each field is not empty
+    if (!form.phone.trim()) {
+      errors.phone = "Phone number is required";
+    } else {
+      const phoneError = validatePhoneNumber(form.phone);
+      if (phoneError) errors.phone = phoneError;
+    }
+    
+    if (!form.address.trim()) {
+      errors.address = "Address is required";
+    }
+    
+    if (!form.community.trim()) {
+      errors.community = "Community/Area is required";
+    }
+    
+    if (!form.businessCategory.trim()) {
+      errors.businessCategory = "Business category is required";
+    }
+    
+    if (!form.monthlyIncomeRange.trim()) {
+      errors.monthlyIncomeRange = "Monthly income range is required";
+    }
+    
+    if (!form.householdSize || form.householdSize <= 0) {
+      errors.householdSize = "Household size is required and must be at least 1";
+    }
+    
+    if (!form.povertyImpactPlan.trim()) {
+      errors.povertyImpactPlan = "Financial growth plan is required";
+    }
+    
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
   const handleChange = (e) => {
+    const { name, value } = e.target;
+    
     setForm((prev) => ({
       ...prev,
-      [e.target.name]:
-        e.target.name === "householdSize"
-          ? Number(e.target.value)
-          : e.target.value,
+      [name]: name === "householdSize" ? Number(value) : value,
     }));
+    
+    // Clear field error when user starts typing
+    if (fieldErrors[name]) {
+      setFieldErrors((prev) => ({
+        ...prev,
+        [name]: "",
+      }));
+    }
+    
+    // Real-time phone number validation
+    if (name === "phone") {
+      const phoneError = validatePhoneNumber(value);
+      if (phoneError && value.trim()) {
+        setFieldErrors((prev) => ({
+          ...prev,
+          phone: phoneError,
+        }));
+      } else {
+        setFieldErrors((prev) => ({
+          ...prev,
+          phone: "",
+        }));
+      }
+    }
   };
 
   const handleLookupCommunity = async () => {
+    if (!form.address.trim()) {
+      setFieldErrors((prev) => ({
+        ...prev,
+        address: "Please enter an address first",
+      }));
+      return;
+    }
+    
     try {
       setLookupLoading(true);
       setError("");
@@ -92,6 +190,21 @@ export default function BorrowerProfile() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate all fields before submission
+    if (!validateForm()) {
+      setError("Please fill in all required fields correctly");
+      // Scroll to the first error
+      const firstErrorField = Object.keys(fieldErrors)[0];
+      if (firstErrorField) {
+        const element = document.querySelector(`[name="${firstErrorField}"]`);
+        if (element) {
+          element.scrollIntoView({ behavior: "smooth", block: "center" });
+        }
+      }
+      return;
+    }
+    
     setSaving(true);
     setMessage("");
     setError("");
@@ -189,47 +302,57 @@ export default function BorrowerProfile() {
               <div style={styles.formGroup}>
                 <label style={styles.label}>
                   <span style={styles.labelIcon}>📱</span>
-                  Phone Number
+                  Phone Number <span style={styles.requiredStar}>*</span>
                 </label>
                 <input
-                  style={styles.input}
+                  style={{...styles.input, borderColor: fieldErrors.phone ? "#ef4444" : "#e5e7eb"}}
                   name="phone"
                   value={form.phone}
                   onChange={handleChange}
                   placeholder="e.g., 0771234567"
                   required
                 />
+                {fieldErrors.phone && (
+                  <span style={styles.fieldError}>{fieldErrors.phone}</span>
+                )}
+                <span style={styles.helperText}>Enter a valid Sri Lankan phone number (9-10 digits)</span>
               </div>
 
               <div style={styles.formGroup}>
                 <label style={styles.label}>
                   <span style={styles.labelIcon}>🏘️</span>
-                  Community / Area
+                  Community / Area <span style={styles.requiredStar}>*</span>
                 </label>
                 <input
-                  style={styles.input}
+                  style={{...styles.input, borderColor: fieldErrors.community ? "#ef4444" : "#e5e7eb"}}
                   name="community"
                   value={form.community}
                   onChange={handleChange}
                   placeholder="Your community or area name"
                   required
                 />
+                {fieldErrors.community && (
+                  <span style={styles.fieldError}>{fieldErrors.community}</span>
+                )}
               </div>
             </div>
 
             <div style={styles.formGroup}>
               <label style={styles.label}>
                 <span style={styles.labelIcon}>📍</span>
-                Full Address
+                Full Address <span style={styles.requiredStar}>*</span>
               </label>
               <input
-                style={styles.input}
+                style={{...styles.input, borderColor: fieldErrors.address ? "#ef4444" : "#e5e7eb"}}
                 name="address"
                 value={form.address}
                 onChange={handleChange}
                 placeholder="Enter your complete address"
                 required
               />
+              {fieldErrors.address && (
+                <span style={styles.fieldError}>{fieldErrors.address}</span>
+              )}
             </div>
 
             <button
@@ -281,41 +404,47 @@ export default function BorrowerProfile() {
               <div style={styles.formGroup}>
                 <label style={styles.label}>
                   <span style={styles.labelIcon}>🏢</span>
-                  Business Category
+                  Business Category <span style={styles.requiredStar}>*</span>
                 </label>
                 <input
-                  style={styles.input}
+                  style={{...styles.input, borderColor: fieldErrors.businessCategory ? "#ef4444" : "#e5e7eb"}}
                   name="businessCategory"
                   value={form.businessCategory}
                   onChange={handleChange}
                   placeholder="e.g., retail, services, manufacturing"
                   required
                 />
+                {fieldErrors.businessCategory && (
+                  <span style={styles.fieldError}>{fieldErrors.businessCategory}</span>
+                )}
               </div>
 
               <div style={styles.formGroup}>
                 <label style={styles.label}>
                   <span style={styles.labelIcon}>💰</span>
-                  Monthly Income Range
+                  Monthly Income Range <span style={styles.requiredStar}>*</span>
                 </label>
                 <input
-                  style={styles.input}
+                  style={{...styles.input, borderColor: fieldErrors.monthlyIncomeRange ? "#ef4444" : "#e5e7eb"}}
                   name="monthlyIncomeRange"
                   value={form.monthlyIncomeRange}
                   onChange={handleChange}
                   placeholder="e.g., LKR 30,000 - 50,000"
                   required
                 />
+                {fieldErrors.monthlyIncomeRange && (
+                  <span style={styles.fieldError}>{fieldErrors.monthlyIncomeRange}</span>
+                )}
               </div>
             </div>
 
             <div style={styles.formGroup}>
               <label style={styles.label}>
                 <span style={styles.labelIcon}>👨‍👩‍👧‍👦</span>
-                Household Size
+                Household Size <span style={styles.requiredStar}>*</span>
               </label>
               <input
-                style={styles.input}
+                style={{...styles.input, borderColor: fieldErrors.householdSize ? "#ef4444" : "#e5e7eb"}}
                 type="number"
                 name="householdSize"
                 value={form.householdSize}
@@ -324,6 +453,9 @@ export default function BorrowerProfile() {
                 placeholder="Number of family members"
                 required
               />
+              {fieldErrors.householdSize && (
+                <span style={styles.fieldError}>{fieldErrors.householdSize}</span>
+              )}
             </div>
           </div>
 
@@ -336,16 +468,19 @@ export default function BorrowerProfile() {
 
             <div style={styles.formGroup}>
               <label style={styles.label}>
-                How will this loan support your business growth and financial stability?
+                How will this loan support your business growth and financial stability? <span style={styles.requiredStar}>*</span>
               </label>
               <textarea
-                style={styles.textarea}
+                style={{...styles.textarea, borderColor: fieldErrors.povertyImpactPlan ? "#ef4444" : "#e5e7eb"}}
                 name="povertyImpactPlan"
                 value={form.povertyImpactPlan}
                 onChange={handleChange}
                 placeholder="Describe your plan to use this loan for business expansion, income generation, skill development, or improving household financial security..."
                 required
               />
+              {fieldErrors.povertyImpactPlan && (
+                <span style={styles.fieldError}>{fieldErrors.povertyImpactPlan}</span>
+              )}
             </div>
           </div>
 
@@ -629,6 +764,11 @@ const styles = {
     fontSize: "16px",
   },
   
+  requiredStar: {
+    color: "#ef4444",
+    marginLeft: "4px",
+  },
+  
   input: {
     width: "100%",
     padding: "12px 14px",
@@ -652,6 +792,20 @@ const styles = {
     outline: "none",
     boxSizing: "border-box",
     resize: "vertical",
+  },
+  
+  fieldError: {
+    display: "block",
+    color: "#ef4444",
+    fontSize: "12px",
+    marginTop: "4px",
+  },
+  
+  helperText: {
+    display: "block",
+    color: "#6b7280",
+    fontSize: "11px",
+    marginTop: "4px",
   },
   
   lookupBtn: {

@@ -328,21 +328,7 @@ export default function Register() {
                     <p style={styles.roleDesc}>Fund loans and earn returns</p>
                   </div>
                 </div>
-                {/* ADMIN Role Card - Remove this block if admin self-registration should not be allowed */}
-                <div
-                  style={{
-                    ...styles.roleCard,
-                    ...(form.role === "ADMIN" && styles.roleCardActive),
-                    gridColumn: "1 / -1",
-                  }}
-                  onClick={() => setForm({ ...form, role: "ADMIN" })}
-                >
-                  <span style={styles.roleIcon}>🛡️</span>
-                  <div>
-                    <strong>Admin</strong>
-                    <p style={styles.roleDesc}>Manage loans, users, and approvals</p>
-                  </div>
-                </div>
+                
               </div>
             </div>
 
