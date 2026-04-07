@@ -1,33 +1,36 @@
 {
- "name": "backend",
- "version": "1.0.0",
- "main": "index.js",
- "scripts": {
-   "dev": "nodemon src/server.js",
-   "start": "node src/server.js",
-   "test": "jest --runInBand"
- },
- "keywords": [],
- "author": "",
- "license": "ISC",
- "description": "",
- "dependencies": {
-   "axios": "^1.13.5",
-   "bcrypt": "^6.0.0",
-   "cors": "^2.8.6",
-   "dotenv": "^17.2.4",
-   "express": "^5.2.1",
-   "helmet": "^8.1.0",
-   "joi": "^18.0.2",
-   "jsonwebtoken": "^9.0.3",
-   "mongoose": "^9.1.6",
-   "morgan": "^1.10.1",
-   "stripe": "^21.0.1"
- },
- "devDependencies": {
-   "jest": "^30.2.0",
-   "mongodb-memory-server": "^11.0.1",
-   "nodemon": "^3.1.11",
-   "supertest": "^7.2.2"
- }
+  "name": "backend",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js",
+    "test": "jest --runInBand --detectOpenHandles",
+    "perf:test": "artillery run tests/performance/perf-test.yml",
+    "perf:test:report": "artillery run --output reports/perf-report.json tests/performance/perf-test.yml"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "axios": "^1.13.5",
+    "bcrypt": "^6.0.0",
+    "cors": "^2.8.6",
+    "dotenv": "^17.2.4",
+    "express": "^5.2.1",
+    "helmet": "^8.1.0",
+    "joi": "^18.0.2",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.6",
+    "morgan": "^1.10.1",
+    "stripe": "^21.0.1"
+  },
+  "devDependencies": {
+    "artillery": "^2.0.30",
+    "jest": "^30.2.0",
+    "mongodb-memory-server": "^11.0.1",
+    "nodemon": "^3.1.11",
+    "supertest": "^7.2.2"
+  }
 }
