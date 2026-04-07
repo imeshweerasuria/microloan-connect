@@ -1,0 +1,50 @@
+config:
+  target: "http://localhost:8080"
+  phases:
+    - duration: 30
+      arrivalRate: 1
+      name: "Warm up"
+    - duration: 60
+      arrivalRate: 3
+      name: "Normal load"
+    - duration: 60
+      arrivalRate: 5
+      name: "Higher load"
+  processor: "./processor.js"
+  http:
+    timeout: 20
+
+scenarios:
+  - name: "Register borrower and create loan flow"
+    flow:
+      - function: "generateBorrowerData"
+
+      - post:
+          url: "/api/auth/register"
+          json:
+            name: "{{ name }}"
+            email: "{{ email }}"
+            password: "{{ password }}"
+            role: "BORROWER"
+          capture:
+            - json: "$.token"
+              as: "token"
+
+      - post:
+          url: "/api/loans"
+          headers:
+            Authorization: "Bearer {{ token }}"
+          json:
+            title: "{{ loanTitle }}"
+            description: "Performance test loan request"
+            amount: 50000
+            currency: "LKR"
+            tenureMonths: 12
+            purpose: "Business expansion"
+            businessCategory: "Retail"
+            povertyImpactPlanSnapshot: "Increase household income"
+
+      - get:
+          url: "/api/loans/me"
+          headers:
+            Authorization: "Bearer {{ token }}"
