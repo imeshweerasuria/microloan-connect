@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from "react";
-import client from "../api/Client";
+import client from "../api/client";
 
 export default function Analytics() {
   const [summary, setSummary] = useState({

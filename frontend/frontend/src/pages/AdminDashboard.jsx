@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
-import client from "../api/Client";
+import client from "../api/client";
 
 export default function AdminDashboard() {
   const [allLoans, setAllLoans] = useState([]);
