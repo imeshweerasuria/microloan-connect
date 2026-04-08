@@ -198,6 +198,15 @@ export default function Navbar() {
                   📈 Analytics
                 </Link>
                 
+                <Link
+                  to="/repayments"
+                  style={isActive("/repayments") ? activeLinkStyle : linkStyle}
+                  onMouseEnter={(e) => (e.target.style.color = "#3b82f6")}
+                  onMouseLeave={(e) => (e.target.style.color = isActive("/repayments") ? "#3b82f6" : "#4b5563")}
+                >
+                  📅 Repayments
+                </Link>
+
                 
               </>
             )}
