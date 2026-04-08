@@ -36,7 +36,7 @@ const corsOptions = {
 
 app.use(helmet());
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // handle preflight properly
+app.options(/.*/, cors(corsOptions)); // handle preflight properly
 app.use(express.json());
 app.use(morgan("dev"));
 
