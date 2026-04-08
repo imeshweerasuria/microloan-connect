@@ -1,3126 +1,590 @@
 {
   "aggregate": {
-    "counters": {
-      "vusers.created_by_name.Register borrower and create loan flow": 510,
-      "vusers.created": 510,
-      "http.requests": 1530,
-      "http.codes.201": 1020,
-      "http.responses": 1530,
-      "http.downloaded_bytes": 605616,
-      "plugins.metrics-by-endpoint./api/auth/register.codes.201": 510,
-      "plugins.metrics-by-endpoint./api/loans.codes.201": 510,
-      "http.codes.200": 510,
-      "plugins.metrics-by-endpoint./api/loans/me.codes.200": 510,
-      "vusers.failed": 0,
-      "vusers.completed": 510
+    "timestamp": "2026-04-07T10:31:18.927Z",
+    "scenariosCreated": 510,
+    "scenariosCompleted": 0,
+    "requestsCompleted": 0,
+    "latency": {
+      "min": null,
+      "max": null,
+      "median": null,
+      "p95": null,
+      "p99": null
     },
-    "rates": {
-      "http.request_rate": 15
+    "rps": {
+      "count": 510,
+      "mean": 0.43
     },
-    "firstCounterAt": 1775549749332,
-    "firstHistogramAt": 1775549749694,
-    "lastCounterAt": 1775549899521,
-    "lastHistogramAt": 1775549899521,
-    "firstMetricAt": 1775549749332,
-    "lastMetricAt": 1775549899521,
-    "period": 1775549890000,
-    "summaries": {
-      "http.response_time": {
-        "min": 139,
-        "max": 1027,
-        "count": 1530,
-        "mean": 279,
-        "p50": 252.2,
-        "median": 252.2,
-        "p75": 320.6,
-        "p90": 399.5,
-        "p95": 497.8,
-        "p99": 632.8,
-        "p999": 727.9
+    "scenarioDuration": {
+      "min": null,
+      "max": null,
+      "median": null,
+      "p95": null,
+      "p99": null
+    },
+    "scenarioCounts": {
+      "Register borrower and create loan flow": 510
+    },
+    "errors": {
+      "ECONNREFUSED": 509,
+      "ETIMEDOUT": 1
+    },
+    "codes": {},
+    "matches": 0,
+    "customStats": {},
+    "counters": {},
+    "scenariosAvoided": 0,
+    "phases": [
+      {
+        "duration": 30,
+        "arrivalRate": 1,
+        "name": "Warm up"
       },
-      "http.response_time.2xx": {
-        "min": 139,
-        "max": 1027,
-        "count": 1530,
-        "mean": 279,
-        "p50": 252.2,
-        "median": 252.2,
-        "p75": 320.6,
-        "p90": 399.5,
-        "p95": 497.8,
-        "p99": 632.8,
-        "p999": 727.9
+      {
+        "duration": 60,
+        "arrivalRate": 3,
+        "name": "Normal load"
       },
-      "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-        "min": 219,
-        "max": 1027,
-        "count": 510,
-        "mean": 323.7,
-        "p50": 308,
-        "median": 308,
-        "p75": 340.4,
-        "p90": 415.8,
-        "p95": 487.9,
-        "p99": 632.8,
-        "p999": 727.9
-      },
-      "plugins.metrics-by-endpoint.response_time./api/loans": {
-        "min": 142,
-        "max": 817,
-        "count": 510,
-        "mean": 257.2,
-        "p50": 214.9,
-        "median": 214.9,
-        "p75": 267.8,
-        "p90": 407.5,
-        "p95": 561.2,
-        "p99": 645.6,
-        "p999": 685.5
-      },
-      "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-        "min": 139,
-        "max": 644,
-        "count": 510,
-        "mean": 256,
-        "p50": 223.7,
-        "median": 223.7,
-        "p75": 290.1,
-        "p90": 391.6,
-        "p95": 441.5,
-        "p99": 584.2,
-        "p999": 632.8
-      },
-      "vusers.session_length": {
-        "min": 547.2,
-        "max": 1825.5,
-        "count": 510,
-        "mean": 845.7,
-        "p50": 772.9,
-        "median": 772.9,
-        "p75": 925.4,
-        "p90": 1153.1,
-        "p95": 1300.1,
-        "p99": 1652.8,
-        "p999": 1790.4
+      {
+        "duration": 60,
+        "arrivalRate": 5,
+        "name": "Higher load"
       }
-    },
-    "histograms": {
-      "http.response_time": {
-        "min": 139,
-        "max": 1027,
-        "count": 1530,
-        "mean": 279,
-        "p50": 252.2,
-        "median": 252.2,
-        "p75": 320.6,
-        "p90": 399.5,
-        "p95": 497.8,
-        "p99": 632.8,
-        "p999": 727.9
-      },
-      "http.response_time.2xx": {
-        "min": 139,
-        "max": 1027,
-        "count": 1530,
-        "mean": 279,
-        "p50": 252.2,
-        "median": 252.2,
-        "p75": 320.6,
-        "p90": 399.5,
-        "p95": 497.8,
-        "p99": 632.8,
-        "p999": 727.9
-      },
-      "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-        "min": 219,
-        "max": 1027,
-        "count": 510,
-        "mean": 323.7,
-        "p50": 308,
-        "median": 308,
-        "p75": 340.4,
-        "p90": 415.8,
-        "p95": 487.9,
-        "p99": 632.8,
-        "p999": 727.9
-      },
-      "plugins.metrics-by-endpoint.response_time./api/loans": {
-        "min": 142,
-        "max": 817,
-        "count": 510,
-        "mean": 257.2,
-        "p50": 214.9,
-        "median": 214.9,
-        "p75": 267.8,
-        "p90": 407.5,
-        "p95": 561.2,
-        "p99": 645.6,
-        "p999": 685.5
-      },
-      "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-        "min": 139,
-        "max": 644,
-        "count": 510,
-        "mean": 256,
-        "p50": 223.7,
-        "median": 223.7,
-        "p75": 290.1,
-        "p90": 391.6,
-        "p95": 441.5,
-        "p99": 584.2,
-        "p999": 632.8
-      },
-      "vusers.session_length": {
-        "min": 547.2,
-        "max": 1825.5,
-        "count": 510,
-        "mean": 845.7,
-        "p50": 772.9,
-        "median": 772.9,
-        "p75": 925.4,
-        "p90": 1153.1,
-        "p95": 1300.1,
-        "p99": 1652.8,
-        "p999": 1790.4
-      }
-    }
+    ]
   },
   "intermediate": [
     {
-      "counters": {
-        "vusers.created_by_name.Register borrower and create loan flow": 1,
-        "vusers.created": 1,
-        "http.requests": 3,
-        "http.codes.201": 2,
-        "http.responses": 2,
-        "http.downloaded_bytes": 755,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 1,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 1
+      "timestamp": "2026-04-07T10:11:43.739Z",
+      "scenariosCreated": 9,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 3
+      "rps": {
+        "count": 9,
+        "mean": 1
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549749332,
-      "firstHistogramAt": 1775549749694,
-      "lastCounterAt": 1775549749939,
-      "lastHistogramAt": 1775549749938,
-      "firstMetricAt": 1775549749332,
-      "lastMetricAt": 1775549749939,
-      "period": "1775549740000",
-      "summaries": {
-        "http.response_time": {
-          "min": 238,
-          "max": 327,
-          "count": 2,
-          "mean": 282.5,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 237.5,
-          "p90": 237.5,
-          "p95": 237.5,
-          "p99": 237.5,
-          "p999": 237.5
-        },
-        "http.response_time.2xx": {
-          "min": 238,
-          "max": 327,
-          "count": 2,
-          "mean": 282.5,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 237.5,
-          "p90": 237.5,
-          "p95": 237.5,
-          "p99": 237.5,
-          "p999": 237.5
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 327,
-          "max": 327,
-          "count": 1,
-          "mean": 327,
-          "p50": 327.1,
-          "median": 327.1,
-          "p75": 327.1,
-          "p90": 327.1,
-          "p95": 327.1,
-          "p99": 327.1,
-          "p999": 327.1
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 238,
-          "max": 238,
-          "count": 1,
-          "mean": 238,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 237.5,
-          "p90": 237.5,
-          "p95": 237.5,
-          "p99": 237.5,
-          "p999": 237.5
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 238,
-          "max": 327,
-          "count": 2,
-          "mean": 282.5,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 237.5,
-          "p90": 237.5,
-          "p95": 237.5,
-          "p99": 237.5,
-          "p999": 237.5
-        },
-        "http.response_time.2xx": {
-          "min": 238,
-          "max": 327,
-          "count": 2,
-          "mean": 282.5,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 237.5,
-          "p90": 237.5,
-          "p95": 237.5,
-          "p99": 237.5,
-          "p999": 237.5
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 327,
-          "max": 327,
-          "count": 1,
-          "mean": 327,
-          "p50": 327.1,
-          "median": 327.1,
-          "p75": 327.1,
-          "p90": 327.1,
-          "p95": 327.1,
-          "p99": 327.1,
-          "p999": 327.1
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 238,
-          "max": 238,
-          "count": 1,
-          "mean": 238,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 237.5,
-          "p90": 237.5,
-          "p95": 237.5,
-          "p99": 237.5,
-          "p999": 237.5
-        }
-      }
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 9
+      },
+      "errors": {
+        "ECONNREFUSED": 9
+      },
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 9,
+      "scenariosAvoided": 0
     },
     {
-      "counters": {
-        "http.codes.200": 10,
-        "http.responses": 29,
-        "http.downloaded_bytes": 11441,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 10,
-        "vusers.failed": 0,
-        "vusers.completed": 10,
-        "vusers.created_by_name.Register borrower and create loan flow": 10,
-        "vusers.created": 10,
-        "http.requests": 29,
-        "http.codes.201": 19,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 10,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 9
+      "timestamp": "2026-04-07T10:11:53.757Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 3
+      "rps": {
+        "count": 10,
+        "mean": 1
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549750210,
-      "firstHistogramAt": 1775549750210,
-      "lastCounterAt": 1775549759972,
-      "lastHistogramAt": 1775549759970,
-      "firstMetricAt": 1775549750210,
-      "lastMetricAt": 1775549759972,
-      "period": "1775549750000",
-      "summaries": {
-        "http.response_time": {
-          "min": 201,
-          "max": 643,
-          "count": 29,
-          "mean": 419.6,
-          "p50": 407.5,
-          "median": 407.5,
-          "p75": 561.2,
-          "p90": 608,
-          "p95": 632.8,
-          "p99": 632.8,
-          "p999": 632.8
-        },
-        "http.response_time.2xx": {
-          "min": 201,
-          "max": 643,
-          "count": 29,
-          "mean": 419.6,
-          "p50": 407.5,
-          "median": 407.5,
-          "p75": 561.2,
-          "p90": 608,
-          "p95": 632.8,
-          "p99": 632.8,
-          "p999": 632.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 201,
-          "max": 629,
-          "count": 10,
-          "mean": 375.5,
-          "p50": 327.1,
-          "median": 327.1,
-          "p75": 361.5,
-          "p90": 608,
-          "p95": 608,
-          "p99": 608,
-          "p999": 608
-        },
-        "vusers.session_length": {
-          "min": 681.1,
-          "max": 1744.2,
-          "count": 10,
-          "mean": 1223.7,
-          "p50": 1249.1,
-          "median": 1249.1,
-          "p75": 1300.1,
-          "p90": 1652.8,
-          "p95": 1652.8,
-          "p99": 1652.8,
-          "p999": 1652.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 248,
-          "max": 635,
-          "count": 10,
-          "mean": 456.7,
-          "p50": 424.2,
-          "median": 424.2,
-          "p75": 550.1,
-          "p90": 608,
-          "p95": 608,
-          "p99": 608,
-          "p999": 608
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 205,
-          "max": 643,
-          "count": 9,
-          "mean": 427.3,
-          "p50": 468.8,
-          "median": 468.8,
-          "p75": 561.2,
-          "p90": 584.2,
-          "p95": 584.2,
-          "p99": 584.2,
-          "p999": 584.2
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 201,
-          "max": 643,
-          "count": 29,
-          "mean": 419.6,
-          "p50": 407.5,
-          "median": 407.5,
-          "p75": 561.2,
-          "p90": 608,
-          "p95": 632.8,
-          "p99": 632.8,
-          "p999": 632.8
-        },
-        "http.response_time.2xx": {
-          "min": 201,
-          "max": 643,
-          "count": 29,
-          "mean": 419.6,
-          "p50": 407.5,
-          "median": 407.5,
-          "p75": 561.2,
-          "p90": 608,
-          "p95": 632.8,
-          "p99": 632.8,
-          "p999": 632.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 201,
-          "max": 629,
-          "count": 10,
-          "mean": 375.5,
-          "p50": 327.1,
-          "median": 327.1,
-          "p75": 361.5,
-          "p90": 608,
-          "p95": 608,
-          "p99": 608,
-          "p999": 608
-        },
-        "vusers.session_length": {
-          "min": 681.1,
-          "max": 1744.2,
-          "count": 10,
-          "mean": 1223.7,
-          "p50": 1249.1,
-          "median": 1249.1,
-          "p75": 1300.1,
-          "p90": 1652.8,
-          "p95": 1652.8,
-          "p99": 1652.8,
-          "p999": 1652.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 248,
-          "max": 635,
-          "count": 10,
-          "mean": 456.7,
-          "p50": 424.2,
-          "median": 424.2,
-          "p75": 550.1,
-          "p90": 608,
-          "p95": 608,
-          "p99": 608,
-          "p999": 608
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 205,
-          "max": 643,
-          "count": 9,
-          "mean": 427.3,
-          "p50": 468.8,
-          "median": 468.8,
-          "p75": 561.2,
-          "p90": 584.2,
-          "p95": 584.2,
-          "p99": 584.2,
-          "p999": 584.2
-        }
-      }
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 10
+      },
+      "errors": {
+        "ECONNREFUSED": 10
+      },
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 19,
+      "scenariosAvoided": 0
     },
     {
-      "counters": {
-        "vusers.created_by_name.Register borrower and create loan flow": 10,
-        "vusers.created": 10,
-        "http.requests": 31,
-        "http.codes.201": 21,
-        "http.responses": 31,
-        "http.downloaded_bytes": 12299,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 11,
-        "http.codes.200": 10,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 10,
-        "vusers.failed": 0,
-        "vusers.completed": 10,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 10
+      "timestamp": "2026-04-07T10:12:03.745Z",
+      "scenariosCreated": 10,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 3
+      "rps": {
+        "count": 10,
+        "mean": 1
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549760329,
-      "firstHistogramAt": 1775549760342,
-      "lastCounterAt": 1775549769985,
-      "lastHistogramAt": 1775549769984,
-      "firstMetricAt": 1775549760329,
-      "lastMetricAt": 1775549769985,
-      "period": "1775549760000",
-      "summaries": {
-        "http.response_time": {
-          "min": 187,
-          "max": 724,
-          "count": 31,
-          "mean": 399.4,
-          "p50": 340.4,
-          "median": 340.4,
-          "p75": 539.2,
-          "p90": 632.8,
-          "p95": 645.6,
-          "p99": 685.5,
-          "p999": 685.5
-        },
-        "http.response_time.2xx": {
-          "min": 187,
-          "max": 724,
-          "count": 31,
-          "mean": 399.4,
-          "p50": 340.4,
-          "median": 340.4,
-          "p75": 539.2,
-          "p90": 632.8,
-          "p95": 645.6,
-          "p99": 685.5,
-          "p999": 685.5
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 187,
-          "max": 630,
-          "count": 11,
-          "mean": 374.9,
-          "p50": 368.8,
-          "median": 368.8,
-          "p75": 432.7,
-          "p90": 596,
-          "p95": 596,
-          "p99": 596,
-          "p999": 596
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 191,
-          "max": 644,
-          "count": 10,
-          "mean": 332.5,
-          "p50": 252.2,
-          "median": 252.2,
-          "p75": 301.9,
-          "p90": 608,
-          "p95": 608,
-          "p99": 608,
-          "p999": 608
-        },
-        "vusers.session_length": {
-          "min": 737.7,
-          "max": 1825.5,
-          "count": 10,
-          "mean": 1245.1,
-          "p50": 1249.1,
-          "median": 1249.1,
-          "p75": 1465.9,
-          "p90": 1652.8,
-          "p95": 1652.8,
-          "p99": 1652.8,
-          "p999": 1652.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 323,
-          "max": 724,
-          "count": 10,
-          "mean": 493.1,
-          "p50": 459.5,
-          "median": 459.5,
-          "p75": 596,
-          "p90": 685.5,
-          "p95": 685.5,
-          "p99": 685.5,
-          "p999": 685.5
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 187,
-          "max": 724,
-          "count": 31,
-          "mean": 399.4,
-          "p50": 340.4,
-          "median": 340.4,
-          "p75": 539.2,
-          "p90": 632.8,
-          "p95": 645.6,
-          "p99": 685.5,
-          "p999": 685.5
-        },
-        "http.response_time.2xx": {
-          "min": 187,
-          "max": 724,
-          "count": 31,
-          "mean": 399.4,
-          "p50": 340.4,
-          "median": 340.4,
-          "p75": 539.2,
-          "p90": 632.8,
-          "p95": 645.6,
-          "p99": 685.5,
-          "p999": 685.5
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 187,
-          "max": 630,
-          "count": 11,
-          "mean": 374.9,
-          "p50": 368.8,
-          "median": 368.8,
-          "p75": 432.7,
-          "p90": 596,
-          "p95": 596,
-          "p99": 596,
-          "p999": 596
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 191,
-          "max": 644,
-          "count": 10,
-          "mean": 332.5,
-          "p50": 252.2,
-          "median": 252.2,
-          "p75": 301.9,
-          "p90": 608,
-          "p95": 608,
-          "p99": 608,
-          "p999": 608
-        },
-        "vusers.session_length": {
-          "min": 737.7,
-          "max": 1825.5,
-          "count": 10,
-          "mean": 1245.1,
-          "p50": 1249.1,
-          "median": 1249.1,
-          "p75": 1465.9,
-          "p90": 1652.8,
-          "p95": 1652.8,
-          "p99": 1652.8,
-          "p999": 1652.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 323,
-          "max": 724,
-          "count": 10,
-          "mean": 493.1,
-          "p50": 459.5,
-          "median": 459.5,
-          "p75": 596,
-          "p90": 685.5,
-          "p95": 685.5,
-          "p99": 685.5,
-          "p999": 685.5
-        }
-      }
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 10
+      },
+      "errors": {
+        "ECONNREFUSED": 10
+      },
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 29,
+      "scenariosAvoided": 0
     },
     {
-      "counters": {
-        "http.codes.200": 10,
-        "http.responses": 32,
-        "http.downloaded_bytes": 12085,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 10,
-        "vusers.failed": 0,
-        "vusers.completed": 10,
-        "vusers.created_by_name.Register borrower and create loan flow": 12,
-        "vusers.created": 12,
-        "http.requests": 33,
-        "http.codes.201": 22,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 12,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 9
+      "timestamp": "2026-04-07T10:12:13.741Z",
+      "scenariosCreated": 30,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 7
+      "rps": {
+        "count": 30,
+        "mean": 3
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549770185,
-      "firstHistogramAt": 1775549770185,
-      "lastCounterAt": 1775549779999,
-      "lastHistogramAt": 1775549779999,
-      "firstMetricAt": 1775549770185,
-      "lastMetricAt": 1775549779999,
-      "period": "1775549770000",
-      "summaries": {
-        "http.response_time": {
-          "min": 164,
-          "max": 624,
-          "count": 32,
-          "mean": 256.1,
-          "p50": 223.7,
-          "median": 223.7,
-          "p75": 284.3,
-          "p90": 327.1,
-          "p95": 376.2,
-          "p99": 391.6,
-          "p999": 391.6
-        },
-        "http.response_time.2xx": {
-          "min": 164,
-          "max": 624,
-          "count": 32,
-          "mean": 256.1,
-          "p50": 223.7,
-          "median": 223.7,
-          "p75": 284.3,
-          "p90": 327.1,
-          "p95": 376.2,
-          "p99": 391.6,
-          "p999": 391.6
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 164,
-          "max": 377,
-          "count": 10,
-          "mean": 223.2,
-          "p50": 210.6,
-          "median": 210.6,
-          "p75": 219.2,
-          "p90": 223.7,
-          "p95": 223.7,
-          "p99": 223.7,
-          "p999": 223.7
-        },
-        "vusers.session_length": {
-          "min": 652.5,
-          "max": 1046.6,
-          "count": 10,
-          "mean": 770.8,
-          "p50": 699.4,
-          "median": 699.4,
-          "p75": 757.6,
-          "p90": 907,
-          "p95": 907,
-          "p99": 907,
-          "p999": 907
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 244,
-          "max": 624,
-          "count": 12,
-          "mean": 323.2,
-          "p50": 290.1,
-          "median": 290.1,
-          "p75": 327.1,
-          "p90": 327.1,
-          "p95": 391.6,
-          "p99": 391.6,
-          "p999": 391.6
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 173,
-          "max": 235,
-          "count": 9,
-          "mean": 203.1,
-          "p50": 202.4,
-          "median": 202.4,
-          "p75": 214.9,
-          "p90": 223.7,
-          "p95": 223.7,
-          "p99": 223.7,
-          "p999": 223.7
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 164,
-          "max": 624,
-          "count": 32,
-          "mean": 256.1,
-          "p50": 223.7,
-          "median": 223.7,
-          "p75": 284.3,
-          "p90": 327.1,
-          "p95": 376.2,
-          "p99": 391.6,
-          "p999": 391.6
-        },
-        "http.response_time.2xx": {
-          "min": 164,
-          "max": 624,
-          "count": 32,
-          "mean": 256.1,
-          "p50": 223.7,
-          "median": 223.7,
-          "p75": 284.3,
-          "p90": 327.1,
-          "p95": 376.2,
-          "p99": 391.6,
-          "p999": 391.6
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 164,
-          "max": 377,
-          "count": 10,
-          "mean": 223.2,
-          "p50": 210.6,
-          "median": 210.6,
-          "p75": 219.2,
-          "p90": 223.7,
-          "p95": 223.7,
-          "p99": 223.7,
-          "p999": 223.7
-        },
-        "vusers.session_length": {
-          "min": 652.5,
-          "max": 1046.6,
-          "count": 10,
-          "mean": 770.8,
-          "p50": 699.4,
-          "median": 699.4,
-          "p75": 757.6,
-          "p90": 907,
-          "p95": 907,
-          "p99": 907,
-          "p999": 907
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 244,
-          "max": 624,
-          "count": 12,
-          "mean": 323.2,
-          "p50": 290.1,
-          "median": 290.1,
-          "p75": 327.1,
-          "p90": 327.1,
-          "p95": 391.6,
-          "p99": 391.6,
-          "p999": 391.6
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 173,
-          "max": 235,
-          "count": 9,
-          "mean": 203.1,
-          "p50": 202.4,
-          "median": 202.4,
-          "p75": 214.9,
-          "p90": 223.7,
-          "p95": 223.7,
-          "p99": 223.7,
-          "p999": 223.7
-        }
-      }
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 30
+      },
+      "errors": {
+        "ECONNREFUSED": 30
+      },
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 59,
+      "scenariosAvoided": 0
     },
     {
-      "counters": {
-        "http.codes.201": 62,
-        "http.responses": 92,
-        "http.downloaded_bytes": 36929,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 33,
-        "http.requests": 93,
-        "vusers.created_by_name.Register borrower and create loan flow": 30,
-        "vusers.created": 30,
-        "http.codes.200": 30,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 30,
-        "vusers.failed": 0,
-        "vusers.completed": 30,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 30
+      "timestamp": "2026-04-07T10:12:23.749Z",
+      "scenariosCreated": 30,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 9
+      "rps": {
+        "count": 30,
+        "mean": 3
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549780000,
-      "firstHistogramAt": 1775549780000,
-      "lastCounterAt": 1775549789930,
-      "lastHistogramAt": 1775549789928,
-      "firstMetricAt": 1775549780000,
-      "lastMetricAt": 1775549789930,
-      "period": "1775549780000",
-      "summaries": {
-        "http.response_time": {
-          "min": 171,
-          "max": 679,
-          "count": 92,
-          "mean": 298.9,
-          "p50": 262.5,
-          "median": 262.5,
-          "p75": 333.7,
-          "p90": 450.4,
-          "p95": 550.1,
-          "p99": 671.9,
-          "p999": 671.9
-        },
-        "http.response_time.2xx": {
-          "min": 171,
-          "max": 679,
-          "count": 92,
-          "mean": 298.9,
-          "p50": 262.5,
-          "median": 262.5,
-          "p75": 333.7,
-          "p90": 450.4,
-          "p95": 550.1,
-          "p99": 671.9,
-          "p999": 671.9
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 171,
-          "max": 679,
-          "count": 33,
-          "mean": 279.6,
-          "p50": 219.2,
-          "median": 219.2,
-          "p75": 290.1,
-          "p90": 450.4,
-          "p95": 608,
-          "p99": 671.9,
-          "p999": 671.9
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 180,
-          "max": 614,
-          "count": 30,
-          "mean": 279.4,
-          "p50": 232.8,
-          "median": 232.8,
-          "p75": 314.2,
-          "p90": 354.3,
-          "p95": 539.2,
-          "p99": 539.2,
-          "p999": 539.2
-        },
-        "vusers.session_length": {
-          "min": 596.6,
-          "max": 1773.7,
-          "count": 30,
-          "mean": 918.9,
-          "p50": 837.3,
-          "median": 837.3,
-          "p75": 907,
-          "p90": 1353.1,
-          "p95": 1495.5,
-          "p99": 1556.5,
-          "p999": 1556.5
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 227,
-          "max": 566,
-          "count": 30,
-          "mean": 338.1,
-          "p50": 327.1,
-          "median": 327.1,
-          "p75": 361.5,
-          "p90": 441.5,
-          "p95": 507.8,
-          "p99": 550.1,
-          "p999": 550.1
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 171,
-          "max": 679,
-          "count": 92,
-          "mean": 298.9,
-          "p50": 262.5,
-          "median": 262.5,
-          "p75": 333.7,
-          "p90": 450.4,
-          "p95": 550.1,
-          "p99": 671.9,
-          "p999": 671.9
-        },
-        "http.response_time.2xx": {
-          "min": 171,
-          "max": 679,
-          "count": 92,
-          "mean": 298.9,
-          "p50": 262.5,
-          "median": 262.5,
-          "p75": 333.7,
-          "p90": 450.4,
-          "p95": 550.1,
-          "p99": 671.9,
-          "p999": 671.9
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 171,
-          "max": 679,
-          "count": 33,
-          "mean": 279.6,
-          "p50": 219.2,
-          "median": 219.2,
-          "p75": 290.1,
-          "p90": 450.4,
-          "p95": 608,
-          "p99": 671.9,
-          "p999": 671.9
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 180,
-          "max": 614,
-          "count": 30,
-          "mean": 279.4,
-          "p50": 232.8,
-          "median": 232.8,
-          "p75": 314.2,
-          "p90": 354.3,
-          "p95": 539.2,
-          "p99": 539.2,
-          "p999": 539.2
-        },
-        "vusers.session_length": {
-          "min": 596.6,
-          "max": 1773.7,
-          "count": 30,
-          "mean": 918.9,
-          "p50": 837.3,
-          "median": 837.3,
-          "p75": 907,
-          "p90": 1353.1,
-          "p95": 1495.5,
-          "p99": 1556.5,
-          "p999": 1556.5
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 227,
-          "max": 566,
-          "count": 30,
-          "mean": 338.1,
-          "p50": 327.1,
-          "median": 327.1,
-          "p75": 361.5,
-          "p90": 441.5,
-          "p95": 507.8,
-          "p99": 550.1,
-          "p999": 550.1
-        }
-      }
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 30
+      },
+      "errors": {
+        "ECONNREFUSED": 30
+      },
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 89,
+      "scenariosAvoided": 0
     },
     {
-      "counters": {
-        "http.codes.200": 31,
-        "http.responses": 91,
-        "http.downloaded_bytes": 36061,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 31,
-        "vusers.failed": 0,
-        "vusers.completed": 31,
-        "vusers.created_by_name.Register borrower and create loan flow": 30,
-        "vusers.created": 30,
-        "http.requests": 90,
-        "http.codes.201": 60,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 30,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 30
+      "timestamp": "2026-04-07T10:12:33.761Z",
+      "scenariosCreated": 30,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 9
+      "rps": {
+        "count": 30,
+        "mean": 3
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549790035,
-      "firstHistogramAt": 1775549790035,
-      "lastCounterAt": 1775549799948,
-      "lastHistogramAt": 1775549799948,
-      "firstMetricAt": 1775549790035,
-      "lastMetricAt": 1775549799948,
-      "period": "1775549790000",
-      "summaries": {
-        "http.response_time": {
-          "min": 152,
-          "max": 654,
-          "count": 91,
-          "mean": 286.8,
-          "p50": 242.3,
-          "median": 242.3,
-          "p75": 314.2,
-          "p90": 478.3,
-          "p95": 507.8,
-          "p99": 645.6,
-          "p999": 645.6
-        },
-        "http.response_time.2xx": {
-          "min": 152,
-          "max": 654,
-          "count": 91,
-          "mean": 286.8,
-          "p50": 242.3,
-          "median": 242.3,
-          "p75": 314.2,
-          "p90": 478.3,
-          "p95": 507.8,
-          "p99": 645.6,
-          "p999": 645.6
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 155,
-          "max": 502,
-          "count": 31,
-          "mean": 263,
-          "p50": 206.5,
-          "median": 206.5,
-          "p75": 242.3,
-          "p90": 478.3,
-          "p95": 487.9,
-          "p99": 497.8,
-          "p999": 497.8
-        },
-        "vusers.session_length": {
-          "min": 617.4,
-          "max": 1310.4,
-          "count": 31,
-          "mean": 872.9,
-          "p50": 757.6,
-          "median": 757.6,
-          "p75": 1064.4,
-          "p90": 1176.4,
-          "p95": 1224.4,
-          "p99": 1300.1,
-          "p999": 1300.1
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 219,
-          "max": 434,
-          "count": 30,
-          "mean": 295.6,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 320.6,
-          "p90": 376.2,
-          "p95": 376.2,
-          "p99": 391.6,
-          "p999": 391.6
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 152,
-          "max": 654,
-          "count": 30,
-          "mean": 302.6,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 301.9,
-          "p90": 539.2,
-          "p95": 645.6,
-          "p99": 645.6,
-          "p999": 645.6
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 152,
-          "max": 654,
-          "count": 91,
-          "mean": 286.8,
-          "p50": 242.3,
-          "median": 242.3,
-          "p75": 314.2,
-          "p90": 478.3,
-          "p95": 507.8,
-          "p99": 645.6,
-          "p999": 645.6
-        },
-        "http.response_time.2xx": {
-          "min": 152,
-          "max": 654,
-          "count": 91,
-          "mean": 286.8,
-          "p50": 242.3,
-          "median": 242.3,
-          "p75": 314.2,
-          "p90": 478.3,
-          "p95": 507.8,
-          "p99": 645.6,
-          "p999": 645.6
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 155,
-          "max": 502,
-          "count": 31,
-          "mean": 263,
-          "p50": 206.5,
-          "median": 206.5,
-          "p75": 242.3,
-          "p90": 478.3,
-          "p95": 487.9,
-          "p99": 497.8,
-          "p999": 497.8
-        },
-        "vusers.session_length": {
-          "min": 617.4,
-          "max": 1310.4,
-          "count": 31,
-          "mean": 872.9,
-          "p50": 757.6,
-          "median": 757.6,
-          "p75": 1064.4,
-          "p90": 1176.4,
-          "p95": 1224.4,
-          "p99": 1300.1,
-          "p999": 1300.1
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 219,
-          "max": 434,
-          "count": 30,
-          "mean": 295.6,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 320.6,
-          "p90": 376.2,
-          "p95": 376.2,
-          "p99": 391.6,
-          "p999": 391.6
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 152,
-          "max": 654,
-          "count": 30,
-          "mean": 302.6,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 301.9,
-          "p90": 539.2,
-          "p95": 645.6,
-          "p99": 645.6,
-          "p999": 645.6
-        }
-      }
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 30
+      },
+      "errors": {
+        "ECONNREFUSED": 30
+      },
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 119,
+      "scenariosAvoided": 0
     },
     {
-      "counters": {
-        "vusers.created_by_name.Register borrower and create loan flow": 30,
-        "vusers.created": 30,
-        "http.requests": 90,
-        "http.codes.201": 60,
-        "http.responses": 91,
-        "http.downloaded_bytes": 36061,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 30,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 30,
-        "http.codes.200": 31,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 31,
-        "vusers.failed": 0,
-        "vusers.completed": 31
+      "timestamp": "2026-04-07T10:12:43.743Z",
+      "scenariosCreated": 30,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 9
+      "rps": {
+        "count": 30,
+        "mean": 3.01
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549800014,
-      "firstHistogramAt": 1775549800014,
-      "lastCounterAt": 1775549809991,
-      "lastHistogramAt": 1775549809991,
-      "firstMetricAt": 1775549800014,
-      "lastMetricAt": 1775549809991,
-      "period": "1775549800000",
-      "summaries": {
-        "http.response_time": {
-          "min": 142,
-          "max": 578,
-          "count": 91,
-          "mean": 266.6,
-          "p50": 232.8,
-          "median": 232.8,
-          "p75": 301.9,
-          "p90": 424.2,
-          "p95": 432.7,
-          "p99": 572.6,
-          "p999": 572.6
-        },
-        "http.response_time.2xx": {
-          "min": 142,
-          "max": 578,
-          "count": 91,
-          "mean": 266.6,
-          "p50": 232.8,
-          "median": 232.8,
-          "p75": 301.9,
-          "p90": 424.2,
-          "p95": 432.7,
-          "p99": 572.6,
-          "p999": 572.6
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 223,
-          "max": 556,
-          "count": 30,
-          "mean": 305.3,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 308,
-          "p90": 424.2,
-          "p95": 459.5,
-          "p99": 487.9,
-          "p999": 487.9
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 142,
-          "max": 578,
-          "count": 30,
-          "mean": 237.5,
-          "p50": 206.5,
-          "median": 206.5,
-          "p75": 232.8,
-          "p90": 340.4,
-          "p95": 432.7,
-          "p99": 572.6,
-          "p999": 572.6
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 163,
-          "max": 435,
-          "count": 31,
-          "mean": 257.4,
-          "p50": 214.9,
-          "median": 214.9,
-          "p75": 314.2,
-          "p90": 407.5,
-          "p95": 424.2,
-          "p99": 432.7,
-          "p999": 432.7
-        },
-        "vusers.session_length": {
-          "min": 561.5,
-          "max": 1250.7,
-          "count": 31,
-          "mean": 803.1,
-          "p50": 757.6,
-          "median": 757.6,
-          "p75": 889.1,
-          "p90": 982.6,
-          "p95": 1200.1,
-          "p99": 1224.4,
-          "p999": 1224.4
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 142,
-          "max": 578,
-          "count": 91,
-          "mean": 266.6,
-          "p50": 232.8,
-          "median": 232.8,
-          "p75": 301.9,
-          "p90": 424.2,
-          "p95": 432.7,
-          "p99": 572.6,
-          "p999": 572.6
-        },
-        "http.response_time.2xx": {
-          "min": 142,
-          "max": 578,
-          "count": 91,
-          "mean": 266.6,
-          "p50": 232.8,
-          "median": 232.8,
-          "p75": 301.9,
-          "p90": 424.2,
-          "p95": 432.7,
-          "p99": 572.6,
-          "p999": 572.6
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 223,
-          "max": 556,
-          "count": 30,
-          "mean": 305.3,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 308,
-          "p90": 424.2,
-          "p95": 459.5,
-          "p99": 487.9,
-          "p999": 487.9
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 142,
-          "max": 578,
-          "count": 30,
-          "mean": 237.5,
-          "p50": 206.5,
-          "median": 206.5,
-          "p75": 232.8,
-          "p90": 340.4,
-          "p95": 432.7,
-          "p99": 572.6,
-          "p999": 572.6
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 163,
-          "max": 435,
-          "count": 31,
-          "mean": 257.4,
-          "p50": 214.9,
-          "median": 214.9,
-          "p75": 314.2,
-          "p90": 407.5,
-          "p95": 424.2,
-          "p99": 432.7,
-          "p999": 432.7
-        },
-        "vusers.session_length": {
-          "min": 561.5,
-          "max": 1250.7,
-          "count": 31,
-          "mean": 803.1,
-          "p50": 757.6,
-          "median": 757.6,
-          "p75": 889.1,
-          "p90": 982.6,
-          "p95": 1200.1,
-          "p99": 1224.4,
-          "p999": 1224.4
-        }
-      }
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 30
+      },
+      "errors": {
+        "ECONNREFUSED": 30
+      },
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 149,
+      "scenariosAvoided": 0
     },
     {
-      "counters": {
-        "vusers.created_by_name.Register borrower and create loan flow": 30,
-        "vusers.created": 30,
-        "http.requests": 90,
-        "http.codes.201": 60,
-        "http.responses": 88,
-        "http.downloaded_bytes": 34762,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 30,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 30,
-        "http.codes.200": 28,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 28,
-        "vusers.failed": 0,
-        "vusers.completed": 28
+      "timestamp": "2026-04-07T10:12:53.749Z",
+      "scenariosCreated": 30,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 9
+      "rps": {
+        "count": 30,
+        "mean": 3
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549810077,
-      "firstHistogramAt": 1775549810077,
-      "lastCounterAt": 1775549819930,
-      "lastHistogramAt": 1775549819929,
-      "firstMetricAt": 1775549810077,
-      "lastMetricAt": 1775549819930,
-      "period": "1775549810000",
-      "summaries": {
-        "http.response_time": {
-          "min": 139,
-          "max": 817,
-          "count": 88,
-          "mean": 329.5,
-          "p50": 301.9,
-          "median": 301.9,
-          "p75": 415.8,
-          "p90": 550.1,
-          "p95": 584.2,
-          "p99": 685.5,
-          "p999": 685.5
-        },
-        "http.response_time.2xx": {
-          "min": 139,
-          "max": 817,
-          "count": 88,
-          "mean": 329.5,
-          "p50": 301.9,
-          "median": 301.9,
-          "p75": 415.8,
-          "p90": 550.1,
-          "p95": 584.2,
-          "p99": 685.5,
-          "p999": 685.5
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 229,
-          "max": 679,
-          "count": 30,
-          "mean": 349.1,
-          "p50": 320.6,
-          "median": 320.6,
-          "p75": 383.8,
-          "p90": 497.8,
-          "p95": 561.2,
-          "p99": 620.3,
-          "p999": 620.3
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 154,
-          "max": 817,
-          "count": 30,
-          "mean": 327.6,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 376.2,
-          "p90": 584.2,
-          "p95": 584.2,
-          "p99": 596,
-          "p999": 596
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 139,
-          "max": 597,
-          "count": 28,
-          "mean": 310.7,
-          "p50": 257.3,
-          "median": 257.3,
-          "p75": 424.2,
-          "p90": 441.5,
-          "p95": 507.8,
-          "p99": 539.2,
-          "p999": 539.2
-        },
-        "vusers.session_length": {
-          "min": 560.6,
-          "max": 1627.8,
-          "count": 28,
-          "mean": 1005.2,
-          "p50": 1043.3,
-          "median": 1043.3,
-          "p75": 1130.2,
-          "p90": 1380.5,
-          "p95": 1465.9,
-          "p99": 1556.5,
-          "p999": 1556.5
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 139,
-          "max": 817,
-          "count": 88,
-          "mean": 329.5,
-          "p50": 301.9,
-          "median": 301.9,
-          "p75": 415.8,
-          "p90": 550.1,
-          "p95": 584.2,
-          "p99": 685.5,
-          "p999": 685.5
-        },
-        "http.response_time.2xx": {
-          "min": 139,
-          "max": 817,
-          "count": 88,
-          "mean": 329.5,
-          "p50": 301.9,
-          "median": 301.9,
-          "p75": 415.8,
-          "p90": 550.1,
-          "p95": 584.2,
-          "p99": 685.5,
-          "p999": 685.5
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 229,
-          "max": 679,
-          "count": 30,
-          "mean": 349.1,
-          "p50": 320.6,
-          "median": 320.6,
-          "p75": 383.8,
-          "p90": 497.8,
-          "p95": 561.2,
-          "p99": 620.3,
-          "p999": 620.3
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 154,
-          "max": 817,
-          "count": 30,
-          "mean": 327.6,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 376.2,
-          "p90": 584.2,
-          "p95": 584.2,
-          "p99": 596,
-          "p999": 596
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 139,
-          "max": 597,
-          "count": 28,
-          "mean": 310.7,
-          "p50": 257.3,
-          "median": 257.3,
-          "p75": 424.2,
-          "p90": 441.5,
-          "p95": 507.8,
-          "p99": 539.2,
-          "p999": 539.2
-        },
-        "vusers.session_length": {
-          "min": 560.6,
-          "max": 1627.8,
-          "count": 28,
-          "mean": 1005.2,
-          "p50": 1043.3,
-          "median": 1043.3,
-          "p75": 1130.2,
-          "p90": 1380.5,
-          "p95": 1465.9,
-          "p99": 1556.5,
-          "p999": 1556.5
-        }
-      }
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 30
+      },
+      "errors": {
+        "ECONNREFUSED": 30
+      },
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 179,
+      "scenariosAvoided": 0
     },
     {
-      "counters": {
-        "http.codes.200": 31,
-        "http.responses": 91,
-        "http.downloaded_bytes": 36039,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 31,
-        "vusers.failed": 0,
-        "vusers.completed": 31,
-        "vusers.created_by_name.Register borrower and create loan flow": 30,
-        "vusers.created": 30,
-        "http.requests": 90,
-        "http.codes.201": 60,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 30,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 30
+      "timestamp": "2026-04-07T10:13:03.744Z",
+      "scenariosCreated": 30,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 9
+      "rps": {
+        "count": 30,
+        "mean": 3
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549820066,
-      "firstHistogramAt": 1775549820066,
-      "lastCounterAt": 1775549829972,
-      "lastHistogramAt": 1775549829972,
-      "firstMetricAt": 1775549820066,
-      "lastMetricAt": 1775549829972,
-      "period": "1775549820000",
-      "summaries": {
-        "http.response_time": {
-          "min": 146,
-          "max": 584,
-          "count": 91,
-          "mean": 312.7,
-          "p50": 278.7,
-          "median": 278.7,
-          "p75": 383.8,
-          "p90": 507.8,
-          "p95": 561.2,
-          "p99": 584.2,
-          "p999": 584.2
-        },
-        "http.response_time.2xx": {
-          "min": 146,
-          "max": 584,
-          "count": 91,
-          "mean": 312.7,
-          "p50": 278.7,
-          "median": 278.7,
-          "p75": 383.8,
-          "p90": 507.8,
-          "p95": 561.2,
-          "p99": 584.2,
-          "p999": 584.2
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 175,
-          "max": 584,
-          "count": 31,
-          "mean": 280.7,
-          "p50": 247.2,
-          "median": 247.2,
-          "p75": 295.9,
-          "p90": 468.8,
-          "p95": 468.8,
-          "p99": 478.3,
-          "p999": 478.3
-        },
-        "vusers.session_length": {
-          "min": 637.9,
-          "max": 1547.4,
-          "count": 31,
-          "mean": 938.2,
-          "p50": 820.7,
-          "median": 820.7,
-          "p75": 1107.9,
-          "p90": 1380.5,
-          "p95": 1408.4,
-          "p99": 1465.9,
-          "p999": 1465.9
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 232,
-          "max": 547,
-          "count": 30,
-          "mean": 339.7,
-          "p50": 314.2,
-          "median": 314.2,
-          "p75": 383.8,
-          "p90": 441.5,
-          "p95": 478.3,
-          "p99": 507.8,
-          "p999": 507.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 146,
-          "max": 583,
-          "count": 30,
-          "mean": 318.7,
-          "p50": 228.2,
-          "median": 228.2,
-          "p75": 354.3,
-          "p90": 572.6,
-          "p95": 584.2,
-          "p99": 584.2,
-          "p999": 584.2
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 146,
-          "max": 584,
-          "count": 91,
-          "mean": 312.7,
-          "p50": 278.7,
-          "median": 278.7,
-          "p75": 383.8,
-          "p90": 507.8,
-          "p95": 561.2,
-          "p99": 584.2,
-          "p999": 584.2
-        },
-        "http.response_time.2xx": {
-          "min": 146,
-          "max": 584,
-          "count": 91,
-          "mean": 312.7,
-          "p50": 278.7,
-          "median": 278.7,
-          "p75": 383.8,
-          "p90": 507.8,
-          "p95": 561.2,
-          "p99": 584.2,
-          "p999": 584.2
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 175,
-          "max": 584,
-          "count": 31,
-          "mean": 280.7,
-          "p50": 247.2,
-          "median": 247.2,
-          "p75": 295.9,
-          "p90": 468.8,
-          "p95": 468.8,
-          "p99": 478.3,
-          "p999": 478.3
-        },
-        "vusers.session_length": {
-          "min": 637.9,
-          "max": 1547.4,
-          "count": 31,
-          "mean": 938.2,
-          "p50": 820.7,
-          "median": 820.7,
-          "p75": 1107.9,
-          "p90": 1380.5,
-          "p95": 1408.4,
-          "p99": 1465.9,
-          "p999": 1465.9
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 232,
-          "max": 547,
-          "count": 30,
-          "mean": 339.7,
-          "p50": 314.2,
-          "median": 314.2,
-          "p75": 383.8,
-          "p90": 441.5,
-          "p95": 478.3,
-          "p99": 507.8,
-          "p999": 507.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 146,
-          "max": 583,
-          "count": 30,
-          "mean": 318.7,
-          "p50": 228.2,
-          "median": 228.2,
-          "p75": 354.3,
-          "p90": 572.6,
-          "p95": 584.2,
-          "p99": 584.2,
-          "p999": 584.2
-        }
-      }
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 30
+      },
+      "errors": {
+        "ECONNREFUSED": 30
+      },
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 209,
+      "scenariosAvoided": 0
     },
     {
-      "counters": {
-        "vusers.created_by_name.Register borrower and create loan flow": 32,
-        "vusers.created": 32,
-        "http.requests": 93,
-        "http.codes.201": 61,
-        "http.responses": 90,
-        "http.downloaded_bytes": 35408,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 32,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 29,
-        "http.codes.200": 29,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 29,
-        "vusers.failed": 0,
-        "vusers.completed": 29
+      "timestamp": "2026-04-07T10:13:13.753Z",
+      "scenariosCreated": 50,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 13
+      "rps": {
+        "count": 50,
+        "mean": 5
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549830330,
-      "firstHistogramAt": 1775549830355,
-      "lastCounterAt": 1775549839988,
-      "lastHistogramAt": 1775549839987,
-      "firstMetricAt": 1775549830330,
-      "lastMetricAt": 1775549839988,
-      "period": "1775549830000",
-      "summaries": {
-        "http.response_time": {
-          "min": 167,
-          "max": 1027,
-          "count": 90,
-          "mean": 335.4,
-          "p50": 295.9,
-          "median": 295.9,
-          "p75": 383.8,
-          "p90": 539.2,
-          "p95": 608,
-          "p99": 699.4,
-          "p999": 699.4
-        },
-        "http.response_time.2xx": {
-          "min": 167,
-          "max": 1027,
-          "count": 90,
-          "mean": 335.4,
-          "p50": 295.9,
-          "median": 295.9,
-          "p75": 383.8,
-          "p90": 539.2,
-          "p95": 608,
-          "p99": 699.4,
-          "p999": 699.4
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 257,
-          "max": 1027,
-          "count": 32,
-          "mean": 391.7,
-          "p50": 327.1,
-          "median": 327.1,
-          "p75": 383.8,
-          "p90": 572.6,
-          "p95": 632.8,
-          "p99": 699.4,
-          "p999": 699.4
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 188,
-          "max": 686,
-          "count": 29,
-          "mean": 334.4,
-          "p50": 257.3,
-          "median": 257.3,
-          "p75": 468.8,
-          "p90": 539.2,
-          "p95": 539.2,
-          "p99": 685.5,
-          "p999": 685.5
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 167,
-          "max": 475,
-          "count": 29,
-          "mean": 274.4,
-          "p50": 219.2,
-          "median": 219.2,
-          "p75": 361.5,
-          "p90": 399.5,
-          "p95": 468.8,
-          "p99": 468.8,
-          "p999": 468.8
-        },
-        "vusers.session_length": {
-          "min": 646.9,
-          "max": 1681.8,
-          "count": 29,
-          "mean": 1011.4,
-          "p50": 963.1,
-          "median": 963.1,
-          "p75": 1130.2,
-          "p90": 1556.5,
-          "p95": 1620,
-          "p99": 1686.1,
-          "p999": 1686.1
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 167,
-          "max": 1027,
-          "count": 90,
-          "mean": 335.4,
-          "p50": 295.9,
-          "median": 295.9,
-          "p75": 383.8,
-          "p90": 539.2,
-          "p95": 608,
-          "p99": 699.4,
-          "p999": 699.4
-        },
-        "http.response_time.2xx": {
-          "min": 167,
-          "max": 1027,
-          "count": 90,
-          "mean": 335.4,
-          "p50": 295.9,
-          "median": 295.9,
-          "p75": 383.8,
-          "p90": 539.2,
-          "p95": 608,
-          "p99": 699.4,
-          "p999": 699.4
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 257,
-          "max": 1027,
-          "count": 32,
-          "mean": 391.7,
-          "p50": 327.1,
-          "median": 327.1,
-          "p75": 383.8,
-          "p90": 572.6,
-          "p95": 632.8,
-          "p99": 699.4,
-          "p999": 699.4
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 188,
-          "max": 686,
-          "count": 29,
-          "mean": 334.4,
-          "p50": 257.3,
-          "median": 257.3,
-          "p75": 468.8,
-          "p90": 539.2,
-          "p95": 539.2,
-          "p99": 685.5,
-          "p999": 685.5
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 167,
-          "max": 475,
-          "count": 29,
-          "mean": 274.4,
-          "p50": 219.2,
-          "median": 219.2,
-          "p75": 361.5,
-          "p90": 399.5,
-          "p95": 468.8,
-          "p99": 468.8,
-          "p999": 468.8
-        },
-        "vusers.session_length": {
-          "min": 646.9,
-          "max": 1681.8,
-          "count": 29,
-          "mean": 1011.4,
-          "p50": 963.1,
-          "median": 963.1,
-          "p75": 1130.2,
-          "p90": 1556.5,
-          "p95": 1620,
-          "p99": 1686.1,
-          "p999": 1686.1
-        }
-      }
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 50
+      },
+      "errors": {
+        "ECONNREFUSED": 50
+      },
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 259,
+      "scenariosAvoided": 0
     },
     {
-      "counters": {
-        "vusers.created_by_name.Register borrower and create loan flow": 50,
-        "vusers.created": 50,
-        "http.requests": 151,
-        "http.codes.200": 50,
-        "http.responses": 151,
-        "http.downloaded_bytes": 59803,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 50,
-        "vusers.failed": 0,
-        "vusers.completed": 50,
-        "http.codes.201": 101,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 50,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 51
+      "timestamp": "2026-04-07T10:13:23.746Z",
+      "scenariosCreated": 50,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 15
+      "rps": {
+        "count": 50,
+        "mean": 5.01
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549840124,
-      "firstHistogramAt": 1775549840124,
-      "lastCounterAt": 1775549849943,
-      "lastHistogramAt": 1775549849942,
-      "firstMetricAt": 1775549840124,
-      "lastMetricAt": 1775549849943,
-      "period": "1775549840000",
-      "summaries": {
-        "http.response_time": {
-          "min": 155,
-          "max": 423,
-          "count": 151,
-          "mean": 269,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 308,
-          "p90": 354.3,
-          "p95": 361.5,
-          "p99": 399.5,
-          "p999": 424.2
-        },
-        "http.response_time.2xx": {
-          "min": 155,
-          "max": 423,
-          "count": 151,
-          "mean": 269,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 308,
-          "p90": 354.3,
-          "p95": 361.5,
-          "p99": 399.5,
-          "p999": 424.2
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 170,
-          "max": 381,
-          "count": 50,
-          "mean": 258.5,
-          "p50": 262.5,
-          "median": 262.5,
-          "p75": 290.1,
-          "p90": 308,
-          "p95": 347.3,
-          "p99": 376.2,
-          "p999": 376.2
-        },
-        "vusers.session_length": {
-          "min": 634,
-          "max": 1017.6,
-          "count": 50,
-          "mean": 817.5,
-          "p50": 820.7,
-          "median": 820.7,
-          "p75": 871.5,
-          "p90": 907,
-          "p95": 944,
-          "p99": 963.1,
-          "p999": 963.1
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 244,
-          "max": 423,
-          "count": 50,
-          "mean": 327.2,
-          "p50": 320.6,
-          "median": 320.6,
-          "p75": 347.3,
-          "p90": 368.8,
-          "p95": 399.5,
-          "p99": 424.2,
-          "p999": 424.2
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 155,
-          "max": 337,
-          "count": 51,
-          "mean": 222.1,
-          "p50": 214.9,
-          "median": 214.9,
-          "p75": 242.3,
-          "p90": 267.8,
-          "p95": 290.1,
-          "p99": 301.9,
-          "p999": 301.9
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 155,
-          "max": 423,
-          "count": 151,
-          "mean": 269,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 308,
-          "p90": 354.3,
-          "p95": 361.5,
-          "p99": 399.5,
-          "p999": 424.2
-        },
-        "http.response_time.2xx": {
-          "min": 155,
-          "max": 423,
-          "count": 151,
-          "mean": 269,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 308,
-          "p90": 354.3,
-          "p95": 361.5,
-          "p99": 399.5,
-          "p999": 424.2
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 170,
-          "max": 381,
-          "count": 50,
-          "mean": 258.5,
-          "p50": 262.5,
-          "median": 262.5,
-          "p75": 290.1,
-          "p90": 308,
-          "p95": 347.3,
-          "p99": 376.2,
-          "p999": 376.2
-        },
-        "vusers.session_length": {
-          "min": 634,
-          "max": 1017.6,
-          "count": 50,
-          "mean": 817.5,
-          "p50": 820.7,
-          "median": 820.7,
-          "p75": 871.5,
-          "p90": 907,
-          "p95": 944,
-          "p99": 963.1,
-          "p999": 963.1
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 244,
-          "max": 423,
-          "count": 50,
-          "mean": 327.2,
-          "p50": 320.6,
-          "median": 320.6,
-          "p75": 347.3,
-          "p90": 368.8,
-          "p95": 399.5,
-          "p99": 424.2,
-          "p999": 424.2
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 155,
-          "max": 337,
-          "count": 51,
-          "mean": 222.1,
-          "p50": 214.9,
-          "median": 214.9,
-          "p75": 242.3,
-          "p90": 267.8,
-          "p95": 290.1,
-          "p99": 301.9,
-          "p999": 301.9
-        }
-      }
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 50
+      },
+      "errors": {
+        "ECONNREFUSED": 50
+      },
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 309,
+      "scenariosAvoided": 0
     },
     {
-      "counters": {
-        "http.codes.200": 50,
-        "http.responses": 146,
-        "http.downloaded_bytes": 57759,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 50,
-        "vusers.failed": 0,
-        "vusers.completed": 50,
-        "vusers.created_by_name.Register borrower and create loan flow": 50,
-        "vusers.created": 50,
-        "http.requests": 146,
-        "http.codes.201": 96,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 49,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 47
+      "timestamp": "2026-04-07T10:13:33.743Z",
+      "scenariosCreated": 50,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 15
+      "rps": {
+        "count": 50,
+        "mean": 5.01
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549850179,
-      "firstHistogramAt": 1775549850179,
-      "lastCounterAt": 1775549859866,
-      "lastHistogramAt": 1775549859865,
-      "firstMetricAt": 1775549850179,
-      "lastMetricAt": 1775549859866,
-      "period": "1775549850000",
-      "summaries": {
-        "http.response_time": {
-          "min": 163,
-          "max": 576,
-          "count": 146,
-          "mean": 270.4,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 320.6,
-          "p90": 347.3,
-          "p95": 354.3,
-          "p99": 399.5,
-          "p999": 424.2
-        },
-        "http.response_time.2xx": {
-          "min": 163,
-          "max": 576,
-          "count": 146,
-          "mean": 270.4,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 320.6,
-          "p90": 347.3,
-          "p95": 354.3,
-          "p99": 399.5,
-          "p999": 424.2
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 163,
-          "max": 576,
-          "count": 50,
-          "mean": 255.9,
-          "p50": 232.8,
-          "median": 232.8,
-          "p75": 290.1,
-          "p90": 340.4,
-          "p95": 354.3,
-          "p99": 399.5,
-          "p999": 399.5
-        },
-        "vusers.session_length": {
-          "min": 634.9,
-          "max": 1234.3,
-          "count": 50,
-          "mean": 815.4,
-          "p50": 804.5,
-          "median": 804.5,
-          "p75": 871.5,
-          "p90": 963.1,
-          "p95": 963.1,
-          "p99": 1022.7,
-          "p999": 1022.7
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 228,
-          "max": 422,
-          "count": 49,
-          "mean": 316.3,
-          "p50": 320.6,
-          "median": 320.6,
-          "p75": 340.4,
-          "p90": 354.3,
-          "p95": 361.5,
-          "p99": 376.2,
-          "p999": 376.2
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 165,
-          "max": 403,
-          "count": 47,
-          "mean": 238,
-          "p50": 214.9,
-          "median": 214.9,
-          "p75": 278.7,
-          "p90": 320.6,
-          "p95": 327.1,
-          "p99": 391.6,
-          "p999": 391.6
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 163,
-          "max": 576,
-          "count": 146,
-          "mean": 270.4,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 320.6,
-          "p90": 347.3,
-          "p95": 354.3,
-          "p99": 399.5,
-          "p999": 424.2
-        },
-        "http.response_time.2xx": {
-          "min": 163,
-          "max": 576,
-          "count": 146,
-          "mean": 270.4,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 320.6,
-          "p90": 347.3,
-          "p95": 354.3,
-          "p99": 399.5,
-          "p999": 424.2
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 163,
-          "max": 576,
-          "count": 50,
-          "mean": 255.9,
-          "p50": 232.8,
-          "median": 232.8,
-          "p75": 290.1,
-          "p90": 340.4,
-          "p95": 354.3,
-          "p99": 399.5,
-          "p999": 399.5
-        },
-        "vusers.session_length": {
-          "min": 634.9,
-          "max": 1234.3,
-          "count": 50,
-          "mean": 815.4,
-          "p50": 804.5,
-          "median": 804.5,
-          "p75": 871.5,
-          "p90": 963.1,
-          "p95": 963.1,
-          "p99": 1022.7,
-          "p999": 1022.7
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 228,
-          "max": 422,
-          "count": 49,
-          "mean": 316.3,
-          "p50": 320.6,
-          "median": 320.6,
-          "p75": 340.4,
-          "p90": 354.3,
-          "p95": 361.5,
-          "p99": 376.2,
-          "p999": 376.2
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 165,
-          "max": 403,
-          "count": 47,
-          "mean": 238,
-          "p50": 214.9,
-          "median": 214.9,
-          "p75": 278.7,
-          "p90": 320.6,
-          "p95": 327.1,
-          "p99": 391.6,
-          "p999": 391.6
-        }
-      }
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 50
+      },
+      "errors": {
+        "ECONNREFUSED": 50
+      },
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 359,
+      "scenariosAvoided": 0
     },
     {
-      "counters": {
-        "http.codes.201": 105,
-        "http.responses": 156,
-        "http.downloaded_bytes": 61852,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 54,
-        "http.requests": 155,
-        "vusers.created_by_name.Register borrower and create loan flow": 50,
-        "vusers.created": 50,
-        "http.codes.200": 51,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 51,
-        "vusers.failed": 0,
-        "vusers.completed": 51,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 51
+      "timestamp": "2026-04-07T10:31:17.449Z",
+      "scenariosCreated": 8,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 15
+      "rps": {
+        "count": 7,
+        "mean": 0.01
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549860023,
-      "firstHistogramAt": 1775549860023,
-      "lastCounterAt": 1775549869985,
-      "lastHistogramAt": 1775549869985,
-      "firstMetricAt": 1775549860023,
-      "lastMetricAt": 1775549869985,
-      "period": "1775549860000",
-      "summaries": {
-        "http.response_time": {
-          "min": 152,
-          "max": 452,
-          "count": 156,
-          "mean": 267.8,
-          "p50": 262.5,
-          "median": 262.5,
-          "p75": 314.2,
-          "p90": 361.5,
-          "p95": 399.5,
-          "p99": 432.7,
-          "p999": 432.7
-        },
-        "http.response_time.2xx": {
-          "min": 152,
-          "max": 452,
-          "count": 156,
-          "mean": 267.8,
-          "p50": 262.5,
-          "median": 262.5,
-          "p75": 314.2,
-          "p90": 361.5,
-          "p95": 399.5,
-          "p99": 432.7,
-          "p999": 432.7
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 152,
-          "max": 433,
-          "count": 54,
-          "mean": 241.7,
-          "p50": 214.9,
-          "median": 214.9,
-          "p75": 284.3,
-          "p90": 347.3,
-          "p95": 361.5,
-          "p99": 432.7,
-          "p999": 432.7
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 159,
-          "max": 409,
-          "count": 51,
-          "mean": 254.2,
-          "p50": 228.2,
-          "median": 228.2,
-          "p75": 308,
-          "p90": 361.5,
-          "p95": 391.6,
-          "p99": 391.6,
-          "p999": 391.6
-        },
-        "vusers.session_length": {
-          "min": 596.3,
-          "max": 1253.4,
-          "count": 51,
-          "mean": 824.3,
-          "p50": 757.6,
-          "median": 757.6,
-          "p75": 963.1,
-          "p90": 1064.4,
-          "p95": 1130.2,
-          "p99": 1200.1,
-          "p999": 1200.1
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 235,
-          "max": 452,
-          "count": 51,
-          "mean": 309.1,
-          "p50": 301.9,
-          "median": 301.9,
-          "p75": 333.7,
-          "p90": 376.2,
-          "p95": 407.5,
-          "p99": 432.7,
-          "p999": 432.7
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 152,
-          "max": 452,
-          "count": 156,
-          "mean": 267.8,
-          "p50": 262.5,
-          "median": 262.5,
-          "p75": 314.2,
-          "p90": 361.5,
-          "p95": 399.5,
-          "p99": 432.7,
-          "p999": 432.7
-        },
-        "http.response_time.2xx": {
-          "min": 152,
-          "max": 452,
-          "count": 156,
-          "mean": 267.8,
-          "p50": 262.5,
-          "median": 262.5,
-          "p75": 314.2,
-          "p90": 361.5,
-          "p95": 399.5,
-          "p99": 432.7,
-          "p999": 432.7
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 152,
-          "max": 433,
-          "count": 54,
-          "mean": 241.7,
-          "p50": 214.9,
-          "median": 214.9,
-          "p75": 284.3,
-          "p90": 347.3,
-          "p95": 361.5,
-          "p99": 432.7,
-          "p999": 432.7
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 159,
-          "max": 409,
-          "count": 51,
-          "mean": 254.2,
-          "p50": 228.2,
-          "median": 228.2,
-          "p75": 308,
-          "p90": 361.5,
-          "p95": 391.6,
-          "p99": 391.6,
-          "p999": 391.6
-        },
-        "vusers.session_length": {
-          "min": 596.3,
-          "max": 1253.4,
-          "count": 51,
-          "mean": 824.3,
-          "p50": 757.6,
-          "median": 757.6,
-          "p75": 963.1,
-          "p90": 1064.4,
-          "p95": 1130.2,
-          "p99": 1200.1,
-          "p999": 1200.1
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 235,
-          "max": 452,
-          "count": 51,
-          "mean": 309.1,
-          "p50": 301.9,
-          "median": 301.9,
-          "p75": 333.7,
-          "p90": 376.2,
-          "p95": 407.5,
-          "p99": 432.7,
-          "p999": 432.7
-        }
-      }
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 8
+      },
+      "errors": {
+        "ECONNREFUSED": 6,
+        "ETIMEDOUT": 1
+      },
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 1,
+      "pendingRequests": 366,
+      "scenariosAvoided": 0
     },
     {
-      "counters": {
-        "vusers.created_by_name.Register borrower and create loan flow": 50,
-        "vusers.created": 50,
-        "http.requests": 149,
-        "http.codes.201": 99,
-        "http.responses": 149,
-        "http.downloaded_bytes": 58952,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 50,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 49,
-        "http.codes.200": 50,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 50,
-        "vusers.failed": 0,
-        "vusers.completed": 50
+      "timestamp": "2026-04-07T10:31:18.920Z",
+      "scenariosCreated": 143,
+      "scenariosCompleted": 0,
+      "requestsCompleted": 0,
+      "latency": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "rates": {
-        "http.request_rate": 15
+      "rps": {
+        "count": 144,
+        "mean": 97.96
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549870007,
-      "firstHistogramAt": 1775549870007,
-      "lastCounterAt": 1775549879940,
-      "lastHistogramAt": 1775549879939,
-      "firstMetricAt": 1775549870007,
-      "lastMetricAt": 1775549879940,
-      "period": "1775549870000",
-      "summaries": {
-        "http.response_time": {
-          "min": 167,
-          "max": 474,
-          "count": 149,
-          "mean": 248.5,
-          "p50": 232.8,
-          "median": 232.8,
-          "p75": 290.1,
-          "p90": 327.1,
-          "p95": 354.3,
-          "p99": 407.5,
-          "p999": 415.8
-        },
-        "http.response_time.2xx": {
-          "min": 167,
-          "max": 474,
-          "count": 149,
-          "mean": 248.5,
-          "p50": 232.8,
-          "median": 232.8,
-          "p75": 290.1,
-          "p90": 327.1,
-          "p95": 354.3,
-          "p99": 407.5,
-          "p999": 415.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 222,
-          "max": 474,
-          "count": 50,
-          "mean": 301.1,
-          "p50": 295.9,
-          "median": 295.9,
-          "p75": 327.1,
-          "p90": 354.3,
-          "p95": 354.3,
-          "p99": 407.5,
-          "p999": 407.5
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 168,
-          "max": 395,
-          "count": 49,
-          "mean": 217.9,
-          "p50": 210.6,
-          "median": 210.6,
-          "p75": 237.5,
-          "p90": 247.2,
-          "p95": 267.8,
-          "p99": 301.9,
-          "p999": 301.9
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 167,
-          "max": 416,
-          "count": 50,
-          "mean": 225.8,
-          "p50": 210.6,
-          "median": 210.6,
-          "p75": 237.5,
-          "p90": 284.3,
-          "p95": 314.2,
-          "p99": 399.5,
-          "p999": 399.5
-        },
-        "vusers.session_length": {
-          "min": 590.1,
-          "max": 987.7,
-          "count": 50,
-          "mean": 753.8,
-          "p50": 742.6,
-          "median": 742.6,
-          "p75": 772.9,
-          "p90": 925.4,
-          "p95": 944,
-          "p99": 982.6,
-          "p999": 982.6
-        }
+      "scenarioDuration": {
+        "min": null,
+        "max": null,
+        "median": null,
+        "p95": null,
+        "p99": null
       },
-      "histograms": {
-        "http.response_time": {
-          "min": 167,
-          "max": 474,
-          "count": 149,
-          "mean": 248.5,
-          "p50": 232.8,
-          "median": 232.8,
-          "p75": 290.1,
-          "p90": 327.1,
-          "p95": 354.3,
-          "p99": 407.5,
-          "p999": 415.8
-        },
-        "http.response_time.2xx": {
-          "min": 167,
-          "max": 474,
-          "count": 149,
-          "mean": 248.5,
-          "p50": 232.8,
-          "median": 232.8,
-          "p75": 290.1,
-          "p90": 327.1,
-          "p95": 354.3,
-          "p99": 407.5,
-          "p999": 415.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 222,
-          "max": 474,
-          "count": 50,
-          "mean": 301.1,
-          "p50": 295.9,
-          "median": 295.9,
-          "p75": 327.1,
-          "p90": 354.3,
-          "p95": 354.3,
-          "p99": 407.5,
-          "p999": 407.5
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 168,
-          "max": 395,
-          "count": 49,
-          "mean": 217.9,
-          "p50": 210.6,
-          "median": 210.6,
-          "p75": 237.5,
-          "p90": 247.2,
-          "p95": 267.8,
-          "p99": 301.9,
-          "p999": 301.9
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 167,
-          "max": 416,
-          "count": 50,
-          "mean": 225.8,
-          "p50": 210.6,
-          "median": 210.6,
-          "p75": 237.5,
-          "p90": 284.3,
-          "p95": 314.2,
-          "p99": 399.5,
-          "p999": 399.5
-        },
-        "vusers.session_length": {
-          "min": 590.1,
-          "max": 987.7,
-          "count": 50,
-          "mean": 753.8,
-          "p50": 742.6,
-          "median": 742.6,
-          "p75": 772.9,
-          "p90": 925.4,
-          "p95": 944,
-          "p99": 982.6,
-          "p999": 982.6
-        }
-      }
-    },
-    {
-      "counters": {
-        "vusers.created_by_name.Register borrower and create loan flow": 50,
-        "vusers.created": 50,
-        "http.requests": 148,
-        "http.codes.201": 98,
-        "http.responses": 147,
-        "http.downloaded_bytes": 58085,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 50,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 48,
-        "http.codes.200": 49,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 49,
-        "vusers.failed": 0,
-        "vusers.completed": 49
+      "scenarioCounts": {
+        "Register borrower and create loan flow": 143
       },
-      "rates": {
-        "http.request_rate": 15
+      "errors": {
+        "ECONNREFUSED": 144
       },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549880085,
-      "firstHistogramAt": 1775549880085,
-      "lastCounterAt": 1775549889924,
-      "lastHistogramAt": 1775549889923,
-      "firstMetricAt": 1775549880085,
-      "lastMetricAt": 1775549889924,
-      "period": "1775549880000",
-      "summaries": {
-        "http.response_time": {
-          "min": 150,
-          "max": 420,
-          "count": 147,
-          "mean": 245.4,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 278.7,
-          "p90": 327.1,
-          "p95": 347.3,
-          "p99": 391.6,
-          "p999": 415.8
-        },
-        "http.response_time.2xx": {
-          "min": 150,
-          "max": 420,
-          "count": 147,
-          "mean": 245.4,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 278.7,
-          "p90": 327.1,
-          "p95": 347.3,
-          "p99": 391.6,
-          "p999": 415.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 229,
-          "max": 420,
-          "count": 50,
-          "mean": 299.3,
-          "p50": 284.3,
-          "median": 284.3,
-          "p75": 327.1,
-          "p90": 347.3,
-          "p95": 383.8,
-          "p99": 415.8,
-          "p999": 415.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 150,
-          "max": 283,
-          "count": 48,
-          "mean": 213.4,
-          "p50": 206.5,
-          "median": 206.5,
-          "p75": 232.8,
-          "p90": 247.2,
-          "p95": 252.2,
-          "p99": 267.8,
-          "p999": 267.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 161,
-          "max": 344,
-          "count": 49,
-          "mean": 221.8,
-          "p50": 210.6,
-          "median": 210.6,
-          "p75": 242.3,
-          "p90": 295.9,
-          "p95": 308,
-          "p99": 320.6,
-          "p999": 320.6
-        },
-        "vusers.session_length": {
-          "min": 598.1,
-          "max": 954.8,
-          "count": 49,
-          "mean": 737,
-          "p50": 727.9,
-          "median": 727.9,
-          "p75": 772.9,
-          "p90": 837.3,
-          "p95": 871.5,
-          "p99": 944,
-          "p999": 944
-        }
-      },
-      "histograms": {
-        "http.response_time": {
-          "min": 150,
-          "max": 420,
-          "count": 147,
-          "mean": 245.4,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 278.7,
-          "p90": 327.1,
-          "p95": 347.3,
-          "p99": 391.6,
-          "p999": 415.8
-        },
-        "http.response_time.2xx": {
-          "min": 150,
-          "max": 420,
-          "count": 147,
-          "mean": 245.4,
-          "p50": 237.5,
-          "median": 237.5,
-          "p75": 278.7,
-          "p90": 327.1,
-          "p95": 347.3,
-          "p99": 391.6,
-          "p999": 415.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 229,
-          "max": 420,
-          "count": 50,
-          "mean": 299.3,
-          "p50": 284.3,
-          "median": 284.3,
-          "p75": 327.1,
-          "p90": 347.3,
-          "p95": 383.8,
-          "p99": 415.8,
-          "p999": 415.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 150,
-          "max": 283,
-          "count": 48,
-          "mean": 213.4,
-          "p50": 206.5,
-          "median": 206.5,
-          "p75": 232.8,
-          "p90": 247.2,
-          "p95": 252.2,
-          "p99": 267.8,
-          "p999": 267.8
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 161,
-          "max": 344,
-          "count": 49,
-          "mean": 221.8,
-          "p50": 210.6,
-          "median": 210.6,
-          "p75": 242.3,
-          "p90": 295.9,
-          "p95": 308,
-          "p99": 320.6,
-          "p999": 320.6
-        },
-        "vusers.session_length": {
-          "min": 598.1,
-          "max": 954.8,
-          "count": 49,
-          "mean": 737,
-          "p50": 727.9,
-          "median": 727.9,
-          "p75": 772.9,
-          "p90": 837.3,
-          "p95": 871.5,
-          "p99": 944,
-          "p999": 944
-        }
-      }
-    },
-    {
-      "counters": {
-        "http.codes.200": 50,
-        "http.responses": 144,
-        "http.downloaded_bytes": 57325,
-        "plugins.metrics-by-endpoint./api/loans/me.codes.200": 50,
-        "vusers.failed": 0,
-        "vusers.completed": 50,
-        "vusers.created_by_name.Register borrower and create loan flow": 45,
-        "vusers.created": 45,
-        "http.requests": 139,
-        "http.codes.201": 94,
-        "plugins.metrics-by-endpoint./api/auth/register.codes.201": 45,
-        "plugins.metrics-by-endpoint./api/loans.codes.201": 49
-      },
-      "rates": {
-        "http.request_rate": 15
-      },
-      "http.request_rate": null,
-      "firstCounterAt": 1775549890019,
-      "firstHistogramAt": 1775549890019,
-      "lastCounterAt": 1775549899521,
-      "lastHistogramAt": 1775549899521,
-      "firstMetricAt": 1775549890019,
-      "lastMetricAt": 1775549899521,
-      "period": "1775549890000",
-      "summaries": {
-        "http.response_time": {
-          "min": 139,
-          "max": 545,
-          "count": 144,
-          "mean": 229.3,
-          "p50": 210.6,
-          "median": 210.6,
-          "p75": 262.5,
-          "p90": 308,
-          "p95": 340.4,
-          "p99": 399.5,
-          "p999": 487.9
-        },
-        "http.response_time.2xx": {
-          "min": 139,
-          "max": 545,
-          "count": 144,
-          "mean": 229.3,
-          "p50": 210.6,
-          "median": 210.6,
-          "p75": 262.5,
-          "p90": 308,
-          "p95": 340.4,
-          "p99": 399.5,
-          "p999": 487.9
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 139,
-          "max": 486,
-          "count": 50,
-          "mean": 211,
-          "p50": 194.4,
-          "median": 194.4,
-          "p75": 210.6,
-          "p90": 314.2,
-          "p95": 354.3,
-          "p99": 399.5,
-          "p999": 399.5
-        },
-        "vusers.session_length": {
-          "min": 547.2,
-          "max": 993.1,
-          "count": 50,
-          "mean": 707,
-          "p50": 685.5,
-          "median": 685.5,
-          "p75": 757.6,
-          "p90": 871.5,
-          "p95": 889.1,
-          "p99": 925.4,
-          "p999": 925.4
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 221,
-          "max": 348,
-          "count": 45,
-          "mean": 274.4,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 295.9,
-          "p90": 320.6,
-          "p95": 327.1,
-          "p99": 340.4,
-          "p999": 340.4
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 153,
-          "max": 545,
-          "count": 49,
-          "mean": 206.6,
-          "p50": 198.4,
-          "median": 198.4,
-          "p75": 210.6,
-          "p90": 232.8,
-          "p95": 252.2,
-          "p99": 361.5,
-          "p999": 361.5
-        }
-      },
-      "histograms": {
-        "http.response_time": {
-          "min": 139,
-          "max": 545,
-          "count": 144,
-          "mean": 229.3,
-          "p50": 210.6,
-          "median": 210.6,
-          "p75": 262.5,
-          "p90": 308,
-          "p95": 340.4,
-          "p99": 399.5,
-          "p999": 487.9
-        },
-        "http.response_time.2xx": {
-          "min": 139,
-          "max": 545,
-          "count": 144,
-          "mean": 229.3,
-          "p50": 210.6,
-          "median": 210.6,
-          "p75": 262.5,
-          "p90": 308,
-          "p95": 340.4,
-          "p99": 399.5,
-          "p999": 487.9
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans/me": {
-          "min": 139,
-          "max": 486,
-          "count": 50,
-          "mean": 211,
-          "p50": 194.4,
-          "median": 194.4,
-          "p75": 210.6,
-          "p90": 314.2,
-          "p95": 354.3,
-          "p99": 399.5,
-          "p999": 399.5
-        },
-        "vusers.session_length": {
-          "min": 547.2,
-          "max": 993.1,
-          "count": 50,
-          "mean": 707,
-          "p50": 685.5,
-          "median": 685.5,
-          "p75": 757.6,
-          "p90": 871.5,
-          "p95": 889.1,
-          "p99": 925.4,
-          "p999": 925.4
-        },
-        "plugins.metrics-by-endpoint.response_time./api/auth/register": {
-          "min": 221,
-          "max": 348,
-          "count": 45,
-          "mean": 274.4,
-          "p50": 273.2,
-          "median": 273.2,
-          "p75": 295.9,
-          "p90": 320.6,
-          "p95": 327.1,
-          "p99": 340.4,
-          "p999": 340.4
-        },
-        "plugins.metrics-by-endpoint.response_time./api/loans": {
-          "min": 153,
-          "max": 545,
-          "count": 49,
-          "mean": 206.6,
-          "p50": 198.4,
-          "median": 198.4,
-          "p75": 210.6,
-          "p90": 232.8,
-          "p95": 252.2,
-          "p99": 361.5,
-          "p999": 361.5
-        }
-      }
+      "codes": {},
+      "matches": 0,
+      "latencies": [],
+      "customStats": {},
+      "counters": {},
+      "concurrency": 0,
+      "pendingRequests": 510,
+      "scenariosAvoided": 0
     }
   ]
 }
