@@ -19,24 +19,21 @@ const allowedOrigins = [
 ];
 
 const corsOptions = {
-  origin: function (origin, callback) {
-    // allow requests with no origin like Postman/mobile apps
+  origin(origin, callback) {
     if (!origin) return callback(null, true);
-
-    if (allowedOrigins.includes(origin)) {
-      return callback(null, true);
-    }
-
-    return callback(new Error(`CORS not allowed for origin: ${origin}`));
+    if (allowedOrigins.includes(origin)) return callback(null, true);
+    return callback(null, false);
   },
   methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"],
   credentials: true,
+  optionsSuccessStatus: 204,
 };
 
-app.use(helmet());
 app.use(cors(corsOptions));
-app.options(/.*/, cors(corsOptions)); // handle preflight properly
+app.options(/.*/, cors(corsOptions));
+
+app.use(helmet());
 app.use(express.json());
 app.use(morgan("dev"));
 
