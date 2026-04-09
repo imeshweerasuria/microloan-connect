@@ -1,6 +1,6 @@
-Micro-Loan Connect
+# Micro-Loan Connect
 
-Project Overview
+## Project Overview
 
 Micro-Loan Connect is a peer-to-peer microloan platform developed to support financial inclusion for underserved communities. The system connects borrowers who need small-scale loans with lenders who are willing to fund approved requests, while administrators oversee approvals, repayments, and platform monitoring.
 
@@ -8,9 +8,9 @@ The platform supports the full micro-lending lifecycle, including user registrat
 
 This project was developed for the Application Framework module and demonstrates full-stack development using React, Node.js, Express, MongoDB, role-based access control, and external service integration.
 
+---
 
-Domain / Problem Statement
-
+## Domain / Problem Statement
 
 Many individuals and small business owners in underserved communities struggle to access formal financial services. Traditional lending systems often require collateral, complex documentation, and lengthy approval procedures, making them difficult to access for low-income borrowers and micro-entrepreneurs.
 
@@ -18,256 +18,286 @@ Micro-Loan Connect addresses this problem by providing a web-based platform wher
 
 The system creates a structured and accessible environment for digital micro-lending and repayment management.
 
+---
 
-SDG Alignment
+## SDG Alignment
 
-This project aligns with United Nations Sustainable Development Goal 1: No Poverty.
+This project aligns with **United Nations Sustainable Development Goal 1: No Poverty**.
 
 Micro-Loan Connect supports this goal by:
 
-improving access to finance for underserved borrowers
-enabling small business growth through micro-loans
-encouraging community-based peer-to-peer lending
-promoting financial accountability through transparent repayments
-supporting economic empowerment through accessible digital financial services
+- improving access to finance for underserved borrowers
+- enabling small business growth through micro-loans
+- encouraging community-based peer-to-peer lending
+- promoting financial accountability through transparent repayments
+- supporting economic empowerment through accessible digital financial services
 
 The borrower profile, business purpose, community information, and impact plans are all designed to reflect how financial access contributes to sustainable livelihoods and poverty reduction.
 
-Tech Stack
+---
 
-Frontend
+## Tech Stack
 
-React
-React Router DOM
-Axios
-Vite
+### Frontend
 
-Backend
+- React
+- React Router DOM
+- Axios
+- Vite
 
-Node.js
-Express.js
-MongoDB
-Mongoose
-Joi
-JWT
-bcrypt
-helmet
-cors
-morgan
+### Backend
 
-Third-Party Integrations
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- Joi
+- JWT
+- bcrypt
+- helmet
+- cors
+- morgan
 
-Currency API for foreign exchange conversion
-NotifyLK for SMS notifications
-Stripe for online repayment processing
-OpenStreetMap Nominatim for address-based community detection
+### Third-Party Integrations
 
-Testing Tools
+- Currency API for foreign exchange conversion
+- NotifyLK for SMS notifications
+- Stripe for online repayment processing
+- OpenStreetMap Nominatim for address-based community detection
 
-Jest
-Supertest
-mongodb-memory-server
-Architecture Overview
+### Testing Tools
+
+- Jest
+- Supertest
+- mongodb-memory-server
+- Artillery
+
+---
+
+## Architecture Overview
 
 The system follows a layered architecture in the backend and a page-based component architecture in the frontend.
 
-Backend Layers
+### Backend Layers
 
-Routes handle endpoint definitions and attach middleware
-Middlewares handle authentication, authorization, validation, and error processing
-Controllers receive requests and delegate work to services
-Services contain business logic and third-party API integrations
-Repositories perform database access operations
-Models define MongoDB schemas
-Utils provide reusable helpers such as JWT generation and async wrappers
+- **Routes** handle endpoint definitions and attach middleware
+- **Middlewares** handle authentication, authorization, validation, and error processing
+- **Controllers** receive requests and delegate work to services
+- **Services** contain business logic and third-party API integrations
+- **Repositories** perform database access operations
+- **Models** define MongoDB schemas
+- **Utils** provide reusable helpers such as JWT generation and async wrappers
 
-Frontend Structure
+### Frontend Structure
 
-Pages manage major UI flows for each user role
-Components provide reusable functionality such as Navbar and ProtectedRoute
-Context manages authentication state
-API layer provides shared Axios configuration and request handling
+- **Pages** manage major UI flows for each user role
+- **Components** provide reusable functionality such as `Navbar` and `ProtectedRoute`
+- **Context** manages authentication state
+- **API layer** provides shared Axios configuration and request handling
 
-System Flow
+---
 
-Users register or log in.
-JWT is issued and stored for authentication.
-Borrowers create their profile and submit loan requests.
-Admin reviews submitted loans and approves or rejects them.
-Lenders browse approved loans and fund them.
-Admin creates repayment schedule entries.
-Borrowers make repayments manually or through Stripe.
-Analytics and transaction records reflect platform activity.
-Team Member Contributions
+## System Flow
 
-Adheesha — Transactions Ledger, FX Conversion, Core Integration
-implemented the transactions ledger flow
-developed lender funding transaction creation
-integrated funding transaction records with loan funding progress
-implemented foreign exchange conversion support in transaction processing
-developed the FX Converter feature
-handled transaction summary and lender-side transaction display
-contributed to shared frontend/backend integration and navigation support
+1. Users register or log in.
+2. JWT is issued and stored for authentication.
+3. Borrowers create their profile and submit loan requests.
+4. Admin reviews submitted loans and approves or rejects them.
+5. Lenders browse approved loans and fund them.
+6. Admin creates repayment schedule entries.
+7. Borrowers make repayments manually or through Stripe.
+8. Analytics and transaction records reflect platform activity.
 
-Sachini — Loans, Admin Moderation, NotifyLK Integration
-implemented loan request creation, update, delete, and submission
-developed the Borrower Dashboard functionality
-implemented admin-side loan approval and rejection workflow
-integrated NotifyLK SMS notifications into loan approval and rejection flow
-connected approval/rejection results with admin UI feedback
-contributed to shared authentication and integration support
+---
 
-Vitharka — Borrower Profiles, Address Detection, Validation
-implemented borrower profile creation, retrieval, update, and deletion
-designed the borrower profile frontend
-added field-level validation and phone number validation
-integrated address-based community detection using Nominatim
-displayed detected location and community preview in the UI
-handled borrower verification visibility and profile completeness flow
+## Team Member Contributions
 
-Avindya — Repayments, Stripe Integration
-implemented repayment schedule creation and management
-developed borrower repayment view and admin repayment controls
-implemented manual repayment functionality
-integrated Stripe checkout session creation
-implemented Stripe payment confirmation flow
-added repayment history, repayment updates, and status handling
-contributed to repayment UI and backend repayment business logic
-Shared Contribution
+### Adheesha — Transactions Ledger, FX Conversion, Core Integration
+
+- implemented the transactions ledger flow
+- developed lender funding transaction creation
+- integrated funding transaction records with loan funding progress
+- implemented foreign exchange conversion support in transaction processing
+- developed the FX Converter feature
+- handled transaction summary and lender-side transaction display
+- contributed to shared frontend/backend integration and navigation support
+
+### Sachini — Loans, Admin Moderation, NotifyLK Integration
+
+- implemented loan request creation, update, delete, and submission
+- developed the Borrower Dashboard functionality
+- implemented admin-side loan approval and rejection workflow
+- integrated NotifyLK SMS notifications into loan approval and rejection flow
+- connected approval/rejection results with admin UI feedback
+- contributed to shared authentication and integration support
+
+### Vitharka — Borrower Profiles, Address Detection, Validation
+
+- implemented borrower profile creation, retrieval, update, and deletion
+- designed the borrower profile frontend
+- added field-level validation and phone number validation
+- integrated address-based community detection using Nominatim
+- displayed detected location and community preview in the UI
+- handled borrower verification visibility and profile completeness flow
+
+### Avindya — Repayments, Stripe Integration
+
+- implemented repayment schedule creation and management
+- developed borrower repayment view and admin repayment controls
+- implemented manual repayment functionality
+- integrated Stripe checkout session creation
+- implemented Stripe payment confirmation flow
+- added repayment history, repayment updates, and status handling
+- contributed to repayment UI and backend repayment business logic
+
+### Shared Contribution
 
 All members contributed to:
 
-authentication flow integration
-frontend and backend integration
-debugging and issue fixing
-testing and demonstration preparation
-deployment preparation
-documentation preparation
+- authentication flow integration
+- frontend and backend integration
+- debugging and issue fixing
+- testing and demonstration preparation
+- deployment preparation
+- documentation preparation
 
-Features by Module
+---
 
-Authentication Module
+## Features by Module
 
-register borrower and lender accounts
-login using JWT-based authentication
-restore session using authenticated user lookup
-role-based protected routes
-logout functionality
-redirect users to correct dashboards based on role
+### Authentication Module
 
-Borrower Profile Module
+- register borrower and lender accounts
+- login using JWT-based authentication
+- restore session using authenticated user lookup
+- role-based protected routes
+- logout functionality
+- redirect users to correct dashboards based on role
 
-create borrower profile
-update borrower profile
-delete borrower profile
-view own borrower profile
-display verification status
-auto-detect community from address
-validate phone number and required fields
-capture financial growth and impact plan
+### Borrower Profile Module
 
-Loans Module
+- create borrower profile
+- update borrower profile
+- delete borrower profile
+- view own borrower profile
+- display verification status
+- auto-detect community from address
+- validate phone number and required fields
+- capture financial growth and impact plan
 
-create draft loan request
-edit loan request
-delete draft loan request
-submit loan for admin review
-browse loans as lender or admin
-approve submitted loans
-reject submitted loans
-search and filter loans in admin interface
+### Loans Module
 
-Transactions Ledger Module
+- create draft loan request
+- edit loan request
+- delete draft loan request
+- submit loan for admin review
+- browse loans as lender or admin
+- approve submitted loans
+- reject submitted loans
+- search and filter loans in admin interface
 
-create funding transaction
-allow lender funding for approved loans
-display personal transaction history
-provide analytics summary for admin
-display converted FX values during funding
-update funded amount on loans automatically
-Repayment Module
-create repayment schedule entries
-update repayment items
-delete repayment items
-list repayments by loan
-allow manual repayments
-allow Stripe-based repayments
-track repayment history and status
+### Transactions Ledger Module
 
-Analytics Module
+- create funding transaction
+- allow lender funding for approved loans
+- display personal transaction history
+- provide analytics summary for admin
+- display converted FX values during funding
+- update funded amount on loans automatically
 
-total funding amount
-total repayment amount
-total transaction count
-loan category breakdown
-loan status breakdown
-funding progress view
-financial inclusion impact summary
-FX Converter Module
-convert currency amounts
-show live exchange rate
-show conversion date
-allow multiple currency inputs
-support quick conversion references
-Home / Landing Page
-landing page introducing the platform
-borrower and lender entry points
-impact-oriented statistics section
-financial inclusion messaging
-modern styled homepage with role-based navigation
+### Repayment Module
 
-Third-Party Integrations
+- create repayment schedule entries
+- update repayment items
+- delete repayment items
+- list repayments by loan
+- allow manual repayments
+- allow Stripe-based repayments
+- track repayment history and status
 
-Currency API
+### Analytics Module
+
+- total funding amount
+- total repayment amount
+- total transaction count
+- loan category breakdown
+- loan status breakdown
+- funding progress view
+- financial inclusion impact summary
+
+### FX Converter Module
+
+- convert currency amounts
+- show live exchange rate
+- show conversion date
+- allow multiple currency inputs
+- support quick conversion references
+
+### Home / Landing Page
+
+- landing page introducing the platform
+- borrower and lender entry points
+- impact-oriented statistics section
+- financial inclusion messaging
+- modern styled homepage with role-based navigation
+
+---
+
+## Third-Party Integrations
+
+### Currency API
 
 Used for:
 
-FX conversion during lender funding transactions
-standalone currency converter feature
+- FX conversion during lender funding transactions
+- standalone currency converter feature
 
 Returned data includes:
 
-exchange rate
-conversion date
-converted amount
+- exchange rate
+- conversion date
+- converted amount
 
-NotifyLK
+### NotifyLK
 
 Used for:
 
-SMS notification when a loan is approved
-SMS notification when a loan is rejected
+- SMS notification when a loan is approved
+- SMS notification when a loan is rejected
 
 Phone numbers are normalized before sending messages.
 
-Stripe
+### Stripe
 
 Used for:
 
-borrower online repayments through Stripe Checkout
-checkout session creation
-successful payment confirmation and repayment update
+- borrower online repayments through Stripe Checkout
+- checkout session creation
+- successful payment confirmation and repayment update
 
-OpenStreetMap Nominatim
+### OpenStreetMap Nominatim
 
 Used for:
 
-community detection from borrower address
-address-based profile assistance in borrower onboarding
+- community detection from borrower address
+- address-based profile assistance in borrower onboarding
 
-Local Setup Instructions
+---
 
-Prerequisites
+## Local Setup Instructions
 
-Node.js
-npm
-MongoDB
-Git
+### Prerequisites
 
-Backend Setup
+- Node.js
+- npm
+- MongoDB
+- Git
 
-Open a terminal in the backend folder and run:
+### Backend Setup
 
+Open a terminal in the `backend` folder and run:
+
+```bash
 npm install
 npm run dev
 
@@ -282,10 +312,9 @@ http://localhost:8080/api/health
 Expected response:
 
 { "status": "ok" }
-
 Frontend Setup
 
-Open a terminal in the frontend folder and run:
+Open a terminal in the frontend/frontend folder and run:
 
 npm install
 npm run dev
@@ -299,21 +328,22 @@ Environment Variables
 Backend .env
 
 PORT=8080
-MONGO_URI=mongodb+srv://microloan_user:9876543210@cluster0.qudfyvp.mongodb.net/micro_loan_connect?retryWrites=true&w=majority
+MONGO_URI=your_mongodb_connection_string
+TEST_MONGO_URI=your_test_mongodb_connection_string
 
-JWT_SECRET=super_secret_key_123
-EXCHANGE_API_KEY=cur_live_VF3MMiwQqEjSMBorr5uy967JKNwEc9yKUF9LPTF6
+JWT_SECRET=your_jwt_secret
+EXCHANGE_API_KEY=your_currency_api_key
 EXCHANGE_API_BASE_URL=https://api.currencyapi.com/v3/latest
 
-NOTIFY_LK_USER_ID=31413
-NOTIFY_LK_API_KEY=kxGVxha7QZmkBLQT6MoS
+NOTIFY_LK_USER_ID=your_notifylk_user_id
+NOTIFY_LK_API_KEY=your_notifylk_api_key
 NOTIFY_LK_SENDER_ID=NotifyDEMO
+NOTIFYLK_BASE_URL=https://app.notify.lk/api/v1/send
 
-STRIPE_SECRET_KEY=your_stripe_secret_key_here
-
-
+STRIPE_SECRET_KEY=your_stripe_secret_key
+FRONTEND_BASE_URL=http://localhost:5173
+NOMINATIM_BASE_URL=https://nominatim.openstreetmap.org
 Frontend .env
-
 VITE_API_BASE_URL=http://localhost:8080/api
 
 Authentication and Roles
@@ -326,6 +356,7 @@ create and manage borrower profile
 create and submit loan requests
 view repayments
 make repayments manually or via Stripe
+
 Lender
 
 A lender can:
@@ -373,10 +404,8 @@ Admin Routes
 API Endpoint Documentation
 
 Base URL
-
 http://localhost:8080/api
 Authentication Endpoints
-
 POST /auth/register
 
 Registers a new user.
@@ -782,10 +811,7 @@ Micro-Loan Connect is prepared for cloud deployment with separate frontend and b
 
 Backend Deployment
 
-The backend can be deployed on a Node.js-compatible hosting platform such as:
-
-Render
-Railway
+The backend is deployed on Render.
 
 The backend deployment requires:
 
@@ -796,36 +822,40 @@ frontend base URL
 secure production environment variable configuration
 Frontend Deployment
 
-The frontend can be deployed on a static hosting platform such as:
-
-Vercel
-Netlify
+The frontend is deployed on Vercel.
 
 The frontend deployment requires:
 
 Vite production build
 backend API base URL configured through environment variables
+Vercel SPA route rewrite support for React Router
+
 Production Environment Variables
+
 Backend
+
 PORT
 MONGO_URI
 JWT_SECRET
 EXCHANGE_API_KEY
 EXCHANGE_API_BASE_URL
-NOTIFYLK_USER_ID
-NOTIFYLK_API_KEY
-NOTIFYLK_SENDER_ID
+NOTIFY_LK_USER_ID
+NOTIFY_LK_API_KEY
+NOTIFY_LK_SENDER_ID
 NOTIFYLK_BASE_URL
 STRIPE_SECRET_KEY
 FRONTEND_BASE_URL
 NOMINATIM_BASE_URL
+
 Frontend
+
 VITE_API_BASE_URL
 Live URLs
+Frontend: https://microloan-connect.vercel.app
+Backend API: https://microloan-connect-01dh.onrender.com/api
+Health endpoint: https://microloan-connect-01dh.onrender.com/api/health
 
-Frontend: To be finalized
-Backend API: To be finalized
-Health endpoint: To be finalized
+Note: The backend is hosted on the Render free tier, so the service may take some time to wake up after inactivity.
 
 Testing Instruction Report
 
@@ -835,6 +865,7 @@ Installed Testing Tools
 Jest
 Supertest
 mongodb-memory-server
+Artillery
 Run Tests
 npm test
 Unit Testing Scope
@@ -859,6 +890,9 @@ lender funding transaction creation
 admin repayment creation
 borrower manual repayment
 Stripe checkout session flow with controlled test setup
+
+At the current stage, the integration test suite is implemented and mostly functional, with one repayment-related scenario still under refinement.
+
 Performance Testing Scope
 
 Performance testing is focused on endpoint behavior under load.
@@ -875,7 +909,11 @@ request volume
 latency
 failures
 endpoint stability
+
+The Artillery-based performance testing setup was completed successfully and summary evidence was captured from the terminal output.
+
 Manual Full Test Flow
+
 A. Start the System
 Start MongoDB
 Start backend
@@ -957,10 +995,11 @@ Recheck admin dashboard
 Known Issues / Limitations
 admin accounts are not created through the public registration UI and must be inserted manually for controlled testing
 some UI sections may still require final alignment with backend-supported routes
-full automated test files are still to be finalized as part of the testing deliverables
-performance testing scripts and evidence are prepared as a separate testing deliverable
-live deployment URLs depend on final hosting configuration
+one integration test scenario related to repayments is still under refinement
+performance testing scripts and terminal evidence are maintained as part of the testing deliverables
 third-party services require valid production/test keys to function fully
+Stripe success/cancel flow depends on correct deployment environment configuration
+free-tier hosting may introduce wake-up delays after inactivity
 Git Workflow Summary
 
 The project followed a branch-based collaborative workflow.
@@ -995,12 +1034,16 @@ admin dashboard
 analytics dashboard
 repayments page
 Stripe repayment flow
+unit testing terminal result
+integration testing terminal result
+performance testing terminal result
 backend health endpoint
-deployment output and hosted URLs
-
+Render deployment output
+Vercel deployment output
+hosted frontend and backend URLs
+one successful end-to-end deployed flow
 Conclusion
 
 Micro-Loan Connect is a full-stack peer-to-peer microloan platform designed to improve financial inclusion through accessible digital lending. The system demonstrates end-to-end support for borrower onboarding, loan management, lender participation, repayment handling, analytics, and external service integration.
 
 The project combines modern application framework practices with a socially relevant problem domain, showing how digital platforms can support underserved communities, transparent financial processes, and sustainable development under SDG 1: No Poverty.
-
