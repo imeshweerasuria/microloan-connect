@@ -6,6 +6,7 @@ const { notFound, errorHandler } = require("./middlewares/errorHandler");
 
 const authRoutes = require("./routes/authRoutes");
 const borrowerRoutes = require("./routes/borrowerRoutes");
+const communityRoutes = require("./routes/communityRoutes");
 const loanRoutes = require("./routes/loanRoutes");
 const repaymentRoutes = require("./routes/repaymentRoutes");
 const transactionRoutes = require("./routes/transactionRoutes");
@@ -42,6 +43,7 @@ app.get("/api/health", (req, res) => res.json({ status: "ok" }));
 app.use("/api/auth", authRoutes);
 app.use("/api/fx", fxRoutes);
 app.use("/api/borrowers", borrowerRoutes);
+app.use("/api/communities", communityRoutes);
 app.use("/api/loans", loanRoutes);
 app.use("/api/repayments", repaymentRoutes);
 app.use("/api/transactions", transactionRoutes);
