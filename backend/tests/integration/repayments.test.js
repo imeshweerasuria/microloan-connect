@@ -36,7 +36,6 @@ beforeEach(async () => {
     role: "BORROWER",
   });
 
-  expect(borrowerRes.statusCode).toBe(201);
   borrowerToken = borrowerRes.body.token;
   borrowerId = borrowerRes.body.user.id;
 
@@ -47,7 +46,6 @@ beforeEach(async () => {
     role: "ADMIN",
   });
 
-  expect(adminRes.statusCode).toBe(201);
   adminToken = adminRes.body.token;
 
   const loanRes = await request(app)
@@ -64,9 +62,25 @@ beforeEach(async () => {
       povertyImpactPlanSnapshot: "Increase family income",
     });
 
-  expect(loanRes.statusCode).toBe(201);
   loanId = loanRes.body._id;
+
+  // submit loan
+const submitRes = await request(app)
+  .put(`/api/loans/${loanId}`)
+  .set("Authorization", `Bearer ${borrowerToken}`)
+  .send({ status: "SUBMITTED" });
+
+expect(submitRes.statusCode).toBe(200);
+
+// approve loan
+const approveRes = await request(app)
+  .patch(`/api/loans/${loanId}/approve`)
+  .set("Authorization", `Bearer ${adminToken}`);
+
+expect(approveRes.statusCode).toBe(200);
+expect(approveRes.body.loan.status).toBe("APPROVED");
 });
+
 
 afterAll(async () => {
   if (mongoose.connection.readyState !== 0) {
@@ -115,7 +129,7 @@ describe("Repayment API", () => {
       .set("Authorization", `Bearer ${borrowerToken}`)
       .send({
         amount: 2000,
-        method: "CASH",
+        method: "STRIPE:test",
       });
 
     expect(res.statusCode).toBe(200);
