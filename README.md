@@ -345,9 +345,7 @@ FRONTEND_BASE_URL=http://localhost:5173
 NOMINATIM_BASE_URL=https://nominatim.openstreetmap.org
 Frontend .env
 VITE_API_BASE_URL=http://localhost:8080/api
-
 Authentication and Roles
-
 Borrower
 
 A borrower can:
@@ -356,7 +354,6 @@ create and manage borrower profile
 create and submit loan requests
 view repayments
 make repayments manually or via Stripe
-
 Lender
 
 A lender can:
@@ -374,11 +371,8 @@ approve or reject submitted loans
 access analytics
 create and manage repayments
 monitor transactions and platform summaries
-
 Frontend Route Overview
-
 Public Routes
-
 /
 /login
 /register
@@ -402,7 +396,6 @@ Admin Routes
 /admin/analytics
 
 API Endpoint Documentation
-
 Base URL
 http://localhost:8080/api
 Authentication Endpoints
@@ -829,7 +822,6 @@ The frontend deployment requires:
 Vite production build
 backend API base URL configured through environment variables
 Vercel SPA route rewrite support for React Router
-
 Production Environment Variables
 
 Backend
@@ -866,18 +858,48 @@ Jest
 Supertest
 mongodb-memory-server
 Artillery
-Run Tests
-npm test
-Unit Testing Scope
+How to Run Unit Tests
 
-Unit testing is designed for isolated logic, including:
+Open a terminal in the backend folder and run:
+
+npm test -- tests/unit
+How to Run Integration Tests
+
+Open a terminal in the backend folder and run:
+
+npm test -- tests/integration
+How to Run Performance Tests
+
+Open a terminal in the backend folder and run:
+
+npx artillery run tests/performance/perf-test.yml
+Testing Environment Configuration Details
+Unit Testing Environment
+
+Unit tests run inside the backend project and use isolated logic-level testing. These tests do not require the frontend to be running.
+
+Setup required:
+
+open terminal in backend
+run npm install
+ensure project dependencies are installed
+
+Unit tests mainly cover helper logic such as:
 
 phone number normalization for NotifyLK
-FX conversion helper logic
-repayment helper logic
-validation-related utility behavior
-role-based helper logic where applicable
-Integration Testing Scope
+FX service logic
+utility behavior
+Integration Testing Environment
+
+Integration tests run against backend endpoints using Jest, Supertest, and mongodb-memory-server.
+
+Setup required:
+
+open terminal in backend
+run npm install
+ensure TEST_MONGO_URI is configured if required by the current test setup
+ensure backend test dependencies are installed
+no frontend is required for integration testing
 
 Integration testing is designed for backend endpoint flows, including:
 
@@ -893,7 +915,16 @@ Stripe checkout session flow with controlled test setup
 
 At the current stage, the integration test suite is implemented and mostly functional, with one repayment-related scenario still under refinement.
 
-Performance Testing Scope
+Performance Testing Environment
+
+Performance testing is executed using Artillery.
+
+Setup required:
+
+open terminal in backend
+run npm install
+make sure the backend server is running before executing the performance script
+use the configured target endpoint in tests/performance/perf-test.yml
 
 Performance testing is focused on endpoint behavior under load.
 
@@ -913,7 +944,6 @@ endpoint stability
 The Artillery-based performance testing setup was completed successfully and summary evidence was captured from the terminal output.
 
 Manual Full Test Flow
-
 A. Start the System
 Start MongoDB
 Start backend
@@ -1005,7 +1035,6 @@ Git Workflow Summary
 The project followed a branch-based collaborative workflow.
 
 Branches
-
 dev for stable final code
 dev for integration and combined development
 feature branches for each assigned module
@@ -1042,6 +1071,10 @@ Render deployment output
 Vercel deployment output
 hosted frontend and backend URLs
 one successful end-to-end deployed flow
+Submission Details
+
+
+
 Conclusion
 
 Micro-Loan Connect is a full-stack peer-to-peer microloan platform designed to improve financial inclusion through accessible digital lending. The system demonstrates end-to-end support for borrower onboarding, loan management, lender participation, repayment handling, analytics, and external service integration.
