@@ -9,16 +9,30 @@ export default function FxConverter() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
-  const handleConvert = async (e) => {
-    e.preventDefault();
-    setError("");
-    setResult(null);
+  const commonCurrencies = ["USD", "EUR", "GBP", "LKR", "INR", "JPY", "CAD", "AUD", "CNY", "SGD"];
+
+  const convertCurrency = async (amountValue, fromCode, toCode) => {
+    if (!amountValue || Number(amountValue) <= 0) {
+      setError("Please enter a valid amount");
+      setResult(null);
+      return;
+    }
+
+    if (!fromCode || !toCode) {
+      setError("Please enter both currency codes");
+      setResult(null);
+      return;
+    }
 
     try {
       setLoading(true);
+      setError("");
+      setResult(null);
 
       const res = await client.get(
-        `/fx/convert?amount=${amount}&from=${from}&to=${to}`
+        `/fx/convert?amount=${encodeURIComponent(amountValue)}&from=${encodeURIComponent(
+          fromCode
+        )}&to=${encodeURIComponent(toCode)}`
       );
 
       setResult(res.data);
@@ -29,8 +43,30 @@ export default function FxConverter() {
     }
   };
 
-  // Common currency codes for suggestions
-  const commonCurrencies = ["USD", "EUR", "GBP", "LKR", "INR", "JPY", "CAD", "AUD", "CNY", "SGD"];
+  const handleConvert = async (e) => {
+    e.preventDefault();
+    await convertCurrency(amount, from, to);
+  };
+
+  const handleQuickConvert = async (currency) => {
+    if (!amount) {
+      setError("Please enter an amount first");
+      return;
+    }
+
+    setTo(currency);
+    await convertCurrency(amount, from, currency);
+  };
+
+  const handleSwap = async () => {
+    const nextFrom = to;
+    const nextTo = from;
+
+    setFrom(nextFrom);
+    setTo(nextTo);
+    setResult(null);
+    setError("");
+  };
 
   return (
     <div style={styles.page}>
@@ -108,7 +144,7 @@ export default function FxConverter() {
                 list="currencies"
               />
               <datalist id="currencies">
-                {commonCurrencies.map(currency => (
+                {commonCurrencies.map((currency) => (
                   <option key={currency} value={currency} />
                 ))}
               </datalist>
@@ -141,11 +177,7 @@ export default function FxConverter() {
             <button
               type="button"
               style={styles.swapBtn}
-              onClick={() => {
-                setFrom(to);
-                setTo(from);
-                setResult(null);
-              }}
+              onClick={handleSwap}
             >
               <span style={styles.swapIcon}>🔄</span>
               Swap Currencies
@@ -175,7 +207,7 @@ export default function FxConverter() {
               <span style={styles.resultIcon}>📊</span>
               <h3 style={styles.resultTitle}>Conversion Result</h3>
             </div>
-            
+
             <div style={styles.resultMain}>
               <div style={styles.resultAmount}>
                 <span style={styles.resultFromAmount}>
@@ -213,8 +245,8 @@ export default function FxConverter() {
           <div>
             <h4 style={styles.infoTitle}>Why currency conversion matters</h4>
             <p style={styles.infoText}>
-              Understanding exchange rates helps borrowers and lenders make informed decisions 
-              about cross-border loans, international funding, and fair value assessment. 
+              Understanding exchange rates helps borrowers and lenders make informed decisions
+              about cross-border loans, international funding, and fair value assessment.
               This tool provides transparent rate information for better financial planning.
             </p>
           </div>
@@ -228,29 +260,20 @@ export default function FxConverter() {
           <h3 style={styles.quickRefTitle}>Quick Reference</h3>
         </div>
         <div style={styles.currencyGrid}>
-          {commonCurrencies.map(currency => (
+          {commonCurrencies.map((currency) => (
             <button
               key={currency}
+              type="button"
               style={styles.currencyChip}
-              onClick={() => {
-                if (!amount) {
-                  setError("Please enter an amount first");
-                  return;
-                }
-                setTo(currency);
-                // Auto-trigger conversion after setting
-                setTimeout(() => {
-                  const fakeEvent = { preventDefault: () => {} };
-                  handleConvert(fakeEvent);
-                }, 100);
-              }}
+              onClick={() => handleQuickConvert(currency)}
+              disabled={loading}
             >
               {currency}
             </button>
           ))}
         </div>
         <p style={styles.quickRefNote}>
-          Click any currency to convert your current amount
+          Click any currency to convert your current amount instantly
         </p>
       </div>
     </div>
@@ -263,7 +286,7 @@ const styles = {
     background: "linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%)",
     padding: "40px 24px",
   },
-  
+
   heroSection: {
     maxWidth: "900px",
     margin: "0 auto 30px",
@@ -277,11 +300,11 @@ const styles = {
     borderRadius: "20px",
     boxShadow: "0 10px 30px rgba(0,0,0,0.08)",
   },
-  
+
   heroContent: {
     flex: 1,
   },
-  
+
   title: {
     fontSize: "32px",
     fontWeight: "800",
@@ -290,19 +313,19 @@ const styles = {
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
-  
+
   titleAccent: {
     background: "linear-gradient(135deg, #f59e0b 0%, #d97706 100%)",
     WebkitBackgroundClip: "text",
     WebkitTextFillColor: "transparent",
   },
-  
+
   subtitle: {
     color: "#4b5563",
     fontSize: "16px",
     margin: 0,
   },
-  
+
   finBadge: {
     background: "linear-gradient(135deg, #1e40af 0%, #3b82f6 100%)",
     padding: "12px 20px",
@@ -312,17 +335,17 @@ const styles = {
     gap: "10px",
     boxShadow: "0 4px 12px rgba(59,130,246,0.3)",
   },
-  
+
   finIcon: {
     fontSize: "24px",
   },
-  
+
   finText: {
     color: "white",
     fontWeight: "600",
     fontSize: "14px",
   },
-  
+
   error: {
     maxWidth: "900px",
     margin: "0 auto 20px",
@@ -335,11 +358,11 @@ const styles = {
     gap: "12px",
     borderLeft: "4px solid #ef4444",
   },
-  
+
   messageIcon: {
     fontSize: "20px",
   },
-  
+
   closeBtn: {
     marginLeft: "auto",
     background: "none",
@@ -349,7 +372,7 @@ const styles = {
     color: "inherit",
     padding: "0 8px",
   },
-  
+
   converterCard: {
     maxWidth: "900px",
     margin: "0 auto",
@@ -358,7 +381,7 @@ const styles = {
     padding: "32px",
     boxShadow: "0 8px 30px rgba(0,0,0,0.08)",
   },
-  
+
   cardHeader: {
     display: "flex",
     alignItems: "center",
@@ -367,28 +390,28 @@ const styles = {
     paddingBottom: "20px",
     borderBottom: "2px solid #eff6ff",
   },
-  
+
   headerIcon: {
     fontSize: "48px",
   },
-  
+
   cardTitle: {
     fontSize: "24px",
     fontWeight: "700",
     color: "#1f2937",
     margin: "0 0 4px 0",
   },
-  
+
   cardSubtitle: {
     fontSize: "14px",
     color: "#6b7280",
     margin: 0,
   },
-  
+
   formGroup: {
     marginBottom: "24px",
   },
-  
+
   label: {
     display: "flex",
     alignItems: "center",
@@ -398,11 +421,11 @@ const styles = {
     color: "#374151",
     fontSize: "14px",
   },
-  
+
   labelIcon: {
     fontSize: "16px",
   },
-  
+
   amountInputWrapper: {
     display: "flex",
     alignItems: "center",
@@ -411,7 +434,7 @@ const styles = {
     overflow: "hidden",
     transition: "border-color 0.2s, box-shadow 0.2s",
   },
-  
+
   currencySymbol: {
     padding: "12px 16px",
     background: "#f9fafb",
@@ -420,7 +443,7 @@ const styles = {
     color: "#374151",
     fontSize: "16px",
   },
-  
+
   amountInput: {
     flex: 1,
     padding: "12px 16px",
@@ -428,13 +451,13 @@ const styles = {
     fontSize: "16px",
     outline: "none",
   },
-  
+
   twoColGrid: {
     display: "grid",
     gridTemplateColumns: "1fr 1fr",
     gap: "20px",
   },
-  
+
   currencyInput: {
     width: "100%",
     padding: "12px 14px",
@@ -445,19 +468,19 @@ const styles = {
     outline: "none",
     boxSizing: "border-box",
   },
-  
+
   helperText: {
     fontSize: "12px",
     color: "#9ca3af",
     marginTop: "6px",
   },
-  
+
   swapContainer: {
     display: "flex",
     justifyContent: "center",
     margin: "16px 0",
   },
-  
+
   swapBtn: {
     display: "flex",
     alignItems: "center",
@@ -472,11 +495,11 @@ const styles = {
     cursor: "pointer",
     transition: "all 0.2s",
   },
-  
+
   swapIcon: {
     fontSize: "16px",
   },
-  
+
   convertBtn: {
     width: "100%",
     background: "linear-gradient(135deg, #2563eb 0%, #1e40af 100%)",
@@ -490,14 +513,14 @@ const styles = {
     transition: "opacity 0.2s",
     marginTop: "8px",
   },
-  
+
   btnContent: {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
     gap: "8px",
   },
-  
+
   spinner: {
     width: "18px",
     height: "18px",
@@ -506,7 +529,7 @@ const styles = {
     borderRadius: "50%",
     animation: "spin 0.6s linear infinite",
   },
-  
+
   resultContainer: {
     marginTop: "32px",
     padding: "24px",
@@ -514,30 +537,30 @@ const styles = {
     borderRadius: "16px",
     border: "1px solid #bfdbfe",
   },
-  
+
   resultHeader: {
     display: "flex",
     alignItems: "center",
     gap: "10px",
     marginBottom: "20px",
   },
-  
+
   resultIcon: {
     fontSize: "24px",
   },
-  
+
   resultTitle: {
     fontSize: "18px",
     fontWeight: "700",
     color: "#1e40af",
     margin: 0,
   },
-  
+
   resultMain: {
     textAlign: "center",
     marginBottom: "24px",
   },
-  
+
   resultAmount: {
     display: "flex",
     alignItems: "center",
@@ -545,53 +568,53 @@ const styles = {
     gap: "16px",
     flexWrap: "wrap",
   },
-  
+
   resultFromAmount: {
     fontSize: "24px",
     fontWeight: "700",
     color: "#1f2937",
   },
-  
+
   resultArrow: {
     fontSize: "28px",
     color: "#3b82f6",
   },
-  
+
   resultToAmount: {
     fontSize: "28px",
     fontWeight: "800",
     color: "#2563eb",
   },
-  
+
   resultDetails: {
     borderTop: "1px solid #bfdbfe",
     paddingTop: "20px",
   },
-  
+
   detailRow: {
     display: "flex",
     justifyContent: "space-between",
     alignItems: "center",
     padding: "8px 0",
   },
-  
+
   detailLabel: {
     fontSize: "13px",
     fontWeight: "600",
     color: "#1e40af",
   },
-  
+
   detailValue: {
     fontSize: "14px",
     fontWeight: "500",
     color: "#1e3a8a",
   },
-  
+
   infoSection: {
     maxWidth: "900px",
     margin: "30px auto 0",
   },
-  
+
   infoCard: {
     display: "flex",
     alignItems: "flex-start",
@@ -602,25 +625,25 @@ const styles = {
     boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
     border: "1px solid #e5e7eb",
   },
-  
+
   infoIcon: {
     fontSize: "32px",
   },
-  
+
   infoTitle: {
     fontSize: "16px",
     fontWeight: "700",
     color: "#1f2937",
     margin: "0 0 8px 0",
   },
-  
+
   infoText: {
     fontSize: "14px",
     color: "#6b7280",
     margin: 0,
     lineHeight: "1.5",
   },
-  
+
   quickRefSection: {
     maxWidth: "900px",
     margin: "20px auto 0",
@@ -629,32 +652,32 @@ const styles = {
     borderRadius: "16px",
     boxShadow: "0 2px 8px rgba(0,0,0,0.05)",
   },
-  
+
   quickRefHeader: {
     display: "flex",
     alignItems: "center",
     gap: "10px",
     marginBottom: "16px",
   },
-  
+
   quickRefIcon: {
     fontSize: "20px",
   },
-  
+
   quickRefTitle: {
     fontSize: "16px",
     fontWeight: "700",
     color: "#1f2937",
     margin: 0,
   },
-  
+
   currencyGrid: {
     display: "flex",
     flexWrap: "wrap",
     gap: "10px",
     marginBottom: "12px",
   },
-  
+
   currencyChip: {
     padding: "8px 16px",
     background: "#f3f4f6",
@@ -666,7 +689,7 @@ const styles = {
     cursor: "pointer",
     transition: "all 0.2s",
   },
-  
+
   quickRefNote: {
     fontSize: "12px",
     color: "#9ca3af",
@@ -675,7 +698,6 @@ const styles = {
   },
 };
 
-// Add animation keyframes
 const styleSheet = document.createElement("style");
 styleSheet.textContent = `
   @keyframes spin {

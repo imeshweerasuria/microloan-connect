@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 import client from "../api/client";
 import { useAuth } from "../context/AuthContext";
@@ -25,6 +25,9 @@ export default function Repayments() {
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
   const [validationError, setValidationError] = useState({});
+  
+  // Guard to prevent double confirmation of the same Stripe session
+  const confirmedStripeSessionRef = useRef("");
 
   const isAdmin = user?.role === "ADMIN";
 
@@ -86,6 +89,7 @@ export default function Repayments() {
     }
   }, [selectedLoanId]);
 
+  // Stripe confirmation effect with duplicate guard
   useEffect(() => {
     const stripeSuccess = searchParams.get("stripe_success");
     const stripeCancel = searchParams.get("stripe_cancel");
@@ -100,12 +104,20 @@ export default function Repayments() {
     }
 
     if (!isAdmin && stripeSuccess === "1" && repaymentId && sessionId) {
+      // Prevent duplicate confirmation for the same session
+      if (confirmedStripeSessionRef.current === sessionId) {
+        return;
+      }
+
+      confirmedStripeSessionRef.current = sessionId;
+
       (async () => {
         try {
           setError("");
           setMessage("Confirming Stripe payment...");
+
           await client.post(`/repayments/${repaymentId}/confirm-stripe-session`, {
-            sessionId
+            sessionId,
           });
 
           if (loanId) {
@@ -141,19 +153,19 @@ export default function Repayments() {
     };
   }, [repayments]);
 
- const updateDraft = (repaymentId, field, value) => {
-  setPaymentDrafts((prev) => ({
-    ...prev,
-    [repaymentId]: {
-      amount: prev[repaymentId]?.amount || "",
-      [field]: value,
-    },
-  }));
-  // Clear validation error when user starts typing
-  if (validationError[repaymentId]) {
-    setValidationError((prev) => ({ ...prev, [repaymentId]: undefined }));
-  }
-};
+  const updateDraft = (repaymentId, field, value) => {
+    setPaymentDrafts((prev) => ({
+      ...prev,
+      [repaymentId]: {
+        amount: prev[repaymentId]?.amount || "",
+        [field]: value,
+      },
+    }));
+    // Clear validation error when user starts typing
+    if (validationError[repaymentId]) {
+      setValidationError((prev) => ({ ...prev, [repaymentId]: undefined }));
+    }
+  };
 
   const updateAdminDraft = (repaymentId, field, value) => {
     setAdminDrafts((prev) => ({
@@ -167,38 +179,37 @@ export default function Repayments() {
     }));
   };
 
-
   const handleStripeCheckout = async (repaymentId) => {
-  const draft = paymentDrafts[repaymentId] || { amount: "" };
+    const draft = paymentDrafts[repaymentId] || { amount: "" };
 
-  if (!draft.amount || Number(draft.amount) <= 0) {
-    setValidationError({ [repaymentId]: "Please enter a valid amount greater than 0" });
-    setError("Enter a valid amount before Stripe payment");
-    setTimeout(() => {
-      setValidationError((prev) => ({ ...prev, [repaymentId]: undefined }));
-    }, 3000);
-    return;
-  }
+    if (!draft.amount || Number(draft.amount) <= 0) {
+      setValidationError({ [repaymentId]: "Please enter a valid amount greater than 0" });
+      setError("Enter a valid amount before Stripe payment");
+      setTimeout(() => {
+        setValidationError((prev) => ({ ...prev, [repaymentId]: undefined }));
+      }, 3000);
+      return;
+    }
 
-  try {
-    setError("");
-    setMessage("");
-    setStripePayingId(repaymentId);
-    setValidationError({});
+    try {
+      setError("");
+      setMessage("");
+      setStripePayingId(repaymentId);
+      setValidationError({});
 
-    const res = await client.post(
-      `/repayments/${repaymentId}/stripe-checkout-session`,
-      {
-        amount: Number(draft.amount),
-      }
-    );
+      const res = await client.post(
+        `/repayments/${repaymentId}/stripe-checkout-session`,
+        {
+          amount: Number(draft.amount),
+        }
+      );
 
-    window.location.href = res.data.url;
-  } catch (err) {
-    setError(err.message || "Failed to start Stripe checkout");
-    setStripePayingId("");
-  }
-};
+      window.location.href = res.data.url;
+    } catch (err) {
+      setError(err.message || "Failed to start Stripe checkout");
+      setStripePayingId("");
+    }
+  };
 
   const handleCreateRepayment = async (e) => {
     e.preventDefault();
@@ -509,7 +520,7 @@ export default function Repayments() {
                     </div>
                   )}
 
-                  {/* ✅ NEW STRIPE PAYMENT DESIGN WITH VALIDATION */}
+                  {/* Stripe Payment Section with Validation */}
                   <div>
                     <div style={styles.stripePaymentContainer}>
                       <input
